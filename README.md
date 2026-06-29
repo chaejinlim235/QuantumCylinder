@@ -100,6 +100,8 @@ pytest
 
 세부 역할과 리뷰 구조는 `docs/01_team_roles.md`에 정리합니다.
 
+대회 기간 실행 계획과 개인별 작업 브랜치는 `docs/05_hackathon_execution_plan.md`에 정리합니다.
+
 ## Git Rules
 
 ### Branch naming
