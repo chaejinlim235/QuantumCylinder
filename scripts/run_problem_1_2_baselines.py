@@ -17,7 +17,7 @@ from quantum_cylinder.problem_1c_random_unitary_diffusion import (  # noqa: E402
     random_unitary_trajectory,
 )
 from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory  # noqa: E402
-from quantum_cylinder.experiment_curves import distance_curve, hamiltonian_resource_proxy
+from quantum_cylinder.experiment_curves import closest_metric_pair, distance_curve, hamiltonian_resource_proxy
 from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 
 
@@ -101,15 +101,63 @@ def plot_curves(random_rows: list[dict], ham_rows: list[dict], output_path: Path
     plt.close(fig)
 
 
+def comparable_strength_resource_rows(
+    random_rows: list[dict],
+    ham_rows: list[dict],
+    measurement_basis: str,
+) -> list[dict]:
+    rows = []
+    for metric in ("mmd", "wasserstein"):
+        match = closest_metric_pair(random_rows, ham_rows, metric=metric)
+        random_row = random_rows[match["reference_index"]]
+        ham_row = ham_rows[match["candidate_index"]]
+        random_resource = random_unitary_resource_proxy(int(round(random_row["parameter"])))
+        ham_resource = hamiltonian_resource_proxy(float(ham_row["parameter"]), measurement_basis=measurement_basis)
+        rows.append(
+            {
+                "matched_by": metric,
+                "random_step": int(round(random_row["parameter"])),
+                "hamiltonian_time": float(ham_row["parameter"]),
+                "random_mmd": float(random_row["mmd"]),
+                "hamiltonian_mmd": float(ham_row["mmd"]),
+                "mmd_gap": abs(float(random_row["mmd"]) - float(ham_row["mmd"])),
+                "random_wasserstein": float(random_row["wasserstein"]),
+                "hamiltonian_wasserstein": float(ham_row["wasserstein"]),
+                "wasserstein_gap": abs(float(random_row["wasserstein"]) - float(ham_row["wasserstein"])),
+                "random_single_qubit_rotations": random_resource["single_qubit_rotations"],
+                "random_two_qubit_entanglers": random_resource["two_qubit_entanglers"],
+                "random_controls": random_resource["random_controls"],
+                "hamiltonian_total_time": ham_resource["total_hamiltonian_time"],
+                "hamiltonian_fixed_terms": ham_resource["fixed_hamiltonian_terms"],
+                "hamiltonian_fixed_parameters": ham_resource["fixed_hamiltonian_parameters"],
+                "measurement_basis": measurement_basis,
+            }
+        )
+    return rows
+
+
 def write_summary(
     path: Path,
     args: argparse.Namespace,
     random_rows: list[dict],
     ham_rows: list[dict],
+    comparable_rows: list[dict],
 ) -> None:
     random_final = random_rows[-1]
     ham_max_mmd = max(ham_rows, key=lambda row: row["mmd"])
     ham_max_wasserstein = max(ham_rows, key=lambda row: row["wasserstein"])
+    comparable_lines = "\n".join(
+        [
+            (
+                f"- Matched by `{row['matched_by']}`: random step `{row['random_step']}` "
+                f"vs Hamiltonian time `t = {row['hamiltonian_time']:.6f}`; "
+                f"MMD gap `{row['mmd_gap']:.6f}`, Wasserstein gap `{row['wasserstein_gap']:.6f}`; "
+                f"random controls `{row['random_controls']}`, entanglers `{row['random_two_qubit_entanglers']}`, "
+                f"Hamiltonian fixed terms `{row['hamiltonian_fixed_terms']}`, total time `{row['hamiltonian_total_time']:.6f}`."
+            )
+            for row in comparable_rows
+        ]
+    )
 
     text = f"""# Problem 1/2 Baseline Summary
 
@@ -142,6 +190,12 @@ Hamiltonian projected diffusion uses the fixed three-qubit Hamiltonian from the 
 - Max Hamiltonian MMD: {ham_max_mmd["mmd"]:.6f} at `t = {ham_max_mmd["parameter"]:.6f}`
 - Max Hamiltonian Wasserstein-type distance: {ham_max_wasserstein["wasserstein"]:.6f} at `t = {ham_max_wasserstein["parameter"]:.6f}`
 
+## Comparable Diffusion Strength
+
+Problem 2(d) asks for a qualitative resource/control comparison at comparable diffusion strength. The nearest non-initial pairs are:
+
+{comparable_lines}
+
 ## Interpretation
 
 - Problem 1 shows a direct scrambling trajectory controlled by random circuit layers.
@@ -153,6 +207,7 @@ Hamiltonian projected diffusion uses the fixed three-qubit Hamiltonian from the 
 - `random_unitary_metrics.csv`
 - `hamiltonian_metrics.csv`
 - `resource_proxies.csv`
+- `comparable_strength_resource_matches.csv`
 - `distance_curves.png`
 - `problem_1_2_settings.json`
 """
@@ -186,10 +241,12 @@ def main() -> None:
     resource_rows = []
     resource_rows.extend(random_unitary_resource_proxy(k) for k in range(args.random_steps + 1))
     resource_rows.extend(hamiltonian_resource_proxy(float(t), measurement_basis=args.measurement_basis) for t in times)
+    comparable_rows = comparable_strength_resource_rows(random_rows, ham_rows, args.measurement_basis)
 
     write_rows(output_dir / "random_unitary_metrics.csv", random_rows)
     write_rows(output_dir / "hamiltonian_metrics.csv", ham_rows)
     write_rows(output_dir / "resource_proxies.csv", resource_rows)
+    write_rows(output_dir / "comparable_strength_resource_matches.csv", comparable_rows)
     plot_curves(random_rows, ham_rows, output_dir / "distance_curves.png")
     write_json(
         output_dir / "problem_1_2_settings.json",
@@ -208,7 +265,7 @@ def main() -> None:
             "metrics": ["fidelity_mmd", "infidelity_wasserstein"],
         },
     )
-    write_summary(output_dir / "problem_1_2_summary.md", args, random_rows, ham_rows)
+    write_summary(output_dir / "problem_1_2_summary.md", args, random_rows, ham_rows, comparable_rows)
 
     print(f"Wrote metrics and plot to {output_dir}")
 

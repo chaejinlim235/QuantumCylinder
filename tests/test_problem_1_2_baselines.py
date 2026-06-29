@@ -6,7 +6,7 @@ from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 from quantum_cylinder.problem_1b_ensemble_metrics import fidelity_matrix, mmd_fidelity, wasserstein_infidelity
 from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_resource_proxy, random_unitary_trajectory
 from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory
-from quantum_cylinder.experiment_curves import hamiltonian_resource_proxy
+from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
 
 
 def test_target_ensemble_is_normalized() -> None:
@@ -50,3 +50,22 @@ def test_resource_proxy_columns_match() -> None:
     assert random_proxy.keys() == hamiltonian_proxy.keys()
     assert hamiltonian_proxy["fixed_hamiltonian_terms"] == 8
     assert hamiltonian_proxy["fixed_hamiltonian_parameters"] == 3
+
+
+def test_closest_metric_pair_skips_initial_point() -> None:
+    random_rows = [
+        {"index": 0, "parameter_name": "step", "parameter": 0.0, "mmd": 0.0},
+        {"index": 1, "parameter_name": "step", "parameter": 1.0, "mmd": 0.3},
+        {"index": 2, "parameter_name": "step", "parameter": 2.0, "mmd": 0.7},
+    ]
+    ham_rows = [
+        {"index": 0, "parameter_name": "time", "parameter": 0.0, "mmd": 0.0},
+        {"index": 1, "parameter_name": "time", "parameter": 0.5, "mmd": 0.35},
+        {"index": 2, "parameter_name": "time", "parameter": 1.0, "mmd": 0.9},
+    ]
+
+    match = closest_metric_pair(random_rows, ham_rows, metric="mmd")
+
+    assert match["reference_parameter"] == 1.0
+    assert match["candidate_parameter"] == 0.5
+    assert np.isclose(match["absolute_gap"], 0.05)
