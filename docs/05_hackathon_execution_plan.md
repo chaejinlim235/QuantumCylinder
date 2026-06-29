@@ -8,13 +8,13 @@
 
 | 항목 | 상태 | 담당 | 판단 |
 | --- | --- | --- | --- |
-| Problem 1 baseline | 구현 완료 | 한지후 | 테스트와 실행 가능 상태 유지 |
-| Problem 2 baseline | 구현 완료 | 한지후 | Problem 1과 같은 metric으로 비교 가능 |
+| Problem 1 baseline | 잠금 | 한지후 | 3번 extension의 비교 기준으로 유지 |
+| Problem 2 baseline | 잠금 | 한지후 | comparable-strength resource match 표까지 생성 |
 | Qiskit 설치/검증 | 로컬 검증 완료 | 김건우 | 전체 구현 교체가 아니라 resource 설명 보강에 사용 |
 | 테스트 환경 | 구축 완료 | 한지후 | `python -m pytest` 기준으로 PR 검증 |
 | 지정문제/논문 해석 | 진행 중 | 임채진, 김건우, 김승빈 | 전체 번역보다 claim에 필요한 정의와 figure만 추출 |
 | Python 환경 복구 | 진행 중 | 김승빈 | 환경 복구 전에는 코드 구현을 맡기지 않음 |
-| Problem 3 extension | 후보 선택 전 | 한지후 | Day 1 안에 하나로 고정 |
+| Problem 3 extension | 착수 가능 | 한지후 | measurement-basis sweep 또는 shallow denoising 중 최소 구현 선택 |
 | 최종 보고서/발표 | 스토리라인 초안 있음 | 임채진 | baseline 결과와 Problem 3 claim에 맞춰 보강 |
 
 ## 운영 전제

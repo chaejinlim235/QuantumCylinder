@@ -115,6 +115,7 @@ Random-unitary는 많은 layer별 control을 써서 diffusion curve를 직접 �
 | Random-unitary MMD/Wasserstein curve | `results/problem_1_2_baseline/random_unitary_metrics.csv` | step별 cluster spreading과 saturation 해석 |
 | Hamiltonian MMD/Wasserstein curve | `results/problem_1_2_baseline/hamiltonian_metrics.csv` | time별 fluctuation과 projection-induced diffusion 해석 |
 | Resource/control proxy table | `results/problem_1_2_baseline/resource_proxies.csv` | diffusion strength와 control/resource cost 연결 |
+| Comparable-strength resource matches | `results/problem_1_2_baseline/comparable_strength_resource_matches.csv` | Problem 2(d)의 같은 diffusion strength 근처 resource/control 비교 |
 | Combined plot | `results/problem_1_2_baseline/distance_curves.png` | 발표용 side-by-side comparison |
 
 ## Next
