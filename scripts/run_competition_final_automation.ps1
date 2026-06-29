@@ -164,6 +164,7 @@ function Invoke-HermesFixLoop {
         -Yolo `
         -MaxTurns $HermesMaxTurns `
         -Attempts $HermesAttempts `
+        -HeartbeatSeconds 10 `
         -IdleTimeoutMinutes 45 `
         -KeepDisplayOff:$KeepDisplayOff
     Assert-LastExitCode "run_hermes_watchdog.ps1 final-sync-fix"

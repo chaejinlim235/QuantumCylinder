@@ -4,6 +4,7 @@ param(
     [int]$HermesMaxTurns = 420,
     [int]$HermesAttempts = 2,
     [int]$HermesRetryDelaySeconds = 0,
+    [int]$HermesHeartbeatSeconds = 10,
     [int]$IdleTimeoutMinutes = 45,
     [string]$StatusOutput = "results/continuous_problem_3/latest_status.md",
     [string]$ProgressLog = "results/continuous_problem_3/progress_log.md",
@@ -302,6 +303,7 @@ function Write-ContinuousStatus {
         ('- hermes_max_turns: `{0}`' -f $HermesMaxTurns),
         ('- hermes_attempts_per_cycle: `{0}`' -f $HermesAttempts),
         ('- hermes_retry_delay_seconds: `{0}`' -f $HermesRetryDelaySeconds),
+        ('- hermes_heartbeat_seconds: `{0}`' -f $HermesHeartbeatSeconds),
         '- loop purpose: `experiment -> analyze -> decide -> apply -> verify -> record`',
         '- seed summary: `results/problem_3_seed_sweep/seed_sweep_summary.md`',
         '- default summary: `results/problem_3_continuous_denoising/problem_3_summary.md`',
@@ -364,6 +366,7 @@ try {
     Write-Step "Repository: $repoRoot"
     Write-Step "Cycle minutes: $CycleMinutes"
     Write-Step "Hermes retry delay seconds: $HermesRetryDelaySeconds"
+    Write-Step "Hermes heartbeat seconds: $HermesHeartbeatSeconds"
     if ($MaxCycles -eq 0) {
         Write-Step "Max cycles: unlimited until Ctrl+C"
     }
@@ -380,6 +383,9 @@ try {
     }
     if ($HermesRetryDelaySeconds -lt 0) {
         throw "HermesRetryDelaySeconds must be 0 or greater."
+    }
+    if ($HermesHeartbeatSeconds -lt 1) {
+        throw "HermesHeartbeatSeconds must be 1 or greater."
     }
 
     if ($StatusOnly) {
@@ -403,6 +409,7 @@ try {
                 -MaxTurns $HermesMaxTurns `
                 -Attempts $HermesAttempts `
                 -RetryDelaySeconds $HermesRetryDelaySeconds `
+                -HeartbeatSeconds $HermesHeartbeatSeconds `
                 -IdleTimeoutMinutes $IdleTimeoutMinutes `
                 -LogRoot "logs/continuous_problem_3" `
                 -KeepDisplayOff:$KeepDisplayOff

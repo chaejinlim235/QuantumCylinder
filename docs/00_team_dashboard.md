@@ -49,6 +49,13 @@ Get-Content results\continuous_problem_3\progress_log.md -Tail 120
 Get-Content logs\continuous_problem_3\latest_state.json
 ```
 
+멈춘 실행 정리 후 재시작:
+
+```powershell
+.\scripts\stop_continuous_problem_3_automation.ps1
+.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
+```
+
 제출 전 전체 검증:
 
 ```powershell
