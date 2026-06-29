@@ -1,6 +1,7 @@
 # QuantumCylinder
 
 2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다.
+
 팀명은 **양자실린더 / QuantumCylinder**입니다. 대회 목표는 수상권 이상이며, 가능하면 우승까지 목표로 합니다. 이 저장소는 그 목표를 위해 재현 가능한 실험 코드와 문서를 관리합니다.
 
 ## Current Progress
@@ -42,11 +43,11 @@
 
 - Python 3.11+
 - NumPy, SciPy
+- Qiskit
 - Matplotlib
 - pytest
-- Qiskit optional
 
-현재 baseline은 NumPy/SciPy state-vector 방식으로 실행됩니다. Qiskit은 필수 구현이 아니라 회로 표현, gate/depth, resource proxy 검증용 선택 레이어로 사용합니다.
+현재 기본 baseline은 Qiskit의 `QuantumCircuit`, `Statevector`, `SparsePauliOp`를 사용해 회로와 Hamiltonian을 구성합니다. 기존 NumPy/SciPy 구현은 독립 backend로 보관하고, 별도 resource proxy 확인은 `scripts/problem_1_qiskit_resource_check.py`로 수행합니다.
 
 ## Quick Start
 
@@ -82,6 +83,8 @@ python scripts/problem_1_qiskit_resource_check.py
 | Qiskit validation | circuit resource proxy | `scripts/problem_1_qiskit_resource_check.py` | Qiskit `QuantumCircuit` |
 | common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
 
+Problem 1(a), 1(c), 2의 기본 import 경로는 Qiskit 구현을 re-export합니다. Qiskit 구현은 `src/quantum_cylinder/implementations/qiskit/`에, 기존 NumPy/SciPy 구현은 `src/quantum_cylinder/implementations/numpy/`에 폴더로 분리 보관합니다. 두 폴더는 독립 구현으로 취급하며, 서로 결과 parity를 맞추는 계약은 두지 않습니다.
+
 ## Repository Structure
 
 ```text
@@ -112,6 +115,9 @@ python scripts/problem_1_qiskit_resource_check.py
 |   |-- run_problem_3_continuous_denoising.py
 |   `-- run_problem_1_2_baselines.py
 |-- src/quantum_cylinder/
+|   |-- implementations/
+|   |   |-- numpy/             # original NumPy/SciPy baseline implementations
+|   |   `-- qiskit/            # Qiskit-backed baseline implementations
 |   |-- quantum_ops.py
 |   |-- problem_1a_target_ensemble.py
 |   |-- problem_1b_ensemble_metrics.py

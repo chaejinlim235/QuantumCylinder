@@ -1,18 +1,27 @@
 from __future__ import annotations
 
 import numpy as np
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import SparsePauliOp
 
-from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
+from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
+from quantum_cylinder.problem_1a_target_ensemble import target_ensemble, target_state_circuit
 from quantum_cylinder.problem_1b_ensemble_metrics import fidelity_matrix, mmd_fidelity, wasserstein_infidelity
-from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_resource_proxy, random_unitary_trajectory
-from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory
+from quantum_cylinder.problem_1c_random_unitary_diffusion import (
+    random_unitary_circuit,
+    random_unitary_resource_proxy,
+    random_unitary_trajectory,
+)
+from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import (
+    hamiltonian_projected_trajectory,
+    three_qubit_hamiltonian_operator,
+)
 from quantum_cylinder.problem_3_continuous_projected_denoising import (
     adoption_decision,
     continuous_projection_basis,
     projected_denoising_step,
     search_projected_denoising,
 )
-from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
 
 
 def test_target_ensemble_is_normalized() -> None:
@@ -43,11 +52,22 @@ def test_random_unitary_trajectory_preserves_norm() -> None:
         assert np.allclose(np.linalg.norm(ensemble, axis=1), 1.0)
 
 
+def test_problem_1_circuits_are_qiskit_circuits() -> None:
+    assert isinstance(target_state_circuit(np.zeros(2), np.zeros(2)), QuantumCircuit)
+    assert isinstance(random_unitary_circuit(np.zeros((2, 3))), QuantumCircuit)
+
+
 def test_hamiltonian_t0_recovers_initial_ensemble() -> None:
     states = target_ensemble(n_samples=6, sigma=0.1, seed=6)
     trajectory = hamiltonian_projected_trajectory(states, times=np.array([0.0]), measurement_basis="z", seed=7)
     assert len(trajectory) == 1
     assert np.allclose(np.abs(np.sum(states * trajectory[0].conj(), axis=1)) ** 2, 1.0)
+
+
+def test_hamiltonian_is_qiskit_sparse_pauli_operator() -> None:
+    hamiltonian = three_qubit_hamiltonian_operator()
+    assert isinstance(hamiltonian, SparsePauliOp)
+    assert len(hamiltonian) == 8
 
 
 def test_resource_proxy_columns_match() -> None:
