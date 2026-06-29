@@ -8,6 +8,7 @@ param(
     [int]$IdleTimeoutMinutes = 45,
     [string]$StatusOutput = "results/continuous_problem_3/latest_status.md",
     [string]$ProgressLog = "results/continuous_problem_3/progress_log.md",
+    [switch]$UseWatchdog,
     [switch]$KeepDisplayOff,
     [switch]$AllowNonMainBranch,
     [switch]$StatusOnly
@@ -304,6 +305,7 @@ function Write-ContinuousStatus {
         ('- hermes_attempts_per_cycle: `{0}`' -f $HermesAttempts),
         ('- hermes_retry_delay_seconds: `{0}`' -f $HermesRetryDelaySeconds),
         ('- hermes_heartbeat_seconds: `{0}`' -f $HermesHeartbeatSeconds),
+        ('- hermes_run_mode: `{0}`' -f $(if ($UseWatchdog) { "watchdog" } else { "attached" })),
         '- loop purpose: `experiment -> analyze -> decide -> apply -> verify -> record`',
         '- seed summary: `results/problem_3_seed_sweep/seed_sweep_summary.md`',
         '- default summary: `results/problem_3_continuous_denoising/problem_3_summary.md`',
@@ -348,10 +350,116 @@ function Write-ContinuousStatus {
     Write-Step "Wrote continuous status: $resolvedPath"
 }
 
+function Write-HermesState {
+    param(
+        [string]$Path,
+        [hashtable]$State
+    )
+
+    $stateDir = Split-Path -Parent $Path
+    New-Item -ItemType Directory -Force -Path $stateDir | Out-Null
+    $State["updated_at"] = (Get-Date).ToString("s")
+    $State | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $Path -Encoding UTF8
+}
+
+function Invoke-AttachedHermesCycle {
+    param([int]$Cycle)
+
+    $logRootPath = Join-Path $repoRoot "logs\continuous_problem_3"
+    $statePath = Join-Path $logRootPath "latest_state.json"
+    New-Item -ItemType Directory -Force -Path $logRootPath | Out-Null
+
+    for ($attempt = 1; $attempt -le $HermesAttempts; $attempt++) {
+        $runId = Get-Date -Format "yyyyMMdd_HHmmss"
+        $logPath = Join-Path $logRootPath "$runId-continuous-p3-improvement-cycle-$Cycle-attempt-$attempt.log"
+        $state = @{
+            status = "running"
+            task = "continuous-p3-improvement"
+            cycle = $Cycle
+            attempt = $attempt
+            attempts = $HermesAttempts
+            log = $logPath
+            exit_code = $null
+            run_mode = "attached"
+        }
+        Write-HermesState -Path $statePath -State $state
+
+        $startedAt = Get-Date
+        $transcriptStarted = $false
+        $exitCode = 1
+        $failureMessage = ""
+
+        Write-Step "Attached Hermes attempt $attempt/$HermesAttempts started. Live output is shown in this PowerShell."
+        Add-Content -LiteralPath $logPath -Encoding UTF8 -Value "[$(Get-Date -Format "s")] Attached Hermes attempt $attempt/$HermesAttempts"
+
+        try {
+            try {
+                Start-Transcript -Path $logPath -Append -ErrorAction Stop | Out-Null
+                $transcriptStarted = $true
+            }
+            catch {
+                $failureMessage = "Transcript unavailable: $($_.Exception.Message)"
+                Write-Step $failureMessage
+                Add-Content -LiteralPath $logPath -Encoding UTF8 -Value "[$(Get-Date -Format "s")] $failureMessage"
+            }
+
+            $global:LASTEXITCODE = 0
+            & $invokeScript continuous-p3-improvement -Yolo -MaxTurns $HermesMaxTurns
+            $exitCode = $LASTEXITCODE
+            if ($null -eq $exitCode) {
+                $exitCode = 0
+            }
+        }
+        catch {
+            $failureMessage = $_.Exception.Message
+            $exitCode = if ($LASTEXITCODE -ne 0) { $LASTEXITCODE } else { 1 }
+            Write-Step "Attached Hermes attempt failed: $failureMessage"
+            Add-Content -LiteralPath $logPath -Encoding UTF8 -Value "[$(Get-Date -Format "s")] ERROR: $failureMessage"
+        }
+        finally {
+            if ($transcriptStarted) {
+                try {
+                    Stop-Transcript | Out-Null
+                }
+                catch {
+                    Write-Step "Could not stop transcript cleanly: $($_.Exception.Message)"
+                }
+            }
+        }
+
+        $duration = New-TimeSpan -Start $startedAt -End (Get-Date)
+        $state["status"] = if ($exitCode -eq 0) { "completed" } else { "failed" }
+        $state["exit_code"] = $exitCode
+        $state["duration"] = Format-RunDuration -Duration $duration
+        if ($failureMessage) {
+            $state["message"] = $failureMessage
+        }
+        Write-HermesState -Path $statePath -State $state
+
+        Write-Step "Attached Hermes attempt $attempt/$HermesAttempts finished with exit code $exitCode."
+        if ($exitCode -eq 0) {
+            $global:LASTEXITCODE = 0
+            return
+        }
+
+        if ($attempt -lt $HermesAttempts) {
+            Write-Step "Retrying in $HermesRetryDelaySeconds seconds."
+            Start-Sleep -Seconds $HermesRetryDelaySeconds
+        }
+    }
+
+    $global:LASTEXITCODE = 1
+    throw "Attached Hermes failed after $HermesAttempts attempts. See logs: $logRootPath"
+}
+
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
 $watchdog = Join-Path $PSScriptRoot "run_hermes_watchdog.ps1"
 if (-not (Test-Path -LiteralPath $watchdog)) {
     throw "Hermes watchdog script not found: $watchdog"
+}
+$invokeScript = Join-Path $PSScriptRoot "invoke_hermes_task.ps1"
+if (-not (Test-Path -LiteralPath $invokeScript)) {
+    throw "Hermes invoke script not found: $invokeScript"
 }
 
 $script:CycleResults = @()
@@ -365,6 +473,7 @@ try {
     Write-Step "Continuous Problem 3 automation started."
     Write-Step "Repository: $repoRoot"
     Write-Step "Cycle minutes: $CycleMinutes"
+    Write-Step "Hermes run mode: $(if ($UseWatchdog) { "watchdog" } else { "attached" })"
     Write-Step "Hermes retry delay seconds: $HermesRetryDelaySeconds"
     Write-Step "Hermes heartbeat seconds: $HermesHeartbeatSeconds"
     if ($MaxCycles -eq 0) {
@@ -404,16 +513,21 @@ try {
         $status = "pass"
         $note = "Hermes cycle completed."
         try {
-            & $watchdog continuous-p3-improvement `
-                -Yolo `
-                -MaxTurns $HermesMaxTurns `
-                -Attempts $HermesAttempts `
-                -RetryDelaySeconds $HermesRetryDelaySeconds `
-                -HeartbeatSeconds $HermesHeartbeatSeconds `
-                -IdleTimeoutMinutes $IdleTimeoutMinutes `
-                -LogRoot "logs/continuous_problem_3" `
-                -KeepDisplayOff:$KeepDisplayOff
-            Assert-LastExitCode "run_hermes_watchdog.ps1 continuous-p3-improvement"
+            if ($UseWatchdog) {
+                & $watchdog continuous-p3-improvement `
+                    -Yolo `
+                    -MaxTurns $HermesMaxTurns `
+                    -Attempts $HermesAttempts `
+                    -RetryDelaySeconds $HermesRetryDelaySeconds `
+                    -HeartbeatSeconds $HermesHeartbeatSeconds `
+                    -IdleTimeoutMinutes $IdleTimeoutMinutes `
+                    -LogRoot "logs/continuous_problem_3" `
+                    -KeepDisplayOff:$KeepDisplayOff
+                Assert-LastExitCode "run_hermes_watchdog.ps1 continuous-p3-improvement"
+            }
+            else {
+                Invoke-AttachedHermesCycle -Cycle $cycle
+            }
         }
         catch {
             $status = "failed"
