@@ -62,7 +62,7 @@ try {
 
     if (-not $SkipTests) {
         Write-Step "Running tests: python -m pytest"
-        & $projectPython -m pytest
+        & $projectPython -m pytest --basetemp .pytest_tmp_visible
         if ($LASTEXITCODE -ne 0) {
             throw "pytest failed with exit code $LASTEXITCODE"
         }

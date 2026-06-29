@@ -60,6 +60,7 @@ For Problem 3, only treat a result as main if the adoption gate passes.
 | Task | Purpose | Typical command |
 | --- | --- | --- |
 | `p3-status` | 테스트, git 상태, Problem 3 현재 결과 확인 | `.\scripts\invoke_hermes_task.ps1 p3-status` |
+| `final-pipeline` | 테스트, 제출용 실행, 20 seed sweep, 최종 claim 점검 자동 실행 | `.\scripts\invoke_hermes_task.ps1 final-pipeline -Yolo -MaxTurns 240` |
 | `p3-seed-sweep` | 20개 seed 반복 실행과 robustness 요약 생성 | `.\scripts\invoke_hermes_task.ps1 p3-seed-sweep -Yolo -MaxTurns 180` |
 | `p3-report-draft` | 실제 결과에 기반한 보고서 초안 생성 | `.\scripts\invoke_hermes_task.ps1 p3-report-draft -Yolo` |
 | `p3-judge-review` | 심사자 관점의 약점과 개선 우선순위 점검 | `.\scripts\invoke_hermes_task.ps1 p3-judge-review` |
