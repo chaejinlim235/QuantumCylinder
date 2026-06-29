@@ -11,13 +11,13 @@
 | Area | Status | Owner | Next action |
 | --- | --- | --- | --- |
 | Repository setup | Done | 한지후 | PR 단위 변경과 자동 CI 유지 |
-| Problem 1 baseline | Implemented | 한지후 | 김건우가 Qiskit/resource 관점에서 검증 |
-| Problem 2 baseline | Implemented | 한지후 | 임채진이 문제 조건과 물리적 해석 확인 |
+| Problem 1 baseline | Locked | 한지후 | 3번 extension의 비교 기준으로 유지 |
+| Problem 2 baseline | Locked | 한지후 | comparable-strength resource match 표를 보고서에 반영 |
 | Local tests | Passing | 한지후 | 모든 코드 PR 전 `pytest` 실행 |
 | Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
 | Paper/problem interpretation | In progress | 임채진 | 발표에 쓸 문제 정의와 핵심 가정만 추출 |
 | Python environment recovery | In progress | 김승빈 | 환경 복구 후 baseline 실행 로그와 결과 파일 확인 |
-| Problem 3 extension | Not started | 한지후 | Day 1 안에 실험 후보 1개로 고정 |
+| Problem 3 extension | Ready to start | 한지후 | measurement-basis sweep + shallow denoising 중 최소 구현 선택 |
 | Final report/story | Draft started | 임채진 | `docs/experiments/2026-06-29_final_report_storyline.md`를 결과와 맞춰 갱신 |
 
 ## Project Scope

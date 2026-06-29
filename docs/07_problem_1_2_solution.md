@@ -125,6 +125,9 @@ Hamiltonian projected proxy:
 Output:
 
 - `results/problem_1_2_baseline/resource_proxies.csv`
+- `results/problem_1_2_baseline/comparable_strength_resource_matches.csv`
+
+The comparable-strength table directly supports Problem 2(d). It searches non-initial random-unitary and Hamiltonian points whose MMD or Wasserstein-type distances are closest, then reports the resource/control proxies at those matched points.
 
 Optional Qiskit check:
 

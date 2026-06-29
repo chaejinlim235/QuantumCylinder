@@ -6,20 +6,22 @@
 - [x] 문제 브리프 정리
 - [x] 역할 분배 정리
 - [x] baseline 코드 골격 생성
-- [ ] 전원이 `python scripts/run_problem_1_2_baselines.py` 실행 확인
+- [x] 기준 환경에서 `python scripts/run_problem_1_2_baselines.py` 실행 확인
 
 ## Day 1: 1/2번 재현
 
-- `N=80`, `sigma=0.10`, seed 고정
-- random-unitary trajectory plot 생성
-- Hamiltonian projected diffusion time sweep plot 생성
-- MMD/Wasserstein 결과가 같은 방향으로 해석되는지 확인
-- resource proxy 표 작성
+- [x] `N=80`, `sigma=0.10`, seed 고정
+- [x] random-unitary trajectory plot 생성
+- [x] Hamiltonian projected diffusion time sweep plot 생성
+- [x] MMD/Wasserstein 결과 해석용 summary 생성
+- [x] resource proxy 표 작성
+- [x] comparable diffusion strength 기준 resource match 표 작성
 
 성공 기준:
 
 - baseline plot 2장 이상
 - 각 mechanism의 diffusion parameter에 따른 qualitative behavior 설명
+- Problem 2(d)의 comparable-strength resource/control 비교
 - 코드 실행 방법이 README만 보고 재현 가능
 
 ## Day 2: 3번 extension 후보 압축
