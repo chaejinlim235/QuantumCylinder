@@ -3,6 +3,22 @@
 2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다..
 팀명은 **양자실린더 / QuantumCylinder**입니다. 대회 목표는 수상권 이상이며, 가능하면 우승까지 목표로 합니다. 이 저장소는 그 목표를 위해 재현 가능한 실험 코드와 문서를 관리합니다.
 
+## Current Progress
+
+팀 운영 기준은 "한지후가 핵심 코드 구현과 통합을 맡고, 나머지 팀원은 해석, 검증, 환경 안정화, 결과 정리에 집중한다"입니다.
+
+| Area | Status | Owner | Next action |
+| --- | --- | --- | --- |
+| Repository setup | Done | 한지후 | PR 단위 변경과 자동 CI 유지 |
+| Problem 1 baseline | Implemented | 한지후 | 김건우가 Qiskit/resource 관점에서 검증 |
+| Problem 2 baseline | Implemented | 한지후 | 임채진이 문제 조건과 물리적 해석 확인 |
+| Local tests | Passing | 한지후 | 모든 코드 PR 전 `pytest` 실행 |
+| Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
+| Paper/problem interpretation | In progress | 임채진 | 발표에 쓸 문제 정의와 핵심 가정만 추출 |
+| Python environment recovery | In progress | 김승빈 | 환경 복구 후 baseline 실행 로그와 결과 파일 확인 |
+| Problem 3 extension | Not started | 한지후 | Day 1 안에 실험 후보 1개로 고정 |
+| Final report/story | Not started | 임채진 | baseline figure와 Problem 3 claim이 정해진 뒤 작성 |
+
 ## Project Scope
 
 이 저장소는 지정문제 3번의 세 요구를 작은 state-vector 실험으로 재현하고 비교합니다.
@@ -28,8 +44,9 @@
 - NumPy, SciPy
 - Matplotlib
 - pytest
+- Qiskit optional
 
-현재 baseline은 Qiskit/PennyLane 없이 실행됩니다. 외부 양자 SDK는 hardware-aware 분석이나 transpilation이 필요할 때 추가합니다.
+현재 baseline은 NumPy/SciPy state-vector 방식으로 실행됩니다. Qiskit은 필수 구현이 아니라 회로 표현, gate/depth, resource proxy 검증용 선택 레이어로 사용합니다.
 
 ## Quick Start
 
@@ -43,6 +60,13 @@ pytest
 
 기본 결과는 `results/problem_1_2_baseline/`에 생성됩니다. `results/`의 CSV/PNG/JSON은 기본적으로 Git에 커밋하지 않습니다.
 
+Qiskit 검증이 필요한 팀원은 아래 명령을 추가로 실행합니다.
+
+```powershell
+pip install -e ".[qiskit]"
+python scripts/problem_1_qiskit_resource_check.py
+```
+
 ## Code Map
 
 문제별 실행 파일과 핵심 구현 파일은 아래와 같습니다.
@@ -54,6 +78,7 @@ pytest
 | 1(c) | random-unitary diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_1c_random_unitary_diffusion.py` |
 | 2 | Hamiltonian projected diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` |
 | 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
+| Qiskit validation | circuit resource proxy | `scripts/problem_1_qiskit_resource_check.py` | Qiskit `QuantumCircuit` |
 | common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
 
 ## Repository Structure
@@ -71,11 +96,17 @@ pytest
 |   |-- 02_roadmap.md
 |   |-- 03_experiment_protocol.md
 |   |-- 04_extension_ideas.md
-|   `-- experiments/
+|   |-- 05_hackathon_execution_plan.md
+|   |-- 06_paper_triage.md
+|   |-- 07_problem_1_2_solution.md
+|   |-- 08_test_environment.md
+|   |-- 09_qiskit_validation_layer.md
+|   `-- 10_llm_development_guide.md
 |-- notebooks/                # exploration only; reusable logic belongs in src/
 |-- results/                  # generated experiment outputs; ignored by default
 |-- scripts/
 |   |-- problem_1a_generate_target_ensemble.py
+|   |-- problem_1_qiskit_resource_check.py
 |   `-- run_problem_1_2_baselines.py
 |-- src/quantum_cylinder/
 |   |-- quantum_ops.py
@@ -92,10 +123,10 @@ pytest
 
 | Member | Primary responsibility | Background fit | Near-term output |
 | --- | --- | --- | --- |
-| 임채진 | 연구 방향, 물리적 해석, 발표 구조 | 물리 데이터 해석과 회귀 모델링 경험을 바탕으로 diffusion behavior를 해석 | 문제 해석, baseline 결과 해석, 발표 흐름 |
-| 김건우 | 양자 회로 구현, resource proxy, hardware-aware 비교 | 양자 터널링 시뮬레이션과 모델 압축 경험을 회로 깊이/게이트 수 분석에 연결 | Problem 1/2 회로 구현 검증, gate/depth proxy 표 |
-| 김승빈 | 실험 파이프라인, 로그 관리, 시각화 | 생성 모델 및 3D reconstruction 파이프라인 경험을 반복 실험 관리에 활용 | 재현 가능한 실행 스크립트, plot/CSV 관리 |
-| 한지후 | metric, loss, 수리 모델링, Problem 3 extension | ML systems, parameter-efficient adaptation, diffusion/loss 분석 경험을 metric과 denoising 설계에 활용 | MMD/Wasserstein 검증, denoising 및 trade-off 분석 |
+| 한지후 | 핵심 코드 구현, 통합, Problem 3 extension | MVP 해커톤 경험을 일정 관리와 빠른 구현에 활용하고, 양자물리 해석은 팀 검증을 받음 | Problem 1/2 baseline 유지, Problem 3 최소 구현, PR 통합 |
+| 김건우 | Qiskit 적용, 회로/resource 검증, 논문 확인 | 양자 관련 코드와 모델 구현 경험을 gate/depth 분석과 문제 조건 검증에 연결 | Qiskit resource 표, NumPy 구현과 회로 관점 차이 정리 |
+| 임채진 | 지정문제 해석, 논문 핵심 추출, 발표 흐름 | 문제와 논문을 읽고 팀이 주장할 수 있는 범위를 정리 | 문제 정의, baseline 해석, 보고서/발표 목차 |
+| 김승빈 | 개발 환경 복구, 실행 재현, 결과 정리 | 개발 경험을 환경 문제 해결과 반복 실행 로그 관리에 활용 | 로컬 환경 복구, baseline 실행 로그, plot/CSV 확인 |
 
 세부 역할과 리뷰 구조는 `docs/01_team_roles.md`에 정리합니다.
 
@@ -108,6 +139,8 @@ Problem 1/2 baseline 풀이와 구현 선택은 `docs/07_problem_1_2_solution.md
 로컬 테스트와 GitHub Actions CI 사용법은 `docs/08_test_environment.md`에 정리합니다.
 
 Qiskit은 필수 구현이 아니라 회로/resource 검증용 선택 레이어로 사용하며, 기준은 `docs/09_qiskit_validation_layer.md`에 정리합니다.
+
+팀원별 LLM 사용 프롬프트와 작업 규칙은 `docs/10_llm_development_guide.md`에 정리합니다.
 
 ## Git Rules
 
@@ -225,18 +258,16 @@ Common utilities that are not specific to one problem may use descriptive names 
 ## LLM Development Guide
 
 ```text
-You are helping the QuantumCylinder team build a reproducible solution for the 2026 Quantum Information Hackathon.
+너는 QuantumCylinder 팀의 2026 양자정보경진대회 작업을 돕는 LLM 개발 파트너다.
 
-Follow these constraints:
-
-1. Keep the repository readable to external reviewers.
-2. Keep Problem 1/2 baselines reproducible before adding Problem 3 extensions.
-3. Use branch names in the form <type>/<short-topic>; do not include personal names.
-4. Put problem-specific code in files named problem_<n><subproblem>_<topic>.py when a subproblem exists.
-5. Put reusable code under src/quantum_cylinder/.
-6. Put executable experiment scripts under scripts/.
-7. Keep generated results and private/raw files out of Git by default.
-8. Compare new ideas against at least one baseline with the same metrics.
-9. State both improvement and trade-off for experimental claims.
-10. Run pytest when code changes are made.
+현재 운영 원칙:
+1. 한지후가 핵심 코드 구현과 통합을 담당한다.
+2. 김건우는 Qiskit/resource 검증과 논문 확인을 담당한다.
+3. 임채진은 지정문제와 논문 해석, 최종 보고서 흐름을 담당한다.
+4. 김승빈은 Python 환경 복구, 실행 재현, 결과 파일 확인을 담당한다.
+5. Problem 1/2 baseline을 깨지 말고, Problem 3 extension은 baseline과 같은 metric으로 비교한다.
+6. 브랜치명에는 개인 이름이나 GitHub username을 넣지 않는다.
+7. 코드 변경 후에는 `python -m pytest`를 실행한다.
+8. 주장할 때는 개선점과 trade-off를 함께 적는다.
+9. 모르는 물리 해석은 단정하지 말고 검증 질문으로 남긴다.
 ```
