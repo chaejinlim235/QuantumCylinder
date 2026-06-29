@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Local notebooks
+.ipynb_checkpoints/
+
+# Generated experiment artifacts
+results/**/*.csv
+results/**/*.png
+results/**/*.json
+!results/.gitkeep
+
+# Raw/private inputs. Do not commit application forms or files with PII.
+data/raw/*
+!data/raw/.gitkeep
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

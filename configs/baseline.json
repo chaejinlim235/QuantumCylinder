@@ -1,0 +1,11 @@
+{
+  "n_samples": 80,
+  "sigma": 0.1,
+  "seed": 7,
+  "random_steps": 12,
+  "random_angle_scale": 3.141592653589793,
+  "hamiltonian_t_max": 4.0,
+  "hamiltonian_time_points": 13,
+  "measurement_basis": "z",
+  "output_dir": "results/baseline"
+}

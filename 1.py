@@ -1,24 +1,29 @@
-import numpy as np
-from qiskit import QuantumCircuit
-from qiskit.quantum_info import Statevector
+"""Compatibility entry point for Problem 1-(a).
 
-N = 100
-sigma = 0.10 
+The original repository started with this root-level script. Keep it as a
+small runnable check, while the reusable implementation lives under src/.
+"""
 
-S_0 = []
+from pathlib import Path
+import sys
 
-for i in range(N):
-    qc = QuantumCircuit(2)
-    
-    for q in range(2):
-        delta_y = np.random.normal(0, sigma)
-        delta_z = np.random.normal(0, sigma)
-        
-        qc.ry(delta_y, q)
-        qc.rz(delta_z, q)
-    
-    state = Statevector.from_instruction(qc)
-    S_0.append(state)
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "src"))
 
-print(f"앙상블 S_0 크기: {len(S_0)}")
-print(f"첫 번째 샘플의 상태 벡터: \n{S_0[0].data}")
+from quantum_cylinder.states import target_ensemble
+
+
+def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+    n_samples = 100
+    sigma = 0.10
+    s0 = target_ensemble(n_samples=n_samples, sigma=sigma, seed=7)
+
+    print(f"앙상블 S_0 크기: {len(s0)}")
+    print(f"첫 번째 샘플의 상태 벡터:\n{s0[0]}")
+
+
+if __name__ == "__main__":
+    main()
