@@ -8,7 +8,17 @@ from scipy.linalg import expm
 
 from quantum_cylinder.problem_1b_ensemble_metrics import fidelity_matrix, mmd_fidelity, wasserstein_infidelity
 from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import three_qubit_hamiltonian
-from quantum_cylinder.quantum_ops import Array, KET0, normalize_rows
+
+Array = np.ndarray
+KET0 = np.array([1, 0], dtype=complex)
+
+
+def normalize_rows(states: Array) -> Array:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
 
 
 def continuous_projection_basis(theta: float, phi: float) -> Array:
