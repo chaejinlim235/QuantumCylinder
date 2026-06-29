@@ -15,7 +15,7 @@
 | --- | --- | --- | --- | --- | --- |
 | 한지후 | `caffeine-fighter` | 핵심 코드 구현, 통합, Problem 3 extension | Problem 1/2 baseline과 테스트 환경을 주도적으로 구축 | Problem 3 최소 구현, metric 비교표, merge 관리 | 임채진, 김건우 |
 | 김건우 | `koi312500` | Qiskit 적용, 회로/resource 검증, 논문 확인 | Qiskit 코드 적용과 논문 리딩을 병행 중 | gate/depth/resource proxy 표, NumPy baseline과 Qiskit 회로 관점 비교 | 한지후 |
-| 임채진 | `chaejinlim235` | 지정문제 해석, 논문 핵심 추출, 발표 흐름 | 문제/논문 해석 중이며 Codex 작업 커밋이 지연 중 | 문제 정의 1페이지, baseline 결과 해석, 보고서 목차 | 한지후 |
+| 임채진 | `chaejinlim235` | 지정문제 해석, 논문 핵심 추출, 발표 흐름 | 보고서 스토리라인 초안이 병합됨 | 문제 정의 1페이지, baseline 결과 해석, 보고서 목차 보강 | 한지후 |
 | 김승빈 | `dreamerghost77` | Python 환경 복구, 실행 재현, 결과 정리 | Python 설치 문제 해결 중이며 논문을 GPT와 함께 읽는 중 | 로컬 실행 성공 로그, 결과 파일 체크리스트, figure/table 후보 | 김건우 |
 
 ## 팀원별 지금 할 일
@@ -39,7 +39,7 @@
 - 지정문제와 논문에서 발표에 반드시 필요한 정의, 가정, 평가 기준만 추출한다.
 - Problem 1/2 baseline 결과가 무엇을 보여주는지 과장 없이 설명한다.
 - 최종 보고서의 목차와 스토리라인을 만든다.
-- Codex나 GitHub 작업이 무한 로딩이면 문서 초안을 로컬 파일로 먼저 저장하고, 커밋은 한지후에게 넘긴다.
+- Codex나 GitHub 작업이 다시 막히면 문서 초안을 로컬 파일로 먼저 저장하고, 커밋은 한지후에게 넘긴다.
 
 ### 김승빈
 
