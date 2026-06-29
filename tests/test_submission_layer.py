@@ -1,0 +1,38 @@
+from __future__ import annotations
+
+from submission.problem1_random_unitary_scrambling import solve_problem_1
+from submission.problem2_hamiltonian_projection import solve_problem_2
+from submission.problem3_continuous_measurement_denoising import solve_problem_3
+
+
+def test_simple_submission_layer_smoke(tmp_path):
+    problem1 = solve_problem_1(
+        tmp_path / "problem1",
+        n_samples=8,
+        random_steps=2,
+    )
+    assert problem1["summary"].exists()
+    assert len(problem1["rows"]) == 3
+
+    problem2 = solve_problem_2(
+        tmp_path / "problem2",
+        n_samples=8,
+        random_steps=2,
+        time_points=3,
+    )
+    assert problem2["summary"].exists()
+    assert len(problem2["rows"]) == 3
+    assert len(problem2["resource_rows"]) == 2
+
+    problem3 = solve_problem_3(
+        tmp_path / "problem3",
+        n_samples=8,
+        random_steps=2,
+        input_steps=[1],
+        tau_points=3,
+        theta_points=5,
+        phi_points=6,
+    )
+    assert problem3["summary"].exists()
+    assert len(problem3["rows"]) == 1
+    assert problem3["overall"] in {"use_as_main", "fallback_only", "do_not_use_as_main"}
