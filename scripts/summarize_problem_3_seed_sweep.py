@@ -55,6 +55,12 @@ def median_or_none(rows: list[dict[str, object]], key: str) -> float | None:
     return stats.median(float(row[key]) for row in rows)
 
 
+def min_or_none(rows: list[dict[str, object]], key: str) -> float | None:
+    if not rows:
+        return None
+    return min(float(row[key]) for row in rows)
+
+
 def format_metric(value: float | None) -> str:
     return f"`{value:.6f}`" if value is not None else "`n/a`"
 
@@ -123,6 +129,14 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
     median_success = median_or_none(rows, "continuous_mean_success_probability")
     median_mmd_improvement = median_or_none(rows, "continuous_mmd_improvement")
     median_wasserstein_improvement = median_or_none(rows, "continuous_wasserstein_improvement")
+    min_score_margin = min_or_none(rows, "continuous_score_minus_axis_score")
+    min_diversity = min_or_none(rows, "continuous_diversity_retention")
+    min_success = min_or_none(rows, "continuous_mean_success_probability")
+    min_mmd_improvement = min_or_none(rows, "continuous_mmd_improvement")
+    min_wasserstein_improvement = min_or_none(rows, "continuous_wasserstein_improvement")
+    nonpositive_axis_margin_rows = sum(
+        1 for row in rows if float(row["continuous_score_minus_axis_score"]) <= 0.0
+    )
 
     strong_enough = (
         use_as_main_fraction >= 0.70
@@ -143,6 +157,22 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
     )
 
     recommendation = "use_as_main" if strong_enough else "fallback_or_appendix"
+    if strong_enough:
+        report_ready_wording = (
+            f"Use: Across the {main_runs} / {len(run_decisions)} requested seeds, "
+            "continuous measurement-basis post-selection remains a reproducible small-scale "
+            "state-vector denoising proxy, "
+            f"with median MMD improvement {format_metric(median_mmd_improvement)} and "
+            f"median Wasserstein improvement {format_metric(median_wasserstein_improvement)}. "
+            f"The axis-only score margin is small ({format_metric(median_score_margin)}), "
+            "so present it as a limited post-selected proxy improvement, not hardware advantage "
+            "or general quantum advantage."
+        )
+    else:
+        report_ready_wording = (
+            "Use: The current seed sweep is not robust enough for the main Problem 3 claim. "
+            "Keep it as a fallback or appendix result unless a later sweep passes the adoption gate."
+        )
 
     lines = [
         "# Problem 3 Seed Sweep Summary",
@@ -185,6 +215,35 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
             f"- continuous_diversity_retention: {format_metric(median_diversity)}",
             f"- continuous_mean_success_probability: {format_metric(median_success)}",
             "",
+            "## Guardrail Checks",
+            "",
+            "Worst-case checks across best rows; these expose weak fallback rows and do not replace the median adoption gate.",
+            "",
+            f"- minimum continuous_mmd_improvement: {format_metric(min_mmd_improvement)}",
+            f"- minimum continuous_wasserstein_improvement: {format_metric(min_wasserstein_improvement)}",
+            f"- minimum continuous_score_minus_axis_score: {format_metric(min_score_margin)}",
+            f"- nonpositive axis-margin rows: `{nonpositive_axis_margin_rows} / {len(rows)}`",
+            f"- minimum continuous_diversity_retention: {format_metric(min_diversity)}",
+            f"- minimum continuous_mean_success_probability: {format_metric(min_success)}",
+            "",
+            "## Report Table",
+            "",
+            "| Metric | Value | Report use |",
+            "| --- | --- | --- |",
+            f"| Recommendation | `{recommendation}` | main-claim gate |",
+            f"| Passing seeds | `{main_runs} / {len(run_decisions)}` | seed robustness gate |",
+            f"| Main-candidate rows | `{len(main_rows)} / {len(rows)} = {main_row_fraction:.3f}` | row-level robustness |",
+            f"| Median MMD improvement | {format_metric(median_mmd_improvement)} | distance improvement |",
+            f"| Median Wasserstein improvement | {format_metric(median_wasserstein_improvement)} | distance improvement |",
+            f"| Median axis-only score margin | {format_metric(median_score_margin)} | limitation, not a broad advantage claim |",
+            f"| Median diversity retention | {format_metric(median_diversity)} | collapse guardrail |",
+            f"| Median mean success probability | {format_metric(median_success)} | post-selection feasibility |",
+            f"| Nonpositive axis-margin rows | `{nonpositive_axis_margin_rows} / {len(rows)}` | axis-comparison caveat |",
+            "",
+            "## Report-Ready Wording",
+            "",
+            report_ready_wording,
+            "",
             "## Final Claim Guidance",
             "",
         ]
@@ -194,6 +253,7 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
         lines.append(
             "The seed sweep supports using continuous projected denoising as the main Problem 3 result, "
             f"with the caveat that the median axis-only score margin is {format_metric(median_score_margin)}. "
+            "Do not claim every input step beats the axis-only projection if fallback rows have weak margins. "
             "State this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage."
         )
     else:

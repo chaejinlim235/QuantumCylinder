@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import statistics as stats
 import sys
 from pathlib import Path
 
@@ -111,6 +112,10 @@ def summarize_best_row(row: dict) -> str:
     )
 
 
+def format_summary_metric(value: float | None) -> str:
+    return f"`{value:.6f}`" if value is not None else "`n/a`"
+
+
 def write_summary(path: Path, args: argparse.Namespace, best_rows: list[dict]) -> None:
     main_rows = [row for row in best_rows if row["decision"] == "main_candidate"]
     fallback_rows = [row for row in best_rows if row["decision"] == "fallback_candidate"]
@@ -119,6 +124,10 @@ def write_summary(path: Path, args: argparse.Namespace, best_rows: list[dict]) -
     best_overall = max(best_pool, key=lambda row: row["continuous_score"])
     decision = "use_as_main" if main_rows else "fallback_only" if fallback_rows else "do_not_use_as_main"
     lines = "\n".join(summarize_best_row(row) for row in best_rows)
+    axis_margins = [float(row["continuous_score_minus_axis_score"]) for row in best_rows]
+    median_axis_margin = stats.median(axis_margins) if axis_margins else None
+    min_axis_margin = min(axis_margins) if axis_margins else None
+    nonpositive_axis_margin_rows = sum(1 for margin in axis_margins if margin <= 0.0)
 
     text = f"""# Problem 3 Continuous Projected Denoising Summary
 
@@ -157,6 +166,14 @@ The result is a main candidate only when it improves at least one baseline metri
 - Main candidates: `{len(main_rows)}`
 - Fallback candidates: `{len(fallback_rows)}`
 - Do not use as main: `{len(do_not_use_rows)}`
+
+## Axis Baseline Comparison
+
+- median continuous_score_minus_axis_score: {format_summary_metric(median_axis_margin)}
+- minimum continuous_score_minus_axis_score: {format_summary_metric(min_axis_margin)}
+- nonpositive axis-margin rows: `{nonpositive_axis_margin_rows} / {len(axis_margins)}`
+
+The continuous basis search is compared against the best exact `Z/X/Y` axis projection at the same time grid. If this margin is small or negative on fallback rows, treat it as a limitation. Do not claim every input step beats the axis-only projection; use the seed sweep as the robustness gate.
 
 ## Generated Files
 

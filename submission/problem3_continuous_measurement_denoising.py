@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import statistics as stats
 import sys
 from collections.abc import Iterable
 from pathlib import Path
@@ -365,6 +366,10 @@ def solve_problem_3(
     overall = "use_as_main" if main_rows else "fallback_only" if fallback_rows else "do_not_use_as_main"
     best_pool = main_rows or fallback_rows or best_rows
     best = max(best_pool, key=lambda row: row["continuous_score_minus_axis_score"])
+    axis_margins = [float(row["continuous_score_minus_axis_score"]) for row in best_rows]
+    median_axis_margin = stats.median(axis_margins)
+    min_axis_margin = min(axis_margins)
+    nonpositive_axis_margin_rows = sum(1 for margin in axis_margins if margin <= 0.0)
 
     summary = f"""# Problem 3 Simple Summary
 
@@ -388,6 +393,15 @@ def solve_problem_3(
 - Best continuous basis: tau `{best['continuous_tau']:.6f}`, theta `{best['continuous_theta']:.6f}`, phi `{best['continuous_phi']:.6f}`
 - Diversity retention: `{best['continuous_diversity_retention']:.6f}`
 - Mean post-selection probability: `{best['continuous_mean_success_probability']:.6f}`
+
+## Axis Baseline Comparison
+
+- Median continuous-vs-axis score margin: `{median_axis_margin:.6f}`
+- Minimum continuous-vs-axis score margin: `{min_axis_margin:.6f}`
+- Nonpositive axis-margin rows: `{nonpositive_axis_margin_rows} / {len(axis_margins)}`
+- Best selected row's axis-only comparator: `{best['axis_basis_name']}` at tau `{best['axis_tau']:.6f}`
+
+Do not claim every input step beats the axis-only projection. Treat small or negative axis margins as a limitation, and state this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage.
 
 ## Interpretation
 

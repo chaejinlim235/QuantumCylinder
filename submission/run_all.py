@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import statistics as stats
 import sys
 from pathlib import Path
 
@@ -60,6 +61,10 @@ def main() -> None:
         theta_points=theta_points,
         phi_points=phi_points,
     )
+    problem3_axis_margins = [float(row["continuous_score_minus_axis_score"]) for row in problem3["rows"]]
+    problem3_median_axis_margin = stats.median(problem3_axis_margins)
+    problem3_min_axis_margin = min(problem3_axis_margins)
+    problem3_nonpositive_axis_rows = sum(1 for margin in problem3_axis_margins if margin <= 0.0)
 
     text = f"""# Simple Submission Run Summary
 
@@ -86,6 +91,11 @@ def main() -> None:
 - Best input step: `{problem3['best']['input_step']}`
 - Best MMD: `{problem3['best']['baseline_mmd']:.6f} -> {problem3['best']['continuous_mmd']:.6f}`
 - Best Wasserstein-type distance: `{problem3['best']['baseline_wasserstein']:.6f} -> {problem3['best']['continuous_wasserstein']:.6f}`
+- Problem 3 axis-only comparison: continuous basis is compared with the best exact `Z/X/Y` axis projection
+- Median continuous-vs-axis score margin: `{problem3_median_axis_margin:.6f}`
+- Minimum continuous-vs-axis score margin: `{problem3_min_axis_margin:.6f}`
+- Nonpositive axis-margin rows: `{problem3_nonpositive_axis_rows} / {len(problem3_axis_margins)}`
+- Caveat: Do not claim every input step beats the axis-only projection; state this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage.
 - Summary: `{problem3['summary']}`
 """
     write_text(args.output_dir / "SUMMARY.md", text)
