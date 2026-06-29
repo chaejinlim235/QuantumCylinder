@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
 
 import numpy as np
 
-from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
+from quantum_cylinder.implementations.qiskit.problem_1a_target_ensemble import target_ensemble
 from quantum_cylinder.problem_1b_ensemble_metrics import mmd_fidelity, wasserstein_infidelity
 
 

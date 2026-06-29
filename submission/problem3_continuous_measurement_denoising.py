@@ -13,8 +13,8 @@ if str(ROOT) not in sys.path:
 
 import numpy as np
 
-from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_trajectory
-from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import three_qubit_hamiltonian
+from quantum_cylinder.implementations.qiskit.problem_1c_random_unitary_diffusion import random_unitary_trajectory
+from quantum_cylinder.implementations.qiskit.problem_2_hamiltonian_projected_diffusion import three_qubit_hamiltonian
 from quantum_cylinder.problem_3_continuous_projected_denoising import (
     adoption_decision,
     axis_basis_specs,
@@ -60,7 +60,7 @@ def solve_problem_3(
     theta_points: int = 13,
     phi_points: int = 16,
 ) -> dict:
-    """Problem 3: search a continuous complement measurement basis for denoising."""
+    """Problem 3: search continuous measurement denoising on Qiskit-generated states."""
     input_steps = [1, 2, 3, 5, 7, 12] if input_steps is None else input_steps
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
     random_trajectory = random_unitary_trajectory(target, n_steps=random_steps, seed=seed + 1)

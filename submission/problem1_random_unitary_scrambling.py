@@ -11,7 +11,7 @@ if str(SRC) not in sys.path:
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_trajectory
+from quantum_cylinder.implementations.qiskit.problem_1c_random_unitary_diffusion import random_unitary_trajectory
 
 from submission.states_and_metrics import distance_to_target, make_target_ensemble, write_csv, write_text
 
@@ -23,7 +23,7 @@ def solve_problem_1(
     seed: int = 7,
     random_steps: int = 12,
 ) -> dict:
-    """Problem 1: diffuse a target ensemble with random unitary circuit layers."""
+    """Problem 1: diffuse a target ensemble with Qiskit random-unitary layers."""
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
 
     # Each layer is random RX/RY/RZ on both data qubits followed by one CZ.
