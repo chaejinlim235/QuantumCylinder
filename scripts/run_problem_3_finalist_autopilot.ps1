@@ -551,10 +551,7 @@ function Start-DetachedAutopilot {
     if ($StopAt) {
         $childArgs += @("-StopAt", $StopAt)
     }
-    $childArgs += "-Seeds"
-    foreach ($seed in $Seeds) {
-        $childArgs += "$seed"
-    }
+    $childArgs += @("-Seeds", ($Seeds -join ","))
     if ($Python) {
         $childArgs += @("-Python", $Python)
     }
@@ -575,6 +572,9 @@ function Start-DetachedAutopilot {
     }
     if ($SkipIssueSync) {
         $childArgs += "-SkipIssueSync"
+    }
+    if ($StatusOnly) {
+        $childArgs += "-StatusOnly"
     }
 
     $commandLine = ($childArgs | ForEach-Object { ConvertTo-CommandLineArgument $_ }) -join " "
