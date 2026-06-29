@@ -14,11 +14,13 @@ if str(ROOT) not in sys.path:
 import numpy as np
 
 from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
-from quantum_cylinder.problem_1c_random_unitary_diffusion import (
+from quantum_cylinder.implementations.qiskit.problem_1c_random_unitary_diffusion import (
     random_unitary_resource_proxy,
     random_unitary_trajectory,
 )
-from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory
+from quantum_cylinder.implementations.qiskit.problem_2_hamiltonian_projected_diffusion import (
+    hamiltonian_projected_trajectory,
+)
 
 from submission.states_and_metrics import distance_to_target, make_target_ensemble, write_csv, write_text
 
@@ -47,7 +49,7 @@ def solve_problem_2(
     time_points: int = 13,
     measurement_basis: str = "z",
 ) -> dict:
-    """Problem 2: evolve data plus complement qubit, then project the complement."""
+    """Problem 2: evolve data plus complement qubit with the Qiskit Hamiltonian backend."""
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
 
     random_trajectory = random_unitary_trajectory(target, n_steps=random_steps, seed=seed + 1)
