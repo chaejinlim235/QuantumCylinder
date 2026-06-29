@@ -56,21 +56,21 @@ namespace QuantumCylinderAutomation {
 "@
     }
 
-    $ES_CONTINUOUS = 0x80000000
-    $ES_SYSTEM_REQUIRED = 0x00000001
-    $ES_DISPLAY_REQUIRED = 0x00000002
+    [uint32]$ES_CONTINUOUS = 2147483648
+    [uint32]$ES_SYSTEM_REQUIRED = 1
+    [uint32]$ES_DISPLAY_REQUIRED = 2
 
     $flags = $ES_CONTINUOUS -bor $ES_SYSTEM_REQUIRED
     if (-not $DisplayOff) {
         $flags = $flags -bor $ES_DISPLAY_REQUIRED
     }
 
-    [QuantumCylinderAutomation.PowerManagement]::SetThreadExecutionState($flags) | Out-Null
+    [QuantumCylinderAutomation.PowerManagement]::SetThreadExecutionState([uint32]$flags) | Out-Null
 }
 
 function Clear-KeepAwake {
     if (([System.Management.Automation.PSTypeName]"QuantumCylinderAutomation.PowerManagement").Type) {
-        [QuantumCylinderAutomation.PowerManagement]::SetThreadExecutionState(0x80000000) | Out-Null
+        [QuantumCylinderAutomation.PowerManagement]::SetThreadExecutionState([uint32]2147483648) | Out-Null
     }
 }
 

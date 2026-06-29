@@ -30,6 +30,27 @@
 
 ## 사용 명령
 
+최종 표준 명령:
+
+```powershell
+.\scripts\run_competition_final_automation.ps1
+```
+
+이 명령 하나가 수행하는 일:
+
+1. `origin/main` 최신 변경을 fetch/fast-forward 한다.
+2. Problem 1/2 quantitative evaluation을 실행한다.
+3. 제출용 `submission/run_all.py`와 20-seed Problem 3 sweep을 포함한 final pipeline을 실행한다.
+4. GitHub issue 할당을 `docs/github_issue_plan.json` 기준으로 동기화한다.
+5. `results/final_automation/latest_status.md`에 최종 status와 safe claim을 기록한다.
+6. 중간 실패가 발생하면 Hermes watchdog의 `final-sync-fix` self-fix loop를 실행한 뒤 실패한 단계를 한 번 재시도한다.
+
+화면은 꺼져도 되고 시스템만 깨어 있으면 충분할 때:
+
+```powershell
+.\scripts\run_competition_final_automation.ps1 -KeepDisplayOff
+```
+
 Hermes에게 전체 루프를 맡길 때:
 
 ```powershell

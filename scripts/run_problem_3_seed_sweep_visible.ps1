@@ -44,6 +44,31 @@ function Format-Duration {
     return "{0:D2}:{1:D2}" -f [int]$Duration.TotalMinutes, $Duration.Seconds
 }
 
+function Resolve-SeedLogPath {
+    param(
+        [string]$LogRoot,
+        [int]$Seed
+    )
+
+    $baseLog = Join-Path $LogRoot "seed_$Seed.log"
+    try {
+        $stream = [System.IO.File]::Open(
+            $baseLog,
+            [System.IO.FileMode]::Create,
+            [System.IO.FileAccess]::Write,
+            [System.IO.FileShare]::Read
+        )
+        $stream.Close()
+        return $baseLog
+    }
+    catch {
+        $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+        $alternateLog = Join-Path $LogRoot "seed_${Seed}_$stamp.log"
+        Write-Step "Seed $Seed log is locked; using alternate log: $alternateLog"
+        return $alternateLog
+    }
+}
+
 $repoRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
 $projectPython = Resolve-ProjectPython -RequestedPython $Python
 $outputRootPath = Join-Path $repoRoot $OutputRoot
@@ -75,7 +100,7 @@ try {
     foreach ($seed in $Seeds) {
         $completed += 1
         $seedDir = Join-Path $outputRootPath "seed_$seed"
-        $seedLog = Join-Path $logRoot "seed_$seed.log"
+        $seedLog = Resolve-SeedLogPath -LogRoot $logRoot -Seed $seed
         $seedWatch = [System.Diagnostics.Stopwatch]::StartNew()
 
         Write-Progress `
