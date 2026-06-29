@@ -101,6 +101,85 @@ def plot_curves(random_rows: list[dict], ham_rows: list[dict], output_path: Path
     plt.close(fig)
 
 
+def plot_metric_aligned_comparison(random_rows: list[dict], ham_rows: list[dict], output_path: Path) -> None:
+    """Plot a mechanism comparison without putting step k and time t on one shared x-axis."""
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
+
+    for rows, label, color, marker in (
+        (random_rows, "random-unitary", "#1f77b4", "o"),
+        (ham_rows, "Hamiltonian projection", "#d62728", "s"),
+    ):
+        non_initial_rows = [row for row in rows if int(row["index"]) != 0]
+        axes[0].scatter(
+            [row["mmd"] for row in non_initial_rows],
+            [row["wasserstein"] for row in non_initial_rows],
+            label=label,
+            color=color,
+            marker=marker,
+            alpha=0.78,
+        )
+        for row in non_initial_rows:
+            native_label = "k" if row["parameter_name"] == "step" else "t"
+            parameter = int(row["parameter"]) if native_label == "k" else round(float(row["parameter"]), 2)
+            axes[0].annotate(
+                f"{native_label}={parameter}",
+                (row["mmd"], row["wasserstein"]),
+                fontsize=7,
+                alpha=0.68,
+                xytext=(3, 3),
+                textcoords="offset points",
+            )
+
+    axes[0].set_title("Metric-space comparison")
+    axes[0].set_xlabel("MMD distance to S0")
+    axes[0].set_ylabel("Wasserstein-type distance to S0")
+    axes[0].grid(alpha=0.25)
+    axes[0].legend()
+
+    match_rows = [
+        ("MMD", closest_metric_pair(random_rows, ham_rows, metric="mmd")),
+        ("Wasserstein", closest_metric_pair(random_rows, ham_rows, metric="wasserstein")),
+    ]
+    x_positions = np.arange(len(match_rows))
+    width = 0.36
+    axes[1].bar(
+        x_positions - width / 2,
+        [row["reference_metric_value"] for _, row in match_rows],
+        width,
+        label="random-unitary",
+        color="#1f77b4",
+        alpha=0.82,
+    )
+    axes[1].bar(
+        x_positions + width / 2,
+        [row["candidate_metric_value"] for _, row in match_rows],
+        width,
+        label="Hamiltonian projection",
+        color="#d62728",
+        alpha=0.82,
+    )
+    axes[1].set_xticks(x_positions)
+    axes[1].set_xticklabels([name for name, _ in match_rows])
+    axes[1].set_title("Nearest comparable-strength pairs")
+    axes[1].set_ylabel("matched metric value")
+    axes[1].grid(axis="y", alpha=0.25)
+    axes[1].legend()
+    for idx, (_, match) in enumerate(match_rows):
+        axes[1].text(
+            idx,
+            max(match["reference_metric_value"], match["candidate_metric_value"]) + 0.025,
+            f"k={match['reference_parameter']:.0f}\n"
+            f"t={match['candidate_parameter']:.2f}\n"
+            f"gap={match['absolute_gap']:.4f}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+
+
 def comparable_strength_resource_rows(
     random_rows: list[dict],
     ham_rows: list[dict],
@@ -192,7 +271,11 @@ Hamiltonian projected diffusion uses the fixed three-qubit Hamiltonian from the 
 
 ## Comparable Diffusion Strength
 
-Problem 2(d) asks for a qualitative resource/control comparison at comparable diffusion strength. The nearest non-initial pairs are:
+Problem 2(d) asks for a qualitative resource/control comparison at comparable diffusion strength. Random-unitary step `k`
+and Hamiltonian evolution time `t` are different native parameters, so they should not be interpreted as one shared x-axis.
+The comparison below matches points by the reported distance metric instead.
+
+The nearest non-initial pairs are:
 
 {comparable_lines}
 
@@ -201,6 +284,7 @@ Problem 2(d) asks for a qualitative resource/control comparison at comparable di
 - Problem 1 shows a direct scrambling trajectory controlled by random circuit layers.
 - Problem 2 shows diffusion driven by fixed Hamiltonian time evolution and projection, so the control structure is simpler even though the diffusion curve can fluctuate with time.
 - Distances are computed with the same fidelity-based MMD and infidelity-cost Wasserstein-type metric for both mechanisms.
+- The native parameters `k` and `t` are shown in separate panels. Cross-mechanism comparison should use the metric-aligned plot and comparable-strength resource table, not the raw horizontal locations.
 
 ## Generated Files
 
@@ -209,6 +293,7 @@ Problem 2(d) asks for a qualitative resource/control comparison at comparable di
 - `resource_proxies.csv`
 - `comparable_strength_resource_matches.csv`
 - `distance_curves.png`
+- `metric_aligned_comparison.png`
 - `problem_1_2_settings.json`
 """
     path.write_text(text, encoding="utf-8")
@@ -248,6 +333,7 @@ def main() -> None:
     write_rows(output_dir / "resource_proxies.csv", resource_rows)
     write_rows(output_dir / "comparable_strength_resource_matches.csv", comparable_rows)
     plot_curves(random_rows, ham_rows, output_dir / "distance_curves.png")
+    plot_metric_aligned_comparison(random_rows, ham_rows, output_dir / "metric_aligned_comparison.png")
     write_json(
         output_dir / "problem_1_2_settings.json",
         {
