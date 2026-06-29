@@ -12,13 +12,13 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from quantum_cylinder.diffusion import (  # noqa: E402
-    hamiltonian_projected_trajectory,
+from quantum_cylinder.problem_1c_random_unitary_diffusion import (  # noqa: E402
     random_unitary_resource_proxy,
     random_unitary_trajectory,
 )
-from quantum_cylinder.experiments import distance_curve, hamiltonian_resource_proxy
-from quantum_cylinder.states import target_ensemble
+from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory  # noqa: E402
+from quantum_cylinder.experiment_curves import distance_curve, hamiltonian_resource_proxy
+from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 
 
 def load_config(path: Path) -> dict:
@@ -28,7 +28,7 @@ def load_config(path: Path) -> dict:
 
 def parse_args() -> argparse.Namespace:
     config_parser = argparse.ArgumentParser(add_help=False)
-    config_parser.add_argument("--config", type=Path, default=ROOT / "configs" / "baseline.json")
+    config_parser.add_argument("--config", type=Path, default=ROOT / "configs" / "problem_1_2_baseline.json")
     known, remaining = config_parser.parse_known_args()
     defaults = load_config(known.config)
 

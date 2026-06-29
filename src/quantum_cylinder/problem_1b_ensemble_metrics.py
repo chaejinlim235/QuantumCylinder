@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import linear_sum_assignment, linprog
 
-from quantum_cylinder.states import Array, normalize_rows
+from quantum_cylinder.quantum_ops import Array, normalize_rows
 
 
 def fidelity_matrix(left: Array, right: Array) -> Array:
