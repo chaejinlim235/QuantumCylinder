@@ -31,7 +31,7 @@ function Add-LogLine {
         [string]$Path,
         [string]$Message
     )
-    Add-Content -LiteralPath $Path -Value $Message -Encoding UTF8
+    Add-SharedUtf8Text -Path $Path -Text ($Message + "`n")
 }
 
 function Format-RunDuration {
@@ -136,6 +136,88 @@ function ConvertTo-CommandLineArgument {
     return '"' + ($Argument -replace '"', '\"') + '"'
 }
 
+function Set-SharedUtf8Text {
+    param(
+        [string]$Path,
+        [string]$Text
+    )
+
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    for ($attempt = 1; $attempt -le 20; $attempt++) {
+        try {
+            $stream = [System.IO.File]::Open(
+                $Path,
+                [System.IO.FileMode]::Create,
+                [System.IO.FileAccess]::Write,
+                [System.IO.FileShare]::ReadWrite
+            )
+            try {
+                $writer = [System.IO.StreamWriter]::new($stream, $encoding)
+                $stream = $null
+                try {
+                    $writer.Write($Text)
+                }
+                finally {
+                    $writer.Dispose()
+                }
+            }
+            finally {
+                if ($stream) {
+                    $stream.Dispose()
+                }
+            }
+            return
+        }
+        catch {
+            if ($attempt -eq 20) {
+                throw
+            }
+            Start-Sleep -Milliseconds 250
+        }
+    }
+}
+
+function Add-SharedUtf8Text {
+    param(
+        [string]$Path,
+        [string]$Text
+    )
+
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    for ($attempt = 1; $attempt -le 20; $attempt++) {
+        try {
+            $stream = [System.IO.File]::Open(
+                $Path,
+                [System.IO.FileMode]::Append,
+                [System.IO.FileAccess]::Write,
+                [System.IO.FileShare]::ReadWrite
+            )
+            try {
+                $writer = [System.IO.StreamWriter]::new($stream, $encoding)
+                $stream = $null
+                try {
+                    $writer.Write($Text)
+                }
+                finally {
+                    $writer.Dispose()
+                }
+            }
+            finally {
+                if ($stream) {
+                    $stream.Dispose()
+                }
+            }
+            return
+        }
+        catch {
+            if ($attempt -eq 20) {
+                throw
+            }
+            Start-Sleep -Milliseconds 250
+        }
+    }
+}
+
 function Write-State {
     param(
         [string]$Path,
@@ -143,7 +225,7 @@ function Write-State {
     )
 
     $State["updated_at"] = (Get-Date).ToString("s")
-    $State | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $Path -Encoding UTF8
+    Set-SharedUtf8Text -Path $Path -Text (($State | ConvertTo-Json -Depth 5) + "`n")
 }
 
 function Stop-ProcessTree {
@@ -189,7 +271,7 @@ $lock = @{
     task = $Task
     started_at = (Get-Date).ToString("s")
 }
-$lock | ConvertTo-Json | Set-Content -LiteralPath $lockPath -Encoding UTF8
+Set-SharedUtf8Text -Path $lockPath -Text (($lock | ConvertTo-Json) + "`n")
 
 $consoleState = $null
 $completed = $false
@@ -233,73 +315,88 @@ try {
         Write-Step "Attempt $attempt/$Attempts started."
         Add-LogLine -Path $logPath -Message "[$(Get-Date -Format "s")] Hermes watchdog attempt $attempt/$Attempts"
 
-        $childArguments = @(
-            "-NoProfile",
-            "-ExecutionPolicy", "Bypass",
-            "-File", $invokeScript,
+        $invokeArguments = @(
             $Task,
             "-MaxTurns", "$MaxTurns"
         )
         if ($HermesPath) {
-            $childArguments += @("-HermesPath", $HermesPath)
+            $invokeArguments += @("-HermesPath", $HermesPath)
         }
         if ($Model) {
-            $childArguments += @("-Model", $Model)
+            $invokeArguments += @("-Model", $Model)
         }
         if ($Yolo) {
-            $childArguments += "-Yolo"
+            $invokeArguments += "-Yolo"
         }
         if ($Worktree) {
-            $childArguments += "-Worktree"
+            $invokeArguments += "-Worktree"
         }
 
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = (Get-Command powershell.exe).Source
-        $psi.Arguments = ($childArguments | ForEach-Object { ConvertTo-CommandLineArgument $_ }) -join " "
-        $psi.WorkingDirectory = $repoRoot
-        $psi.UseShellExecute = $false
-        $psi.RedirectStandardOutput = $true
-        $psi.RedirectStandardError = $true
-        $psi.CreateNoWindow = $true
-
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $psi
-        $script:lastOutputAt = Get-Date
-        $script:currentLogPath = $logPath
-
-        $stdoutHandler = [System.Diagnostics.DataReceivedEventHandler]{
-            param($sender, $eventArgs)
-            if ($null -ne $eventArgs.Data) {
-                $script:lastOutputAt = Get-Date
-                $line = "[{0}] {1}" -f (Get-Date -Format "HH:mm:ss"), $eventArgs.Data
-                Write-Host $line
-                Add-Content -LiteralPath $script:currentLogPath -Value $line -Encoding UTF8
-            }
+        $childOutPath = Join-Path $logRootPath "$runId-$Task-attempt-$attempt.stdout.log"
+        $childErrPath = Join-Path $logRootPath "$runId-$Task-attempt-$attempt.stderr.log"
+        Set-SharedUtf8Text -Path $childErrPath -Text ""
+        $invokeCommand = "& " + (ConvertTo-CommandLineArgument $invokeScript)
+        if ($invokeArguments.Count -gt 0) {
+            $invokeCommand += " " + (($invokeArguments | ForEach-Object { ConvertTo-CommandLineArgument $_ }) -join " ")
         }
-        $stderrHandler = [System.Diagnostics.DataReceivedEventHandler]{
-            param($sender, $eventArgs)
-            if ($null -ne $eventArgs.Data) {
-                $script:lastOutputAt = Get-Date
-                $line = "[{0}] STDERR: {1}" -f (Get-Date -Format "HH:mm:ss"), $eventArgs.Data
-                Write-Host $line -ForegroundColor Yellow
-                Add-Content -LiteralPath $script:currentLogPath -Value $line -Encoding UTF8
-            }
-        }
+        $innerCommand = "$invokeCommand *> $(ConvertTo-CommandLineArgument $childOutPath); exit `$LASTEXITCODE"
+        $wrapperArguments = @(
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-Command", $innerCommand
+        )
+        $childCommandLine = ($wrapperArguments | ForEach-Object { ConvertTo-CommandLineArgument $_ }) -join " "
+        Add-LogLine -Path $logPath -Message "[$(Get-Date -Format "s")] child command: powershell.exe $childCommandLine"
+        Add-LogLine -Path $logPath -Message "[$(Get-Date -Format "s")] child combined output: $childOutPath"
+        Add-LogLine -Path $logPath -Message "[$(Get-Date -Format "s")] child stderr placeholder: $childErrPath"
 
-        $process.add_OutputDataReceived($stdoutHandler)
-        $process.add_ErrorDataReceived($stderrHandler)
-        [void]$process.Start()
-        $process.BeginOutputReadLine()
-        $process.BeginErrorReadLine()
+        $process = Start-Process `
+            -FilePath (Get-Command powershell.exe).Source `
+            -ArgumentList $childCommandLine `
+            -WorkingDirectory $repoRoot `
+            -WindowStyle Hidden `
+            -PassThru
+
+        $lastOutputAt = Get-Date
+        $lastOutLength = 0
+        $lastTreeCount = 0
+        $childPid = $process.Id
+        Add-LogLine -Path $logPath -Message ("[{0}] watchdog: child pid: {1}" -f (Get-Date -Format "HH:mm:ss"), $childPid)
 
         $startedAt = Get-Date
         $killedForIdle = $false
 
         while (-not $process.HasExited) {
             Start-Sleep -Seconds $HeartbeatSeconds
+            $process.Refresh()
             $now = Get-Date
             $elapsed = New-TimeSpan -Start $startedAt -End $now
-            $idle = New-TimeSpan -Start $script:lastOutputAt -End $now
+            $currentOutLength = if (Test-Path -LiteralPath $childOutPath) { (Get-Item -LiteralPath $childOutPath).Length } else { 0 }
+            $currentTreeCount = 0
+            try {
+                $childProcess = Get-CimInstance Win32_Process -Filter "ProcessId = $childPid" -ErrorAction SilentlyContinue
+                if ($childProcess) {
+                    $childTree = @(Get-CimInstance Win32_Process | Where-Object {
+                        $_.ProcessId -eq $childPid -or $_.ParentProcessId -eq $childPid
+                    })
+                    $currentTreeCount = $childTree.Count
+                }
+            }
+            catch {
+                $currentTreeCount = 0
+            }
+            if ($currentOutLength -ne $lastOutLength -or $currentTreeCount -ne $lastTreeCount) {
+                $lastOutputAt = $now
+                $changeMessage = "[{0}] watchdog: child stdout bytes={1} process_tree={2}" -f `
+                    (Get-Date -Format "HH:mm:ss"), `
+                    $currentOutLength, `
+                    $currentTreeCount
+                Write-Host $changeMessage -ForegroundColor DarkGray
+                Add-LogLine -Path $logPath -Message $changeMessage
+                $lastOutLength = $currentOutLength
+                $lastTreeCount = $currentTreeCount
+            }
+            $idle = New-TimeSpan -Start $lastOutputAt -End $now
             $heartbeat = "[{0}] watchdog: attempt={1}/{2} elapsed={3} idle={4}" -f `
                 (Get-Date -Format "HH:mm:ss"), `
                 $attempt, `
@@ -320,8 +417,11 @@ try {
         }
 
         $process.WaitForExit()
-        $exitCode = if ($killedForIdle) { 124 } else { $process.ExitCode }
+        $process.Refresh()
+        $exitCode = if ($killedForIdle) { 124 } else { [int]$process.ExitCode }
         $finalExitCode = $exitCode
+        Add-LogLine -Path $logPath -Message ("[{0}] watchdog: child combined output log: {1}" -f (Get-Date -Format "HH:mm:ss"), $childOutPath)
+        Add-LogLine -Path $logPath -Message ("[{0}] watchdog: child stderr placeholder: {1}" -f (Get-Date -Format "HH:mm:ss"), $childErrPath)
 
         $state["status"] = if ($exitCode -eq 0) { "completed" } else { "failed" }
         $state["exit_code"] = $exitCode
