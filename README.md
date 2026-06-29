@@ -74,6 +74,14 @@ pytest
 
 기본 결과는 `results/problem_1_2_baseline/`에 생성됩니다. `results/`의 CSV/PNG/JSON은 기본적으로 Git에 커밋하지 않습니다.
 
+Problem 1/2의 지정문제 세부 요구사항과 실제 실행 결과를 함께 확인하려면 아래 리포트를 생성합니다.
+
+```powershell
+python scripts/problem_1_2_generate_requirement_report.py
+```
+
+커밋되는 요약 리포트는 `docs/14_problem_1_2_requirement_report.md`이고, 상세 CSV/PNG/JSON은 `results/problem_1_2_requirement_report/`에 생성됩니다.
+
 Qiskit 검증이 필요한 팀원은 아래 명령을 추가로 실행합니다.
 
 ```powershell
