@@ -99,6 +99,20 @@ python submission/run_all.py
 
 `submission/`은 제출/발표용으로 문제별 핵심 흐름만 얇게 묶은 폴더입니다. 검증된 실제 구현은 `src/quantum_cylinder/`에 유지하고, `submission/`은 심사자와 팀원이 먼저 읽기 쉬운 entry point 역할을 합니다.
 
+## Visible Problem 3 Run
+
+Hermes 내부 실행 로그보다 seed별 진행을 PowerShell에서 직접 보고 싶으면 아래 명령을 사용합니다.
+
+```powershell
+.\scripts\run_problem_3_seed_sweep_visible.ps1
+```
+
+짧게 확인하려면:
+
+```powershell
+.\scripts\run_problem_3_seed_sweep_visible.ps1 -Seeds 1,2 -SkipTests -OutputRoot results/problem_3_seed_sweep_visible_check
+```
+
 ## Code Map
 
 문제별 실행 파일과 핵심 구현 파일은 아래와 같습니다.
@@ -112,6 +126,7 @@ python submission/run_all.py
 | 2 | Hamiltonian projected diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` |
 | 3 | continuous projected denoising | `scripts/run_problem_3_continuous_denoising.py` | `src/quantum_cylinder/problem_3_continuous_projected_denoising.py` |
 | 3 sweep | seed sweep summary | `scripts/summarize_problem_3_seed_sweep.py` | `results/problem_3_seed_sweep/` |
+| 3 visible sweep | seed별 진행 확인 | `scripts/run_problem_3_seed_sweep_visible.ps1` | `results/problem_3_seed_sweep/` |
 | 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
 | Qiskit validation | circuit resource proxy | `scripts/problem_1_qiskit_resource_check.py` | Qiskit `QuantumCircuit` |
 

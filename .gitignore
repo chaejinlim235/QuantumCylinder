@@ -20,6 +20,7 @@ results/**/*.csv
 results/**/*.png
 results/**/*.json
 results/**/*.md
+results/**/*.log
 !results/.gitkeep
 
 # Raw/private inputs. Do not commit application forms or files with PII.
