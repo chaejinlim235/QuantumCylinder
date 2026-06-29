@@ -102,6 +102,8 @@ pytest
 
 대회 기간 실행 계획과 개인별 작업 브랜치는 `docs/05_hackathon_execution_plan.md`에 정리합니다.
 
+논문 해석 범위를 줄이기 위한 triage 기준은 `docs/06_paper_triage.md`에 정리합니다.
+
 ## Git Rules
 
 ### Branch naming
