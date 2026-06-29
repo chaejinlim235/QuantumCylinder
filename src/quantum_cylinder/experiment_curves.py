@@ -3,13 +3,12 @@ from __future__ import annotations
 import numpy as np
 
 from quantum_cylinder.problem_1b_ensemble_metrics import mmd_fidelity, wasserstein_infidelity
-from quantum_cylinder.quantum_ops import Array
 
 
 def distance_curve(
-    reference: Array,
-    trajectory: list[Array],
-    parameters: Array | None = None,
+    reference: np.ndarray,
+    trajectory: list[np.ndarray],
+    parameters: np.ndarray | None = None,
     parameter_name: str = "parameter",
 ) -> list[dict]:
     if parameters is None:

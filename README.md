@@ -81,7 +81,6 @@ python scripts/problem_1_qiskit_resource_check.py
 | 3 | continuous projected denoising | `scripts/run_problem_3_continuous_denoising.py` | `src/quantum_cylinder/problem_3_continuous_projected_denoising.py` |
 | 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
 | Qiskit validation | circuit resource proxy | `scripts/problem_1_qiskit_resource_check.py` | Qiskit `QuantumCircuit` |
-| common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
 
 Problem 1(a), 1(c), 2의 기본 import 경로는 Qiskit 구현을 re-export합니다. Qiskit 구현은 `src/quantum_cylinder/implementations/qiskit/`에, 기존 NumPy/SciPy 구현은 `src/quantum_cylinder/implementations/numpy/`에 폴더로 분리 보관합니다. 두 폴더는 독립 구현으로 취급하며, 서로 결과 parity를 맞추는 계약은 두지 않습니다.
 
@@ -118,7 +117,6 @@ Problem 1(a), 1(c), 2의 기본 import 경로는 Qiskit 구현을 re-export합�
 |   |-- implementations/
 |   |   |-- numpy/             # original NumPy/SciPy baseline implementations
 |   |   `-- qiskit/            # Qiskit-backed baseline implementations
-|   |-- quantum_ops.py
 |   |-- problem_1a_target_ensemble.py
 |   |-- problem_1b_ensemble_metrics.py
 |   |-- problem_1c_random_unitary_diffusion.py
@@ -228,7 +226,7 @@ scripts/run_problem_1_2_baselines.py
 configs/problem_1_2_baseline.json
 ```
 
-Common utilities that are not specific to one problem may use descriptive names such as `quantum_ops.py` or `experiment_curves.py`.
+Common utilities that are not specific to one problem may use descriptive names such as `experiment_curves.py`.
 
 ## Reproducibility Rules
 
