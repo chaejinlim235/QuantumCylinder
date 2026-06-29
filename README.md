@@ -249,6 +249,8 @@ Hermes Agent 연동 방법은 `docs/12_hermes_agent_setup.md`에 정리합니다
 
 자동화 피드백 루프와 issue 동기화 기준은 `docs/13_automation_feedback_loop.md`에 정리합니다.
 
+팀원이 현재 문제 해결 상황과 코드 리뷰 보강 포인트를 확인하려면 `docs/14_team_problem_status.md`를 먼저 봅니다.
+
 ## Git Rules
 
 ### Branch naming
