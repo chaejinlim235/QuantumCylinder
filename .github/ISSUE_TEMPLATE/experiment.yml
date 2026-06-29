@@ -1,0 +1,38 @@
+name: Experiment
+description: Track a reproducible experiment.
+title: "[EXP] "
+labels: ["experiment"]
+body:
+  - type: input
+    id: owner
+    attributes:
+      label: Owner
+      placeholder: "예: 한지후"
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: 무엇이 개선될 것이라고 보는지 한 문장으로 적어주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Setup
+      description: 샘플 수, seed, diffusion steps/time grid, Hamiltonian, noise model 등을 적어주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Metrics
+      description: MMD, Wasserstein, depth, 2-qubit gate count, parameter count 등.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Result
+      description: 실험 후 결과와 판단을 업데이트하세요.
