@@ -1,6 +1,6 @@
 param(
     [Parameter(Position = 0)]
-    [ValidateSet("final-pipeline", "p3-seed-sweep", "p3-report-draft", "p3-judge-review", "p3-status")]
+    [ValidateSet("feedback-loop", "final-pipeline", "p3-seed-sweep", "p3-report-draft", "p3-judge-review", "p3-status")]
     [string]$Task = "p3-seed-sweep",
 
     [string]$HermesPath = "",
