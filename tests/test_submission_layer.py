@@ -1,8 +1,18 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from submission.problem1_random_unitary_scrambling import solve_problem_1
 from submission.problem2_hamiltonian_projection import solve_problem_2
 from submission.problem3_continuous_measurement_denoising import solve_problem_3
+
+
+def test_submission_layer_does_not_import_development_package():
+    submission_dir = Path(__file__).resolve().parents[1] / "submission"
+    for path in submission_dir.glob("*.py"):
+        text = path.read_text(encoding="utf-8")
+        assert "quantum_cylinder" not in text
+        assert 'ROOT / "src"' not in text
 
 
 def test_simple_submission_layer_smoke(tmp_path):

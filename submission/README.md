@@ -2,7 +2,7 @@
 
 이 폴더는 심사자와 팀원이 먼저 읽을 수 있는 단순 제출용 코드입니다.
 
-기존 `src/`, `scripts/`, `tests/`는 검증과 자동화에 유리한 개발용 구조입니다. 이 폴더는 `src/quantum_cylinder/implementations/qiskit/` 구현을 얇게 묶어, 문제별 물리 흐름이 바로 보이도록 정리합니다.
+기존 `src/`, `scripts/`, `tests/`는 검증과 자동화에 유리한 개발용 구조입니다. 이 폴더는 제출자가 바로 읽고 실행할 수 있도록 필요한 Qiskit 구현을 폴더 안에 복사해 둔 독립 실행용 코드입니다.
 
 ## Files
 
@@ -10,8 +10,8 @@
 | --- | --- |
 | `states_and_metrics.py` | Qiskit target ensemble, MMD, Wasserstein 거리 계산 |
 | `problem1_random_unitary_scrambling.py` | Problem 1: Qiskit random local rotations + entangler diffusion |
-| `problem2_hamiltonian_projection.py` | Problem 2: Qiskit data + complement Hamiltonian evolution and projection |
-| `problem3_continuous_measurement_denoising.py` | Problem 3: Qiskit-generated diffusion plus continuous complement-basis post-selection denoising |
+| `problem2_hamiltonian_projection.py` | Problem 2: Qiskit random-unitary 비교, Hamiltonian evolution, projection, resource matching |
+| `problem3_continuous_measurement_denoising.py` | Problem 3: Qiskit-generated diffusion, fixed Hamiltonian, continuous complement-basis post-selection denoising |
 | `run_all.py` | Problem 1, 2, 3을 한 번에 실행 |
 
 ## Quick Smoke Test
@@ -47,4 +47,4 @@ python submission/run_all.py
 
 ## Rule
 
-이 폴더는 읽기 쉬운 제출용 layer입니다. Problem 1/2의 물리적 세부 구현 source of truth는 `src/quantum_cylinder/implementations/qiskit/`입니다. Problem 3의 continuous measurement search는 `src/quantum_cylinder/problem_3_continuous_projected_denoising.py`에 두고, 그 입력 ensemble과 Hamiltonian primitive는 Qiskit 구현에서 가져옵니다.
+이 폴더는 읽기 쉬운 제출용 layer입니다. `submission/` 안의 코드는 개발용 패키지를 import하지 않고, 필요한 Qiskit/metric/search 로직을 직접 포함합니다. 개발용 source of truth는 여전히 `src/`에 있지만, 제출 폴더만 보아도 실행 흐름을 따라갈 수 있습니다.

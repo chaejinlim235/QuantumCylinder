@@ -5,24 +5,263 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import numpy as np
-
-from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
-from quantum_cylinder.implementations.qiskit.problem_1c_random_unitary_diffusion import (
-    random_unitary_resource_proxy,
-    random_unitary_trajectory,
-)
-from quantum_cylinder.implementations.qiskit.problem_2_hamiltonian_projected_diffusion import (
-    hamiltonian_projected_trajectory,
-)
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Operator, SparsePauliOp, Statevector
+from scipy.linalg import expm
 
 from submission.states_and_metrics import distance_to_target, make_target_ensemble, write_csv, write_text
+
+KET0 = np.asarray(Statevector.from_label("0").data, dtype=complex)
+
+
+def random_unitary_circuit(angles: np.ndarray, entangler: str = "cz") -> QuantumCircuit:
+    """Create one Qiskit random local-rotation + entangler layer."""
+    circuit = QuantumCircuit(2)
+    for qubit in range(2):
+        ax, ay, az = angles[qubit]
+        circuit.rx(float(ax), qubit)
+        circuit.ry(float(ay), qubit)
+        circuit.rz(float(az), qubit)
+
+    if entangler == "cz":
+        circuit.cz(0, 1)
+    elif entangler == "cnot":
+        circuit.cx(0, 1)
+    else:
+        raise ValueError(f"Unknown entangler: {entangler}")
+    return circuit
+
+
+def _normalize_rows(states: np.ndarray) -> np.ndarray:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
+
+
+def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> np.ndarray:
+    """Sample one Qiskit layer and return its 4x4 unitary matrix."""
+    angles = rng.uniform(-angle_scale, angle_scale, size=(2, 3))
+    circuit = random_unitary_circuit(angles, entangler=entangler)
+    return np.asarray(Operator(circuit).reverse_qargs().data, dtype=complex)
+
+
+def random_unitary_trajectory(
+    initial: np.ndarray,
+    n_steps: int = 12,
+    angle_scale: float = np.pi,
+    seed: int | None = 8,
+    entangler: str = "cz",
+) -> list[np.ndarray]:
+    """Apply random-unitary layers and return S0, S1, ..., Sn."""
+    if n_steps < 0:
+        raise ValueError("n_steps must be non-negative.")
+
+    rng = np.random.default_rng(seed)
+    current = _normalize_rows(initial)
+    trajectory = [current.copy()]
+
+    for _ in range(n_steps):
+        next_states = np.empty_like(current)
+        for idx, state in enumerate(current):
+            unitary = random_unitary_layer(rng, angle_scale=angle_scale, entangler=entangler)
+            next_states[idx] = Statevector(state).evolve(Operator(unitary)).data
+        current = _normalize_rows(next_states)
+        trajectory.append(current.copy())
+
+    return trajectory
+
+
+def random_unitary_resource_proxy(step: int, rotations_per_qubit: int = 3, n_qubits: int = 2) -> dict:
+    """Report the simple gate/control proxy for a k-step random-unitary circuit."""
+    return {
+        "mechanism": "random_unitary",
+        "parameter": step,
+        "single_qubit_rotations": step * rotations_per_qubit * n_qubits,
+        "two_qubit_entanglers": step,
+        "random_controls": step * rotations_per_qubit * n_qubits,
+        "total_hamiltonian_time": 0.0,
+        "fixed_hamiltonian_terms": 0,
+        "fixed_hamiltonian_parameters": 0,
+        "measurement_basis": "",
+    }
+
+
+def three_qubit_hamiltonian_operator(
+    hx: float = 0.8090,
+    hy: float = 0.9045,
+    j_coupling: float = 1.0,
+) -> SparsePauliOp:
+    """Create Problem 2's fixed 3-qubit Hamiltonian as a Qiskit Pauli sum."""
+    return SparsePauliOp.from_list(
+        [
+            ("XII", hx),
+            ("YII", hy),
+            ("IXI", hx),
+            ("IYI", hy),
+            ("IIX", hx),
+            ("IIY", hy),
+            ("XXI", j_coupling),
+            ("IXX", j_coupling),
+        ]
+    )
+
+
+def three_qubit_hamiltonian(hx: float = 0.8090, hy: float = 0.9045, j_coupling: float = 1.0) -> np.ndarray:
+    """Return the Hamiltonian matrix with qubit order M0, M1, F."""
+    hamiltonian = three_qubit_hamiltonian_operator(hx=hx, hy=hy, j_coupling=j_coupling)
+    return np.asarray(hamiltonian.to_matrix(), dtype=complex)
+
+
+def measurement_basis_vectors(name: str) -> tuple[np.ndarray, np.ndarray]:
+    """Return the two complement-qubit basis vectors used for projection."""
+    name = name.lower()
+    if name == "z":
+        return KET0, np.asarray(Statevector.from_label("1").data, dtype=complex)
+    if name == "x":
+        plus = np.array([1, 1], dtype=complex) / np.sqrt(2)
+        minus = np.array([1, -1], dtype=complex) / np.sqrt(2)
+        return plus, minus
+    if name == "y":
+        plus_i = np.array([1, 1j], dtype=complex) / np.sqrt(2)
+        minus_i = np.array([1, -1j], dtype=complex) / np.sqrt(2)
+        return plus_i, minus_i
+    raise ValueError(f"Unknown measurement basis: {name}")
+
+
+def _project_complement(full_state: np.ndarray, outcome: int, measurement_basis: str) -> tuple[np.ndarray, float]:
+    """Project the complement qubit and return the normalized data state."""
+    basis = measurement_basis_vectors(measurement_basis)[outcome]
+    data_by_complement = full_state.reshape(4, 2)
+    projected = data_by_complement @ basis.conj()
+    probability = float(np.vdot(projected, projected).real)
+    if probability <= 1e-14:
+        return np.zeros(4, dtype=complex), 0.0
+    normalized_projected = Statevector(projected / np.sqrt(probability)).data
+    return np.asarray(normalized_projected, dtype=complex), probability
+
+
+def hamiltonian_projected_ensemble(
+    initial: np.ndarray,
+    time: float,
+    measurement_basis: str = "z",
+    seed: int | None = 9,
+    hamiltonian: np.ndarray | None = None,
+) -> np.ndarray:
+    """Evolve M+F under H, project F, and return the resulting M ensemble."""
+    if time < 0:
+        raise ValueError("time must be non-negative.")
+
+    rng = np.random.default_rng(seed)
+    data_states = _normalize_rows(initial)
+    hamiltonian = three_qubit_hamiltonian() if hamiltonian is None else hamiltonian
+    evolution = Operator(expm(-1j * hamiltonian * time))
+    output = np.empty_like(data_states)
+
+    for idx, data_state in enumerate(data_states):
+        full_initial = np.kron(data_state, KET0)
+        evolved = np.asarray(Statevector(full_initial).evolve(evolution).data, dtype=complex)
+
+        projected_states = []
+        probabilities = []
+        for outcome in (0, 1):
+            projected, probability = _project_complement(evolved, outcome, measurement_basis)
+            projected_states.append(projected)
+            probabilities.append(probability)
+
+        probabilities = np.array(probabilities, dtype=float)
+        probabilities = probabilities / probabilities.sum()
+        sampled_outcome = int(rng.choice([0, 1], p=probabilities))
+        output[idx] = projected_states[sampled_outcome]
+
+    return _normalize_rows(output)
+
+
+def hamiltonian_projected_trajectory(
+    initial: np.ndarray,
+    times: np.ndarray,
+    measurement_basis: str = "z",
+    seed: int | None = 9,
+) -> list[np.ndarray]:
+    """Evaluate Hamiltonian projected diffusion on a list of time points."""
+    hamiltonian = three_qubit_hamiltonian()
+    return [
+        hamiltonian_projected_ensemble(
+            initial,
+            float(time),
+            measurement_basis=measurement_basis,
+            seed=None if seed is None else seed + idx,
+            hamiltonian=hamiltonian,
+        )
+        for idx, time in enumerate(times)
+    ]
+
+
+def closest_metric_pair(
+    reference_rows: list[dict],
+    candidate_rows: list[dict],
+    metric: str,
+    skip_initial: bool = True,
+) -> dict:
+    """Find the closest pair of diffusion points under one reported metric."""
+    if not reference_rows:
+        raise ValueError("reference_rows must not be empty.")
+    if not candidate_rows:
+        raise ValueError("candidate_rows must not be empty.")
+
+    def eligible(row: dict) -> bool:
+        if not skip_initial:
+            return True
+        return int(row.get("index", -1)) != 0 and abs(float(row.get("parameter", 0.0))) > 1e-12
+
+    reference_candidates = [row for row in reference_rows if eligible(row)]
+    candidate_candidates = [row for row in candidate_rows if eligible(row)]
+    if not reference_candidates or not candidate_candidates:
+        raise ValueError("No eligible non-initial rows to compare.")
+
+    best_reference = reference_candidates[0]
+    best_candidate = candidate_candidates[0]
+    best_gap = abs(float(best_reference[metric]) - float(best_candidate[metric]))
+
+    for reference_row in reference_candidates:
+        for candidate_row in candidate_candidates:
+            gap = abs(float(reference_row[metric]) - float(candidate_row[metric]))
+            if gap < best_gap:
+                best_reference = reference_row
+                best_candidate = candidate_row
+                best_gap = gap
+
+    return {
+        "metric": metric,
+        "reference_index": int(best_reference["index"]),
+        "reference_parameter_name": best_reference["parameter_name"],
+        "reference_parameter": float(best_reference["parameter"]),
+        "reference_metric_value": float(best_reference[metric]),
+        "candidate_index": int(best_candidate["index"]),
+        "candidate_parameter_name": best_candidate["parameter_name"],
+        "candidate_parameter": float(best_candidate["parameter"]),
+        "candidate_metric_value": float(best_candidate[metric]),
+        "absolute_gap": float(best_gap),
+    }
+
+
+def hamiltonian_resource_proxy(time: float, measurement_basis: str = "z") -> dict:
+    return {
+        "mechanism": "hamiltonian_projected",
+        "parameter": time,
+        "single_qubit_rotations": 0,
+        "two_qubit_entanglers": 0,
+        "random_controls": 0,
+        "total_hamiltonian_time": time,
+        "fixed_hamiltonian_terms": 8,
+        "fixed_hamiltonian_parameters": 3,
+        "measurement_basis": measurement_basis,
+    }
 
 
 def _distance_rows(target: np.ndarray, trajectory: list[np.ndarray], parameters: list[float], name: str) -> list[dict]:
