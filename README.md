@@ -27,10 +27,11 @@
 
 - Python 3.11+
 - NumPy, SciPy
+- Qiskit
 - Matplotlib
 - pytest
 
-현재 baseline은 Qiskit/PennyLane 없이 실행됩니다. 외부 양자 SDK는 hardware-aware 분석이나 transpilation이 필요할 때 추가합니다.
+현재 baseline은 Qiskit의 `QuantumCircuit`, `Statevector`, `SparsePauliOp`를 사용해 회로와 Hamiltonian을 구성합니다. 외부 hardware-aware 분석이나 transpilation은 필요할 때 별도 단계로 추가합니다.
 
 ## Quick Start
 
@@ -57,6 +58,8 @@ pytest
 | 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
 | common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
 
+Problem 1(a), 1(c), 2의 기본 import 경로는 Qiskit 구현을 re-export합니다. Qiskit 구현은 `src/quantum_cylinder/implementations/qiskit/`에, 기존 NumPy/SciPy 구현은 `src/quantum_cylinder/implementations/numpy/`에 폴더로 분리 보관합니다. 두 폴더는 독립 구현으로 취급하며, 서로 결과 parity를 맞추는 계약은 두지 않습니다.
+
 ## Repository Structure
 
 ```text
@@ -79,6 +82,9 @@ pytest
 |   |-- problem_1a_generate_target_ensemble.py
 |   `-- run_problem_1_2_baselines.py
 |-- src/quantum_cylinder/
+|   |-- implementations/
+|   |   |-- numpy/             # original NumPy/SciPy baseline implementations
+|   |   `-- qiskit/            # Qiskit-backed baseline implementations
 |   |-- quantum_ops.py
 |   |-- problem_1a_target_ensemble.py
 |   |-- problem_1b_ensemble_metrics.py

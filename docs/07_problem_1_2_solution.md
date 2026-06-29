@@ -15,6 +15,10 @@ pytest
 Implementation:
 
 - `src/quantum_cylinder/problem_1a_target_ensemble.py`
+- Qiskit `QuantumCircuit` and `Statevector`
+- Qiskit implementation: `src/quantum_cylinder/implementations/qiskit/problem_1a_target_ensemble.py`
+- Preserved NumPy implementation: `src/quantum_cylinder/implementations/numpy/problem_1a_target_ensemble.py`
+- The Qiskit and NumPy implementations are stored independently; no cross-backend parity contract is maintained.
 
 Choices:
 
@@ -44,6 +48,10 @@ For equal-size ensembles, the Wasserstein-type distance is solved as a minimum a
 Implementation:
 
 - `src/quantum_cylinder/problem_1c_random_unitary_diffusion.py`
+- Qiskit `QuantumCircuit` and `Operator`
+- Qiskit implementation: `src/quantum_cylinder/implementations/qiskit/problem_1c_random_unitary_diffusion.py`
+- Preserved NumPy implementation: `src/quantum_cylinder/implementations/numpy/problem_1c_random_unitary_diffusion.py`
+- The Qiskit and NumPy implementations are stored independently; no cross-backend parity contract is maintained.
 
 Choices:
 
@@ -68,6 +76,10 @@ Reference run:
 Implementation:
 
 - `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py`
+- Qiskit `SparsePauliOp`, `Operator`, and `Statevector`
+- Qiskit implementation: `src/quantum_cylinder/implementations/qiskit/problem_2_hamiltonian_projected_diffusion.py`
+- Preserved NumPy/SciPy implementation: `src/quantum_cylinder/implementations/numpy/problem_2_hamiltonian_projected_diffusion.py`
+- The Qiskit and NumPy/SciPy implementations are stored independently; no cross-backend parity contract is maintained.
 
 Choices:
 
