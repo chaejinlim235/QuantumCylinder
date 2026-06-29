@@ -1,6 +1,6 @@
 # QuantumCylinder
 
-2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다..
+2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다.
 팀명은 **양자실린더 / QuantumCylinder**입니다. 대회 목표는 수상권 이상이며, 가능하면 우승까지 목표로 합니다. 이 저장소는 그 목표를 위해 재현 가능한 실험 코드와 문서를 관리합니다.
 
 ## Current Progress
@@ -17,7 +17,7 @@
 | Paper/problem interpretation | In progress | 임채진 | 발표에 쓸 문제 정의와 핵심 가정만 추출 |
 | Python environment recovery | In progress | 김승빈 | 환경 복구 후 baseline 실행 로그와 결과 파일 확인 |
 | Problem 3 extension | Not started | 한지후 | Day 1 안에 실험 후보 1개로 고정 |
-| Final report/story | Not started | 임채진 | baseline figure와 Problem 3 claim이 정해진 뒤 작성 |
+| Final report/story | Draft started | 임채진 | `docs/experiments/2026-06-29_final_report_storyline.md`를 결과와 맞춰 갱신 |
 
 ## Project Scope
 
