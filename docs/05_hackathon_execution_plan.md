@@ -14,7 +14,7 @@
 | 테스트 환경 | 구축 완료 | 한지후 | `python -m pytest` 기준으로 PR 검증 |
 | 지정문제/논문 해석 | 진행 중 | 임채진, 김건우, 김승빈 | 전체 번역보다 claim에 필요한 정의와 figure만 추출 |
 | Python 환경 복구 | 진행 중 | 김승빈 | 환경 복구 전에는 코드 구현을 맡기지 않음 |
-| Problem 3 extension | 착수 가능 | 한지후 | measurement-basis sweep 또는 shallow denoising 중 최소 구현 선택 |
+| Problem 3 extension | 구현 중 | 한지후 | continuous projected denoising의 채택 게이트 통과 여부 검증 |
 | 최종 보고서/발표 | 스토리라인 초안 있음 | 임채진 | baseline 결과와 Problem 3 claim에 맞춰 보강 |
 
 ## 운영 전제
@@ -58,14 +58,14 @@
 
 목표: 새 아이디어를 늘리지 않고 최소 실험 코드를 만든다.
 
-- 한지후: 선택한 Problem 3 extension의 최소 구현을 시작한다.
+- 한지후: continuous projected denoising 최소 구현과 채택 게이트를 완성한다.
 - 김건우: extension이 기존 resource proxy와 어떻게 비교되는지 정리한다.
 - 임채진: main claim이 발표 가능한 문장인지 확인한다.
 - 김승빈: 환경이 복구되었으면 실행 로그와 결과 저장 경로를 확인한다. 환경이 여전히 깨져 있으면 더 이상 코드를 맡지 않고 문서/체크리스트로 지원한다.
 
 완료 기준:
 
-- 실패해도 설명 가능한 main claim 1개
+- 성능이 나오면 main claim 1개, 안 나오면 후보/부록 처리 기준 1개
 - baseline과 같은 metric으로 비교할 계획
 - 결과 폴더와 config 이름 확정
 

@@ -16,7 +16,7 @@
 | Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
 | Paper/problem interpretation | In progress | 임채진 | 발표에 쓸 문제 정의와 핵심 가정만 추출 |
 | Python environment recovery | In progress | 김승빈 | 환경 복구 후 baseline 실행 로그와 결과 파일 확인 |
-| Problem 3 extension | Ready to start | 한지후 | measurement-basis sweep + shallow denoising 중 최소 구현 선택 |
+| Problem 3 extension | In progress | 한지후 | continuous projected denoising 결과가 채택 게이트를 통과하는지 검증 |
 | Final report/story | Draft started | 임채진 | `docs/experiments/2026-06-29_final_report_storyline.md`를 결과와 맞춰 갱신 |
 
 ## Project Scope
@@ -34,9 +34,9 @@
    - Problem 1과 같은 metric으로 diffusion curve 비교
 
 3. **Problem 3 - Further extension**
-   - toy reverse/denoising step
-   - measurement basis, schedule, Hamiltonian parameter, noise model 등 통제된 변형
-   - baseline 대비 개선점과 손실을 함께 정리
+   - continuous measurement-induced toy denoising step
+   - `Z/X/Y` axis-only baseline 대비 continuous projection basis 탐색
+   - 성능이 나오지 않으면 main result가 아니라 후보/부록으로 분리
 
 ## Tech Stack
 
@@ -77,6 +77,7 @@ python scripts/problem_1_qiskit_resource_check.py
 | 1(b) | fidelity, MMD, Wasserstein metric | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_1b_ensemble_metrics.py` |
 | 1(c) | random-unitary diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_1c_random_unitary_diffusion.py` |
 | 2 | Hamiltonian projected diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` |
+| 3 | continuous projected denoising | `scripts/run_problem_3_continuous_denoising.py` | `src/quantum_cylinder/problem_3_continuous_projected_denoising.py` |
 | 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
 | Qiskit validation | circuit resource proxy | `scripts/problem_1_qiskit_resource_check.py` | Qiskit `QuantumCircuit` |
 | common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
@@ -101,12 +102,14 @@ python scripts/problem_1_qiskit_resource_check.py
 |   |-- 07_problem_1_2_solution.md
 |   |-- 08_test_environment.md
 |   |-- 09_qiskit_validation_layer.md
-|   `-- 10_llm_development_guide.md
+|   |-- 10_llm_development_guide.md
+|   `-- 11_problem_3_continuous_denoising.md
 |-- notebooks/                # exploration only; reusable logic belongs in src/
 |-- results/                  # generated experiment outputs; ignored by default
 |-- scripts/
 |   |-- problem_1a_generate_target_ensemble.py
 |   |-- problem_1_qiskit_resource_check.py
+|   |-- run_problem_3_continuous_denoising.py
 |   `-- run_problem_1_2_baselines.py
 |-- src/quantum_cylinder/
 |   |-- quantum_ops.py
@@ -114,6 +117,7 @@ python scripts/problem_1_qiskit_resource_check.py
 |   |-- problem_1b_ensemble_metrics.py
 |   |-- problem_1c_random_unitary_diffusion.py
 |   |-- problem_2_hamiltonian_projected_diffusion.py
+|   |-- problem_3_continuous_projected_denoising.py
 |   `-- experiment_curves.py
 `-- tests/
     `-- test_problem_1_2_baselines.py
@@ -141,6 +145,8 @@ Problem 1/2 baseline 풀이와 구현 선택은 `docs/07_problem_1_2_solution.md
 Qiskit은 필수 구현이 아니라 회로/resource 검증용 선택 레이어로 사용하며, 기준은 `docs/09_qiskit_validation_layer.md`에 정리합니다.
 
 팀원별 LLM 사용 프롬프트와 작업 규칙은 `docs/10_llm_development_guide.md`에 정리합니다.
+
+Problem 3 continuous projected denoising 전략과 채택 게이트는 `docs/11_problem_3_continuous_denoising.md`에 정리합니다.
 
 ## Git Rules
 

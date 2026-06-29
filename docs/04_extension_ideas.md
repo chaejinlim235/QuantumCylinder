@@ -70,7 +70,7 @@
 
 ## 최종 추천 조합
 
-가장 안전한 우승형 조합은 다음이다.
+안전한 후보는 다음이다.
 
 1. Problem 1/2 baseline을 정확히 재현한다.
 2. 동일 MMD 지점에서 resource proxy를 비교한다.
@@ -78,3 +78,22 @@
 4. Shallow denoising filter로 toy reverse step을 보인다.
 
 이 조합은 구현 난도가 낮고, 문제에서 요구한 세 축을 모두 건드린다: diffusion, reverse/denoise, hardware-efficient trade-off.
+
+하지만 `Z/X/Y` basis sweep은 다른 팀과 겹칠 가능성이 높으므로, 메인 후보는 더 도전적인 방향으로 둔다.
+
+## 도전적 메인 후보: Continuous measurement-induced denoising
+
+아이디어:
+
+- complement projection basis를 `Z/X/Y` 세 축이 아니라 Bloch sphere 위의 연속 basis로 탐색한다.
+- random-unitary로 diffused된 ensemble에 fixed Hamiltonian evolution과 post-selection을 적용해 toy denoising map을 만든다.
+- `Z/X/Y` axis-only projection을 baseline으로 두고, exact axis를 제외한 continuous basis가 실제로 더 나은지 비교한다.
+
+채택 조건:
+
+- MMD 또는 Wasserstein-type distance 중 하나 이상이 baseline보다 개선된다.
+- best `Z/X/Y` axis-only projection보다 score가 충분히 높다.
+- diversity가 과도하게 collapse하지 않는다.
+- post-selection success probability가 너무 낮지 않다.
+
+성능이 나오지 않으면 main result로 쓰지 않고 후보 또는 부록으로만 남긴다.
