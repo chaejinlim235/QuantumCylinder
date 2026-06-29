@@ -11,6 +11,7 @@
 | Need | File |
 | --- | --- |
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
+| Problem 1/2 ipynb 완성 기준 | `docs/18_problem_1_2_notebook_completion_plan.md` |
 | 저장소 구조와 code map | `README.md` |
 | 상시 자동화 상태 | `results/continuous_problem_3/latest_status.md` |
 | 상시 자동화 변화 기록 | `results/continuous_problem_3/progress_log.md` |
@@ -29,6 +30,7 @@
 | 3-day roadmap | Added | 전원 | `docs/16_three_day_roadmap.md` 기준으로 Day 2/Day 3 작업 진행 |
 | Problem 1 baseline | Validated + diagnostics generated | 한지후 | 1(b) metric sanity와 cluster fidelity 수치를 팀 검토에 사용 |
 | Problem 2 baseline | Validated + diagnostics generated | 한지후 | Hamiltonian/projection/Bloch 진단 결과를 물리 해석에 반영 |
+| Problem 1/2 notebook | Active priority | 전원 | `docs/18_problem_1_2_notebook_completion_plan.md` 기준으로 `양자정보경진대회_v1.ipynb`부터 사본 작성 |
 | CI/local tests | Passing | 한지후 | 모든 코드 PR 전 `pytest`와 GitHub Actions 확인 |
 | Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
 | Submission layer | Done | 한지후 | `submission/run_all.py`를 심사자용 entry point로 유지 |

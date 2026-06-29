@@ -6,14 +6,16 @@
 
 ## 결론 요약
 
-현재 코드는 Problem 1/2/3의 핵심 수치 실험을 실행할 수 있다. 하지만 코드 리뷰에서 지적된 것처럼, 채점자가 보거나 팀원이 검증할 수 있는 **관찰 가능한 출력**, **문제 소문항별 실행 경로**, **정성적 시각화**, **폴더 구조 설명**은 아직 부족하다.
+현재 코드는 Problem 1/2/3의 핵심 수치 실험을 실행할 수 있다. 초기 코드 리뷰에서 지적된 **관찰 가능한 출력**, **문제 소문항별 실행 경로**, **정성적 시각화**, **폴더 구조 설명**은 대부분 보강되었다.
 
-따라서 다음 우선순위는 새 아이디어를 더 붙이는 것이 아니라 아래 네 가지를 채우는 것이다.
+2026-06-29 22:31 기준 최신 우선순위는 Problem 1/2를 ipynb 형태로 완전히 닫는 것이다. 노트북 수정 기준은 `docs/18_problem_1_2_notebook_completion_plan.md`를 따른다. 원본 `C:\Users\sky_m\Downloads\양자정보경진대회.ipynb`는 덮어쓰지 않고 `양자정보경진대회_v1.ipynb`, `v2`, `v3`처럼 사본으로 저장한다.
 
-1. 각 소문항별로 "무엇을 입력했고 무엇이 나왔는지" 출력되는 실행 파일 또는 summary를 만든다.
-2. Problem 1(c), 2(c), 2(d)에 필요한 정성 비교 그림을 추가한다.
-3. 2-qubit state를 한 개의 Bloch sphere로 오해하지 않도록 reduced single-qubit Bloch vector 시각화로 설명한다.
-4. `src/`와 `submission/`의 역할 차이를 문서와 파일명으로 명확히 한다.
+따라서 다음 우선순위는 새 아이디어를 더 붙이는 것이 아니라 아래 네 가지를 노트북에 반영하는 것이다.
+
+1. 각 소문항별로 "무엇을 입력했고 무엇이 나왔는지" 노트북에 출력한다.
+2. Problem 1(c), 2(c), 2(d)에 필요한 정성 비교 그림을 노트북에 넣는다.
+3. 2-qubit state를 한 개의 Bloch sphere로 오해하지 않도록 reduced single-qubit Bloch vector 시각화라고 명시한다.
+4. `src/`, `scripts/`, `submission/` 중 어떤 경로가 검증된 source인지 노트북에서 분명히 설명한다.
 
 ## 코드 리뷰에 대한 현재 판단
 
@@ -38,6 +40,12 @@ python -m pytest
 
 ```powershell
 python scripts/run_quantitative_evaluation.py
+```
+
+Problem 1/2 노트북 작성 기준:
+
+```text
+docs/18_problem_1_2_notebook_completion_plan.md
 ```
 
 Problem 1/2 baseline 전체 실행:
@@ -381,6 +389,8 @@ python scripts/run_problem_3_continuous_denoising.py
 - [x] Problem 2(c) reduced Bloch vector visualization 추가: `scripts/problem_2c_plot_bloch_comparison.py`
 - [x] Problem 2(d) comparable-strength resource table 해석 문장 보강: `docs/15_quantitative_evaluation_plan.md`
 - [ ] 생성된 `results/quantitative_evaluation/` 파일을 팀원이 직접 보고 정성 판단 기록
+- [ ] `docs/18_problem_1_2_notebook_completion_plan.md` 기준으로 `양자정보경진대회_v1.ipynb` 작성
+- [ ] 코드 직접 리뷰 기록을 노트북 또는 review notes에 남김
 
 ### 해도 되지만 조심할 것
 

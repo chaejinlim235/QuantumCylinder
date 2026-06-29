@@ -4,8 +4,10 @@
 
 ## 최신 스냅샷
 
-- 기준 시각: `2026-06-29 22:10 KST`
-- 로컬 `main`과 `origin/main`은 `1b95cd9` 기준으로 동기화되어 있다.
+- 기준 시각: `2026-06-29 22:31 KST`
+- 로컬 `main`과 `origin/main`은 `28f6640` 기준으로 동기화되어 있다.
+- 현재 최우선 목표는 Problem 1/2를 노트북 형태로 완전히 닫는 것이다.
+- 원본 노트북 `C:\Users\sky_m\Downloads\양자정보경진대회.ipynb`는 덮어쓰지 않고 `양자정보경진대회_v1.ipynb`, `v2`, `v3` 순서로 사본 저장한다.
 - PR #49 반영 이후 Problem 3 상시 자동화는 기본적으로 `attached` 모드로 실행된다. Hermes 출력이 실행 중인 PowerShell에 직접 표시되어야 한다.
 - Problem 3 seed sweep gate는 `20/20 use_as_main`으로 유지한다.
 - seed sweep 집계는 요청한 seed 목록만 집계하도록 보정한다. 오래된 `seed_<n>` 결과 폴더가 남아 있어도 최신 sweep 결과에 섞이지 않아야 한다.
@@ -15,6 +17,7 @@
 | Purpose | File |
 | --- | --- |
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
+| Problem 1/2 ipynb 완성 계획 | `docs/18_problem_1_2_notebook_completion_plan.md` |
 | 저장소 구조와 실행 entry point | `README.md` |
 | 자동화 실행 중 상태 | `results/continuous_problem_3/latest_status.md` |
 | 자동화 실행 중 변화 기록 | `results/continuous_problem_3/progress_log.md` |
@@ -27,6 +30,7 @@
 | --- | --- | --- | --- |
 | Problem 1 | locked | 한지후 | 정성 설명과 diagnostic 출력만 유지 |
 | Problem 2 | locked | 한지후, 김건우 | Hamiltonian/projection 해석 검수 |
+| Problem 1/2 notebook | active priority | 전원 | `docs/18_problem_1_2_notebook_completion_plan.md` 기준으로 ipynb v1/v2/v3 작성 |
 | Problem 3 | main candidate | 한지후 | 성능 claim보다 재현성, limitation, figure/table 강화 |
 | Seed sweep | passed + aggregation guarded | 김승빈 | 최종 표/그림 후보 정리, 오래된 seed 결과 혼입 여부 확인 |
 | Report/story | evidence ready | 임채진 | claim, limitation, 발표 흐름 정리 |
@@ -41,6 +45,22 @@ Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
 - hardware advantage나 general quantum advantage로 주장하지 않는다.
 
 ## 지금 실행할 명령
+
+Problem 1/2 노트북 수정 전후:
+
+```powershell
+cd C:\Coding\Hackathon\2026Quantum
+python scripts/run_quantitative_evaluation.py
+python scripts/run_problem_1_2_baselines.py
+python submission/run_all.py --quick
+python -m pytest
+```
+
+노트북 작성 기준:
+
+```text
+docs/18_problem_1_2_notebook_completion_plan.md
+```
 
 Problem 3를 계속 개선할 때:
 
@@ -119,6 +139,7 @@ Problem 3를 main으로 유지하는 조건:
 | --- | --- |
 | Problem 1/2 풀이와 출력 | `docs/07_problem_1_2_solution.md` |
 | Problem 1/2 코드 읽는 순서 | `docs/17_problem_1_2_code_reading_guide.md` |
+| Problem 1/2 노트북 완성 계획 | `docs/18_problem_1_2_notebook_completion_plan.md` |
 | Qiskit 검증 | `docs/09_qiskit_validation_layer.md` |
 | Problem 3 방법과 gate | `docs/11_problem_3_continuous_denoising.md` |
 | Hermes 세부 설정 | `docs/12_hermes_agent_setup.md` |
