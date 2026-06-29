@@ -34,6 +34,12 @@ python submission/run_all.py --quick
 python -m pytest
 ```
 
+심사위원 정량 평가용 진단 전체 실행:
+
+```powershell
+python scripts/run_quantitative_evaluation.py
+```
+
 Problem 1/2 baseline 전체 실행:
 
 ```powershell
@@ -366,11 +372,12 @@ python scripts/run_problem_3_continuous_denoising.py
 
 ### 바로 해야 할 것
 
-- [ ] Problem 1(b) metric diagnostic 출력 추가
-- [ ] Problem 2(a) Hamiltonian term 출력 추가
-- [ ] Problem 2(b) projection probability/outcome diagnostic 추가
-- [ ] Problem 2(c) reduced Bloch vector visualization 추가
-- [ ] Problem 2(d) comparable-strength resource table 해석 문장 보강
+- [x] Problem 1(b) metric diagnostic 출력 추가: `scripts/problem_1b_check_metrics.py`
+- [x] Problem 2(a) Hamiltonian term 출력 추가: `scripts/problem_2a_print_hamiltonian.py`
+- [x] Problem 2(b) projection probability/outcome diagnostic 추가: `scripts/problem_2b_projection_diagnostics.py`
+- [x] Problem 2(c) reduced Bloch vector visualization 추가: `scripts/problem_2c_plot_bloch_comparison.py`
+- [x] Problem 2(d) comparable-strength resource table 해석 문장 보강: `docs/15_quantitative_evaluation_plan.md`
+- [ ] 생성된 `results/quantitative_evaluation/` 파일을 팀원이 직접 보고 정성 판단 기록
 
 ### 해도 되지만 조심할 것
 
@@ -387,6 +394,23 @@ python scripts/run_problem_3_continuous_denoising.py
 | 김건우 | Qiskit Hamiltonian term, qubit order, projection basis 설명 검증 |
 | 임채진 | Problem 1/2 정성 설명이 문제 요구와 맞는지 확인 |
 | 김승빈 | 실행 명령을 따라 결과 파일이 생성되는지 확인하고 screenshot/log 정리 |
+
+## 새 정량 평가 산출물
+
+아래 명령으로 생성한다.
+
+```powershell
+python scripts/run_quantitative_evaluation.py
+```
+
+확인할 파일:
+
+- `results/quantitative_evaluation/problem_1b_metric_diagnostics.md`
+- `results/quantitative_evaluation/problem_2a_hamiltonian_diagnostics.md`
+- `results/quantitative_evaluation/problem_2b_projection_diagnostics.md`
+- `results/quantitative_evaluation/problem_2c_bloch_qubit_0.png`
+- `results/quantitative_evaluation/problem_2c_bloch_qubit_1.png`
+- `results/quantitative_evaluation/QUANTITATIVE_EVALUATION_INDEX.md`
 
 ## 현재 안전한 주장 범위
 

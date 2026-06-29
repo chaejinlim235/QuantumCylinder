@@ -4,6 +4,7 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import SparsePauliOp
 
+from quantum_cylinder.bloch_vectors import bloch_vector, ensemble_bloch_vectors
 from quantum_cylinder.experiment_curves import closest_metric_pair, hamiltonian_resource_proxy
 from quantum_cylinder.problem_1a_target_ensemble import target_ensemble, target_state_circuit
 from quantum_cylinder.problem_1b_ensemble_metrics import fidelity_matrix, mmd_fidelity, wasserstein_infidelity
@@ -68,6 +69,14 @@ def test_hamiltonian_is_qiskit_sparse_pauli_operator() -> None:
     hamiltonian = three_qubit_hamiltonian_operator()
     assert isinstance(hamiltonian, SparsePauliOp)
     assert len(hamiltonian) == 8
+
+
+def test_bloch_vectors_match_product_basis_states() -> None:
+    ket00 = np.array([[1.0, 0.0, 0.0, 0.0]], dtype=complex)
+    vectors = ensemble_bloch_vectors(ket00, qubit=0)
+    assert vectors.shape == (1, 3)
+    assert np.allclose(vectors[0], [0.0, 0.0, 1.0])
+    assert np.allclose(bloch_vector(ket00[0], qubit=1), [0.0, 0.0, 1.0])
 
 
 def test_resource_proxy_columns_match() -> None:
