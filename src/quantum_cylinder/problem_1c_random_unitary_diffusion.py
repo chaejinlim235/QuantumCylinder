@@ -68,5 +68,6 @@ def random_unitary_resource_proxy(step: int, rotations_per_qubit: int = 3, n_qub
         "random_controls": step * rotations_per_qubit * n_qubits,
         "total_hamiltonian_time": 0.0,
         "fixed_hamiltonian_terms": 0,
+        "fixed_hamiltonian_parameters": 0,
         "measurement_basis": "",
     }

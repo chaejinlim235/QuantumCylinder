@@ -19,6 +19,7 @@ env/
 results/**/*.csv
 results/**/*.png
 results/**/*.json
+results/**/*.md
 !results/.gitkeep
 
 # Raw/private inputs. Do not commit application forms or files with PII.

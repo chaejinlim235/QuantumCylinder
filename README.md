@@ -104,6 +104,8 @@ pytest
 
 논문 해석 범위를 줄이기 위한 triage 기준은 `docs/06_paper_triage.md`에 정리합니다.
 
+Problem 1/2 baseline 풀이와 구현 선택은 `docs/07_problem_1_2_solution.md`에 정리합니다.
+
 ## Git Rules
 
 ### Branch naming
