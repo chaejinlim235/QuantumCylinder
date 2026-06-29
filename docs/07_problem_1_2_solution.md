@@ -114,6 +114,12 @@ Output:
 
 - `results/problem_1_2_baseline/resource_proxies.csv`
 
+Optional Qiskit check:
+
+- `scripts/problem_1_qiskit_resource_check.py`
+- This is a validation and presentation aid, not the primary simulator.
+- Install with `pip install -e ".[qiskit]"` only when circuit-level resource inspection is needed.
+
 ## Interpretation
 
 Problem 1 provides a direct random-circuit scrambling baseline. As the layer count increases, the original `|00>`-centered cluster should move away from `S0` under both distance metrics.

@@ -42,6 +42,8 @@ CI에서 실행하는 항목:
 4. `python scripts/run_problem_1_2_baselines.py`
 5. `pytest`
 
+Qiskit은 CI 기본 경로에 포함하지 않는다. Qiskit은 선택 검증 레이어이며 필요한 팀원만 `pip install -e ".[qiskit]"`로 설치한다.
+
 ## 운영 규칙
 
 - PR을 열기 전 로컬에서 `pytest`는 반드시 통과시킨다.

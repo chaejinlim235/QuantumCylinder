@@ -107,6 +107,8 @@ Problem 1/2 baseline 풀이와 구현 선택은 `docs/07_problem_1_2_solution.md
 
 로컬 테스트와 GitHub Actions CI 사용법은 `docs/08_test_environment.md`에 정리합니다.
 
+Qiskit은 필수 구현이 아니라 회로/resource 검증용 선택 레이어로 사용하며, 기준은 `docs/09_qiskit_validation_layer.md`에 정리합니다.
+
 ## Git Rules
 
 ### Branch naming
