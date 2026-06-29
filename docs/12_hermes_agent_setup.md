@@ -63,6 +63,7 @@ For Problem 3, only treat a result as main if the adoption gate passes.
 | `feedback-loop` | 최종 파이프라인 실행, 결과 분석, GitHub issue 재할당 반복 | `.\scripts\invoke_hermes_task.ps1 feedback-loop -Yolo -MaxTurns 260` |
 | `final-pipeline` | 테스트, 제출용 실행, 20 seed sweep, 최종 claim 점검 자동 실행 | `.\scripts\invoke_hermes_task.ps1 final-pipeline -Yolo -MaxTurns 240` |
 | `final-sync-fix` | 팀원 최신 변경 반영, 테스트/파이프라인 점검, 실패 시 최소 수정 루프 | `.\scripts\invoke_hermes_task.ps1 final-sync-fix -Yolo -MaxTurns 360` |
+| `quantitative-evaluation` | Problem 1/2 진단, Hamiltonian/projection 확인, Bloch 시각화 생성 | `.\scripts\invoke_hermes_task.ps1 quantitative-evaluation -Yolo -MaxTurns 240` |
 | `p3-seed-sweep` | 20개 seed 반복 실행과 robustness 요약 생성 | `.\scripts\invoke_hermes_task.ps1 p3-seed-sweep -Yolo -MaxTurns 180` |
 | `p3-report-draft` | 실제 결과에 기반한 보고서 초안 생성 | `.\scripts\invoke_hermes_task.ps1 p3-report-draft -Yolo` |
 | `p3-judge-review` | 심사자 관점의 약점과 개선 우선순위 점검 | `.\scripts\invoke_hermes_task.ps1 p3-judge-review` |
