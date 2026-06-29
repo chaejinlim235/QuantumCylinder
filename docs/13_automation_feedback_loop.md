@@ -40,11 +40,13 @@ Problem 3를 상시 개선하는 명령:
 
 기본 반복 간격은 0분이다. 즉 한 cycle이 끝나면 바로 다음 cycle을 시작한다. `-MaxCycles 0`은 종료 조건 없이 `Ctrl+C`까지 계속 돈다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 변화 기록은 `results/continuous_problem_3/progress_log.md`, 상세 로그는 `logs/continuous_problem_3/`에 남긴다.
 
+현재 기본 실행 방식은 `attached` 모드다. Hermes를 숨은 자식 프로세스로 분리하지 않고 현재 PowerShell에 붙여 실행하므로, 진행 출력이 실행 창에 직접 보여야 한다. 예전 watchdog 방식이 꼭 필요할 때만 `-UseWatchdog`를 명시한다.
+
 실행 중 팀원이 보는 순서:
 
 1. `results/continuous_problem_3/latest_status.md`: 현재 gate와 최근 cycle 요약
 2. `results/continuous_problem_3/progress_log.md`: cycle별 변화 기록과 핵심 metric
-3. `logs/continuous_problem_3/latest_state.json`: Hermes watchdog 현재 attempt와 log path
+3. `logs/continuous_problem_3/latest_state.json`: Hermes 현재 attempt, run mode, log path
 
 최종 표준 명령:
 
@@ -111,6 +113,8 @@ PowerShell에서 직접 보면서 돌릴 때:
 - continuous basis가 axis-only보다 안정적으로 더 나은 후보를 찾았다.
 - 하지만 toy state-vector 규모의 post-selected proxy이므로 hardware advantage나 general quantum advantage로 말하지 않는다.
 - main claim은 "small-scale reproducible extension"과 "continuous measurement-basis search improves the denoising proxy"로 제한한다.
+
+seed sweep 집계 시에는 실행한 seed 목록을 명시적으로 전달한다. 이렇게 해야 `results/problem_3_seed_sweep/` 아래에 오래된 `seed_<n>` 폴더가 남아 있어도 최신 20-seed gate에 섞이지 않는다.
 
 ## 우승 방향성
 

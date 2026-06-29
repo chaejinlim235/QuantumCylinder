@@ -129,7 +129,7 @@ try {
 
     Write-Progress -Activity "Problem 3 seed sweep" -Completed
     Write-Step "Aggregating seed results."
-    & $projectPython scripts/summarize_problem_3_seed_sweep.py --input-dir $OutputRoot
+    & $projectPython scripts/summarize_problem_3_seed_sweep.py --input-dir $OutputRoot --seeds $Seeds
     if ($LASTEXITCODE -ne 0) {
         throw "Seed sweep aggregation failed with exit code $LASTEXITCODE"
     }

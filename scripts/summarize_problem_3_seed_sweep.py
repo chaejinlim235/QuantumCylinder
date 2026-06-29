@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import statistics as stats
+from collections.abc import Iterable
 from pathlib import Path
 
 
@@ -31,6 +32,13 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Summary markdown path. Defaults to <input-dir>/seed_sweep_summary.md.",
     )
+    parser.add_argument(
+        "--seeds",
+        type=int,
+        nargs="*",
+        default=None,
+        help="Optional expected seed list. When set, stale seed_<n> directories outside this list are ignored.",
+    )
     return parser.parse_args()
 
 
@@ -51,17 +59,24 @@ def format_metric(value: float | None) -> str:
     return f"`{value:.6f}`" if value is not None else "`n/a`"
 
 
-def load_seed_results(root: Path) -> tuple[list[tuple[int, str]], list[dict[str, object]]]:
-    seed_dirs = []
-    for path in root.glob("seed_*"):
-        if not path.is_dir():
-            continue
-        try:
-            int(path.name.split("_")[-1])
-        except ValueError:
-            continue
-        seed_dirs.append(path)
-    seed_dirs = sorted(seed_dirs, key=lambda path: int(path.name.split("_")[-1]))
+def load_seed_results(
+    root: Path,
+    expected_seeds: Iterable[int] | None = None,
+) -> tuple[list[tuple[int, str]], list[dict[str, object]]]:
+    if expected_seeds is None:
+        seed_dirs = []
+        for path in root.glob("seed_*"):
+            if not path.is_dir():
+                continue
+            try:
+                int(path.name.split("_")[-1])
+            except ValueError:
+                continue
+            seed_dirs.append(path)
+        seed_dirs = sorted(seed_dirs, key=lambda path: int(path.name.split("_")[-1]))
+    else:
+        seed_dirs = [root / f"seed_{seed}" for seed in sorted(set(expected_seeds))]
+    mark_missing_unknown = expected_seeds is not None
     run_decisions: list[tuple[int, str]] = []
     rows: list[dict[str, object]] = []
 
@@ -72,6 +87,8 @@ def load_seed_results(root: Path) -> tuple[list[tuple[int, str]], list[dict[str,
 
         if not problem_summary.exists() or not best_path.exists():
             print(f"Missing results for seed {seed}: {seed_dir}")
+            if mark_missing_unknown:
+                run_decisions.append((seed, "unknown"))
             continue
 
         summary_text = problem_summary.read_text(encoding="utf-8")
@@ -175,7 +192,9 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
 
     if strong_enough:
         lines.append(
-            "The seed sweep supports using continuous projected denoising as the main Problem 3 result."
+            "The seed sweep supports using continuous projected denoising as the main Problem 3 result, "
+            f"with the caveat that the median axis-only score margin is {format_metric(median_score_margin)}. "
+            "State this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage."
         )
     else:
         lines.append(
@@ -189,7 +208,7 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
 def main() -> None:
     args = parse_args()
     output_path = args.output or args.input_dir / "seed_sweep_summary.md"
-    run_decisions, rows = load_seed_results(args.input_dir)
+    run_decisions, rows = load_seed_results(args.input_dir, expected_seeds=args.seeds)
     summary = build_summary(run_decisions, rows)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(summary, encoding="utf-8")

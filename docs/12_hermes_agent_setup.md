@@ -108,19 +108,32 @@ Problem 3를 계속 개선해야 할 때는 상시 루프를 사용한다.
 .\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
-이 루프는 `continuous-p3-improvement`를 cycle 사이 대기 없이 반복한다. `-MaxCycles 0`은 `Ctrl+C`로 중지할 때까지 계속 실행한다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 변화 기록은 `results/continuous_problem_3/progress_log.md`에 기록된다. 의도적으로 쉬게 만들 때만 `-CycleMinutes 30`처럼 값을 준다.
+이 루프는 `continuous-p3-improvement`를 cycle 사이 대기 없이 반복한다. `-MaxCycles 0`은 `Ctrl+C`로 중지할 때까지 계속 실행한다는 뜻이다. 현재 기본 실행 방식은 `attached` 모드이며, Hermes 출력이 현재 PowerShell 창에 직접 표시된다. 의도적으로 쉬게 만들 때만 `-CycleMinutes 30`처럼 값을 준다.
+
+정상 시작 문구:
+
+```text
+Hermes run mode: attached
+Attached Hermes attempt 1/2 started. Live output is shown in this PowerShell.
+```
 
 실행 중 확인:
 
 ```powershell
-Get-Content results\continuous_problem_3\latest_status.md -Tail 80
-Get-Content results\continuous_problem_3\progress_log.md -Tail 120
+Get-Content results\continuous_problem_3\latest_status.md -Wait -Tail 80
+Get-Content results\continuous_problem_3\progress_log.md -Wait -Tail 120
 Get-Content logs\continuous_problem_3\latest_state.json
+```
+
+PowerShell이 즉시 닫히는지 확인해야 하면 `-NoExit`로 실행한다.
+
+```powershell
+powershell -NoProfile -NoExit -ExecutionPolicy Bypass -File .\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
 ## 장시간 실행 watchdog
 
-PowerShell이 자주 멈추거나 노트북 절전 때문에 실행이 끊기는 경우에는 `invoke_hermes_task.ps1`를 직접 실행하지 말고 watchdog 래퍼를 사용한다.
+`final-sync-fix`처럼 단발성 장시간 task에서 PowerShell이 자주 멈추거나 노트북 절전 때문에 실행이 끊기는 경우에는 `invoke_hermes_task.ps1`를 직접 실행하지 말고 watchdog 래퍼를 사용한다. Problem 3 상시 루프는 기본적으로 attached 모드를 쓴다.
 
 ```powershell
 cd C:\Coding\Hackathon\2026Quantum
