@@ -128,6 +128,12 @@ Task prompt는 `.hermes/tasks/`에 있습니다.
 .\scripts\invoke_hermes_task.ps1 final-sync-fix -Yolo -MaxTurns 360
 ```
 
+PowerShell이 절전, 콘솔 선택, 장시간 무출력 상태 때문에 멈추는 경우에는 watchdog 래퍼를 사용합니다. 이 명령은 절전을 막고, 로그를 남기고, Hermes가 실패하거나 오래 응답하지 않으면 재시도합니다.
+
+```powershell
+.\scripts\run_hermes_watchdog.ps1 final-sync-fix -Yolo -MaxTurns 360 -Attempts 6
+```
+
 현재 Problem 3는 20-seed sweep에서 `20/20 use_as_main`이며, main result claim이 가능한 상태입니다. 다만 axis-only 대비 median score margin이 `0.010000`으로 크지 않으므로, 최종 보고서에서는 continuous basis search의 이득과 post-selection toy proxy라는 limitation을 함께 적습니다.
 
 GitHub issue 자동 할당의 원본은 `docs/github_issue_plan.json`입니다. 이 파일을 수정한 뒤 `.\scripts\sync_hackathon_issues.ps1`로 dry-run을 확인하고, 문제가 없을 때 `.\scripts\sync_hackathon_issues.ps1 -Apply`를 실행합니다.

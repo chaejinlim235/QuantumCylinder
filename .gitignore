@@ -24,6 +24,9 @@ results/**/*.md
 results/**/*.log
 !results/.gitkeep
 
+# Local automation logs
+logs/
+
 # Raw/private inputs. Do not commit application forms or files with PII.
 data/raw/*
 !data/raw/.gitkeep
