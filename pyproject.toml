@@ -19,6 +19,9 @@ dependencies = [
 dev = [
     "pytest>=8.0",
 ]
+qiskit = [
+    "qiskit>=1.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
