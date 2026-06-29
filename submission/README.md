@@ -45,6 +45,18 @@ python submission/run_all.py
 - Problem 2: Qiskit `SparsePauliOp`로 fixed Hamiltonian을 정의하고 `Statevector` projection을 사용합니다.
 - Problem 3: Problem 2의 Qiskit Hamiltonian matrix를 재사용하고, continuous measurement basis 후보 탐색은 수치 grid search로 수행합니다.
 
+## Problem 1 Outputs
+
+Problem 1은 하나의 최종 숫자만 내는 코드가 아닙니다. 실행하면 1(a) target ensemble 확인, 1(b) metric sanity check, 1(c) diffusion curve와 resource proxy가 각각 별도 파일로 생성됩니다.
+
+- `problem1_target_summary.csv`
+- `problem1_target_samples.csv`
+- `problem1_metric_checks.csv`
+- `problem1_random_unitary_metrics.csv`
+- `problem1_random_unitary_resources.csv`
+- `problem1_distance_curve.png`
+- `problem1_summary.md`
+
 ## Rule
 
 이 폴더는 읽기 쉬운 제출용 layer입니다. `submission/` 안의 코드는 개발용 패키지를 import하지 않고, 필요한 Qiskit/metric/search 로직을 직접 포함합니다. 개발용 source of truth는 여전히 `src/`에 있지만, 제출 폴더만 보아도 실행 흐름을 따라갈 수 있습니다.

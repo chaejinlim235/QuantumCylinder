@@ -22,7 +22,14 @@ def test_simple_submission_layer_smoke(tmp_path):
         random_steps=2,
     )
     assert problem1["summary"].exists()
+    assert problem1["plot"].exists()
     assert len(problem1["rows"]) == 3
+    assert len(problem1["metric_rows"]) == 3
+    assert len(problem1["resource_rows"]) == 3
+    assert (tmp_path / "problem1" / "problem1_target_summary.csv").exists()
+    assert (tmp_path / "problem1" / "problem1_target_samples.csv").exists()
+    assert (tmp_path / "problem1" / "problem1_metric_checks.csv").exists()
+    assert (tmp_path / "problem1" / "problem1_random_unitary_resources.csv").exists()
 
     problem2 = solve_problem_2(
         tmp_path / "problem2",
