@@ -5,15 +5,75 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from quantum_cylinder.implementations.qiskit.problem_1c_random_unitary_diffusion import random_unitary_trajectory
+import numpy as np
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Operator, Statevector
 
 from submission.states_and_metrics import distance_to_target, make_target_ensemble, write_csv, write_text
+
+
+def random_unitary_circuit(angles: np.ndarray, entangler: str = "cz") -> QuantumCircuit:
+    """Create one Qiskit random local-rotation + entangler layer."""
+    circuit = QuantumCircuit(2)
+    for qubit in range(2):
+        ax, ay, az = angles[qubit]
+        circuit.rx(float(ax), qubit)
+        circuit.ry(float(ay), qubit)
+        circuit.rz(float(az), qubit)
+
+    if entangler == "cz":
+        circuit.cz(0, 1)
+    elif entangler == "cnot":
+        circuit.cx(0, 1)
+    else:
+        raise ValueError(f"Unknown entangler: {entangler}")
+    return circuit
+
+
+def _normalize_rows(states: np.ndarray) -> np.ndarray:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
+
+
+def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> np.ndarray:
+    """Sample one Qiskit layer and return its 4x4 unitary matrix."""
+    angles = rng.uniform(-angle_scale, angle_scale, size=(2, 3))
+    circuit = random_unitary_circuit(angles, entangler=entangler)
+
+    # Convert Qiskit's little-endian convention to the q0-left array convention.
+    return np.asarray(Operator(circuit).reverse_qargs().data, dtype=complex)
+
+
+def random_unitary_trajectory(
+    initial: np.ndarray,
+    n_steps: int = 12,
+    angle_scale: float = np.pi,
+    seed: int | None = 8,
+    entangler: str = "cz",
+) -> list[np.ndarray]:
+    """Apply random-unitary layers and return S0, S1, ..., Sn."""
+    if n_steps < 0:
+        raise ValueError("n_steps must be non-negative.")
+
+    rng = np.random.default_rng(seed)
+    current = _normalize_rows(initial)
+    trajectory = [current.copy()]
+
+    for _ in range(n_steps):
+        next_states = np.empty_like(current)
+        for idx, state in enumerate(current):
+            unitary = random_unitary_layer(rng, angle_scale=angle_scale, entangler=entangler)
+            next_states[idx] = Statevector(state).evolve(Operator(unitary)).data
+        current = _normalize_rows(next_states)
+        trajectory.append(current.copy())
+
+    return trajectory
 
 
 def solve_problem_1(
