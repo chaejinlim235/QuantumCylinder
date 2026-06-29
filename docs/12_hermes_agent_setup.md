@@ -47,7 +47,34 @@ Do not commit generated results or private files.
 For Problem 3, only treat a result as main if the adoption gate passes.
 ```
 
-## 권장 작업 요청
+## 자동 실행 래퍼
+
+반복 작업은 직접 프롬프트를 붙여 넣지 말고 래퍼를 사용한다.
+
+```powershell
+.\scripts\invoke_hermes_task.ps1 <task-name>
+```
+
+사용 가능한 task:
+
+| Task | Purpose | Typical command |
+| --- | --- | --- |
+| `p3-status` | 테스트, git 상태, Problem 3 현재 결과 확인 | `.\scripts\invoke_hermes_task.ps1 p3-status` |
+| `p3-seed-sweep` | 20개 seed 반복 실행과 robustness 요약 생성 | `.\scripts\invoke_hermes_task.ps1 p3-seed-sweep -Yolo -MaxTurns 180` |
+| `p3-report-draft` | 실제 결과에 기반한 보고서 초안 생성 | `.\scripts\invoke_hermes_task.ps1 p3-report-draft -Yolo` |
+| `p3-judge-review` | 심사자 관점의 약점과 개선 우선순위 점검 | `.\scripts\invoke_hermes_task.ps1 p3-judge-review` |
+
+프롬프트 원문은 `.hermes/tasks/`에 둔다. task를 수정할 때는 실행 명령, 수정 허용 범위, 최종 응답 형식을 명확히 적는다.
+
+Hermes가 PATH에 없다면 이 저장소의 래퍼는 Windows 기본 설치 경로도 자동으로 찾는다. 그래도 실패하면 직접 경로를 넘긴다.
+
+```powershell
+.\scripts\invoke_hermes_task.ps1 p3-status -HermesPath "C:\Users\sky_m\AppData\Local\Hermes\hermes-agent\venv\Scripts\hermes.exe"
+```
+
+장시간 seed sweep처럼 승인 프롬프트 없이 진행하고 싶은 작업에는 `-Yolo`를 붙인다. 코드 수정까지 허용되는 task에는 먼저 prompt의 허용 범위를 확인한다.
+
+## 수동 요청 예시
 
 Problem 3 seed sweep:
 
