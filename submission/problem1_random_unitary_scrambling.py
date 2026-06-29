@@ -23,7 +23,7 @@ def solve_problem_1(
     seed: int = 7,
     random_steps: int = 12,
 ) -> dict:
-    """Problem 1: diffuse a target ensemble with Qiskit random-unitary layers."""
+    """Problem 1: diffuse a target ensemble with Qiskit random-unitary circuit layers."""
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
 
     # Each layer is random RX/RY/RZ on both data qubits followed by one CZ.
@@ -40,8 +40,9 @@ def solve_problem_1(
 ## Physical Operation
 
 - Start from a target ensemble near `|00>`.
-- Apply random local rotations to both data qubits.
-- Add one `CZ` entangler per layer.
+- Backend: Qiskit `QuantumCircuit`, `Operator`, and `Statevector`.
+- Apply random local `RX/RY/RZ` rotations to both data qubits.
+- Add one Qiskit `CZ` entangler per layer.
 - Measure diffusion by distance back to the original target ensemble.
 
 ## Result

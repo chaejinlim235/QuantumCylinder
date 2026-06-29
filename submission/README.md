@@ -38,6 +38,13 @@ python submission/run_all.py
 2. Problem 2는 2-qubit data system에 complement qubit `F`를 붙이고, 고정 3-qubit Hamiltonian으로 진화시킨 뒤 `F`를 측정해 projected ensemble을 만듭니다.
 3. Problem 3은 Problem 2의 Hamiltonian projection을 denoising step으로 다시 사용합니다. 단, `Z/X/Y` axis projection만 쓰지 않고 Bloch sphere 위의 continuous complement basis를 탐색합니다.
 
+## Qiskit Boundary
+
+- Problem 1(a): Qiskit `QuantumCircuit` + `Statevector`로 target state를 생성합니다.
+- Problem 1(c): Qiskit `QuantumCircuit`, `Operator`, `Statevector`로 random unitary layer를 적용합니다.
+- Problem 2: Qiskit `SparsePauliOp`로 fixed Hamiltonian을 정의하고 `Statevector` projection을 사용합니다.
+- Problem 3: Problem 2의 Qiskit Hamiltonian matrix를 재사용하고, continuous measurement basis 후보 탐색은 수치 grid search로 수행합니다.
+
 ## Rule
 
 이 폴더는 읽기 쉬운 제출용 layer입니다. Problem 1/2의 물리적 세부 구현 source of truth는 `src/quantum_cylinder/implementations/qiskit/`입니다. Problem 3의 continuous measurement search는 `src/quantum_cylinder/problem_3_continuous_projected_denoising.py`에 두고, 그 입력 ensemble과 Hamiltonian primitive는 Qiskit 구현에서 가져옵니다.
