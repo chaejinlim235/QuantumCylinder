@@ -43,6 +43,7 @@ if (-not (Test-Path -LiteralPath $taskPath)) {
 
 $hermes = Resolve-HermesPath -RequestedPath $HermesPath
 $prompt = Get-Content -LiteralPath $taskPath -Raw -Encoding UTF8
+$promptArgument = $prompt.Replace('"', '\"')
 $projectPython = Get-Command python -ErrorAction SilentlyContinue
 $previousProjectPython = $env:HERMES_PROJECT_PYTHON
 $previousProjectRoot = $env:HERMES_PROJECT_ROOT
@@ -54,7 +55,7 @@ if ($projectPython) {
 }
 $env:HERMES_PROJECT_ROOT = $repoRoot
 
-$arguments = @("chat", "-q", $prompt, "--max-turns", "$MaxTurns", "--accept-hooks")
+$arguments = @("chat", "-q", $promptArgument, "--max-turns", "$MaxTurns", "--accept-hooks")
 if ($Yolo) {
     $arguments += "--yolo"
 }
