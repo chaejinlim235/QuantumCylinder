@@ -3,18 +3,24 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import linear_sum_assignment, linprog
 
-from quantum_cylinder.quantum_ops import Array, normalize_rows
+
+def _normalize_rows(states: np.ndarray) -> np.ndarray:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
 
 
-def fidelity_matrix(left: Array, right: Array) -> Array:
+def fidelity_matrix(left: np.ndarray, right: np.ndarray) -> np.ndarray:
     """Pairwise pure-state fidelity matrix for row-wise state ensembles."""
-    left = normalize_rows(left)
-    right = normalize_rows(right)
+    left = _normalize_rows(left)
+    right = _normalize_rows(right)
     overlaps = left @ right.conj().T
     return np.clip(np.abs(overlaps) ** 2, 0.0, 1.0)
 
 
-def mmd_fidelity(left: Array, right: Array) -> float:
+def mmd_fidelity(left: np.ndarray, right: np.ndarray) -> float:
     """Biased MMD with the fidelity kernel."""
     k_xx = fidelity_matrix(left, left)
     k_yy = fidelity_matrix(right, right)
@@ -23,7 +29,7 @@ def mmd_fidelity(left: Array, right: Array) -> float:
     return float(np.sqrt(max(mmd_sq, 0.0)))
 
 
-def wasserstein_infidelity(left: Array, right: Array) -> float:
+def wasserstein_infidelity(left: np.ndarray, right: np.ndarray) -> float:
     """Uniform ensemble OT distance with cost 1 - fidelity.
 
     For equal-size ensembles, this is the minimum average matching cost.

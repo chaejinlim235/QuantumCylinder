@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import numpy as np
 
-from quantum_cylinder.quantum_ops import Array, normalize_rows, rx, ry, rz
-
 CZ = np.diag([1, 1, 1, -1]).astype(complex)
 CNOT_01 = np.array(
     [
@@ -16,13 +14,40 @@ CNOT_01 = np.array(
 )
 
 
-def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> Array:
+def _normalize_rows(states: np.ndarray) -> np.ndarray:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
+
+
+def _rx(theta: float) -> np.ndarray:
+    c = np.cos(theta / 2)
+    s = np.sin(theta / 2)
+    return np.array([[c, -1j * s], [-1j * s, c]], dtype=complex)
+
+
+def _ry(theta: float) -> np.ndarray:
+    c = np.cos(theta / 2)
+    s = np.sin(theta / 2)
+    return np.array([[c, -s], [s, c]], dtype=complex)
+
+
+def _rz(theta: float) -> np.ndarray:
+    return np.array(
+        [[np.exp(-0.5j * theta), 0], [0, np.exp(0.5j * theta)]],
+        dtype=complex,
+    )
+
+
+def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> np.ndarray:
     """One Problem 1 scrambling layer using NumPy matrices."""
     angles = rng.uniform(-angle_scale, angle_scale, size=(2, 3))
     local_ops = []
     for qubit in range(2):
         ax, ay, az = angles[qubit]
-        local_ops.append(rz(az) @ ry(ay) @ rx(ax))
+        local_ops.append(_rz(az) @ _ry(ay) @ _rx(ax))
 
     local = np.kron(local_ops[0], local_ops[1])
     if entangler == "cz":
@@ -35,17 +60,17 @@ def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, e
 
 
 def random_unitary_trajectory(
-    initial: Array,
+    initial: np.ndarray,
     n_steps: int = 12,
     angle_scale: float = np.pi,
     seed: int | None = 8,
     entangler: str = "cz",
-) -> list[Array]:
+) -> list[np.ndarray]:
     """Generate the Problem 1 trajectory S0, S1, ..., Sn."""
     if n_steps < 0:
         raise ValueError("n_steps must be non-negative.")
     rng = np.random.default_rng(seed)
-    current = normalize_rows(initial)
+    current = _normalize_rows(initial)
     trajectory = [current.copy()]
 
     for _ in range(n_steps):
@@ -53,7 +78,7 @@ def random_unitary_trajectory(
         for idx, state in enumerate(current):
             unitary = random_unitary_layer(rng, angle_scale=angle_scale, entangler=entangler)
             next_states[idx] = unitary @ state
-        current = normalize_rows(next_states)
+        current = _normalize_rows(next_states)
         trajectory.append(current.copy())
 
     return trajectory
