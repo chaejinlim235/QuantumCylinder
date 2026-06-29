@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import numpy as np
 from qiskit import QuantumCircuit
-from qiskit.quantum_info import Operator
-
-from quantum_cylinder.quantum_ops import Array, normalize_rows
+from qiskit.quantum_info import Operator, Statevector
 
 
-def random_unitary_circuit(angles: Array, entangler: str = "cz") -> QuantumCircuit:
-    """Build one Qiskit random-unitary scrambling circuit."""
+def random_unitary_circuit(angles: np.ndarray, entangler: str = "cz") -> QuantumCircuit:
+    """Create one Problem 1(c) random local-rotation + entangler layer."""
     circuit = QuantumCircuit(2)
     for qubit in range(2):
         ax, ay, az = angles[qubit]
@@ -25,44 +23,52 @@ def random_unitary_circuit(angles: Array, entangler: str = "cz") -> QuantumCircu
     return circuit
 
 
-def _operator_data(circuit: QuantumCircuit) -> Array:
-    # Convert Qiskit's little-endian qubit convention to the repository's
-    # q0-left array convention used by the metric and projection code.
+def _normalize_rows(states: np.ndarray) -> np.ndarray:
+    states = np.asarray(states, dtype=complex)
+    norms = np.linalg.norm(states, axis=1, keepdims=True)
+    if np.any(norms == 0):
+        raise ValueError("Cannot normalize an ensemble with a zero vector.")
+    return states / norms
+
+
+def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> np.ndarray:
+    """Sample one random Qiskit layer and return its 4x4 unitary matrix."""
+    angles = rng.uniform(-angle_scale, angle_scale, size=(2, 3))
+    circuit = random_unitary_circuit(angles, entangler=entangler)
+
+    # Convert Qiskit's little-endian convention to the q0-left array convention
+    # used by the metric and Hamiltonian projection code.
     return np.asarray(Operator(circuit).reverse_qargs().data, dtype=complex)
 
 
-def random_unitary_layer(rng: np.random.Generator, angle_scale: float = np.pi, entangler: str = "cz") -> Array:
-    """One Problem 1 scrambling layer using Qiskit."""
-    angles = rng.uniform(-angle_scale, angle_scale, size=(2, 3))
-    return _operator_data(random_unitary_circuit(angles, entangler=entangler))
-
-
 def random_unitary_trajectory(
-    initial: Array,
+    initial: np.ndarray,
     n_steps: int = 12,
     angle_scale: float = np.pi,
     seed: int | None = 8,
     entangler: str = "cz",
-) -> list[Array]:
-    """Generate the Problem 1 trajectory S0, S1, ..., Sn."""
+) -> list[np.ndarray]:
+    """Apply random-unitary layers and return S0, S1, ..., Sn."""
     if n_steps < 0:
         raise ValueError("n_steps must be non-negative.")
+
     rng = np.random.default_rng(seed)
-    current = normalize_rows(initial)
+    current = _normalize_rows(initial)
     trajectory = [current.copy()]
 
     for _ in range(n_steps):
         next_states = np.empty_like(current)
         for idx, state in enumerate(current):
             unitary = random_unitary_layer(rng, angle_scale=angle_scale, entangler=entangler)
-            next_states[idx] = unitary @ state
-        current = normalize_rows(next_states)
+            next_states[idx] = Statevector(state).evolve(Operator(unitary)).data
+        current = _normalize_rows(next_states)
         trajectory.append(current.copy())
 
     return trajectory
 
 
 def random_unitary_resource_proxy(step: int, rotations_per_qubit: int = 3, n_qubits: int = 2) -> dict:
+    """Report the simple gate/control proxy for a k-step random-unitary circuit."""
     return {
         "mechanism": "random_unitary",
         "parameter": step,
