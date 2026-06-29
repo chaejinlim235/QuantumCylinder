@@ -7,10 +7,10 @@ small runnable check, while the reusable implementation lives under src/.
 from pathlib import Path
 import sys
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from quantum_cylinder.states import target_ensemble
+from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 
 
 def main() -> None:

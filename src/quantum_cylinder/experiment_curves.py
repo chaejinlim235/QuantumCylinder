@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 
-from quantum_cylinder.metrics import mmd_fidelity, wasserstein_infidelity
-from quantum_cylinder.states import Array
+from quantum_cylinder.problem_1b_ensemble_metrics import mmd_fidelity, wasserstein_infidelity
+from quantum_cylinder.quantum_ops import Array
 
 
 def distance_curve(

@@ -2,273 +2,194 @@
 
 2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다.
 
-팀명은 **양자실린더 / QuantumCylinder**입니다. 이 프로젝트의 목표는 명확합니다.
+팀명은 **양자실린더 / QuantumCylinder**입니다. 대회 목표는 수상권 이상이며, 가능하면 우승까지 목표로 합니다. 이 저장소는 그 목표를 위해 재현 가능한 실험 코드와 문서를 관리합니다.
 
-- 1차 목표: **2026 양자정보경진대회 우승**
-- 최소 목표: **수상권 진입**
-- 구현 목표: Problem 1/2 baseline을 빠르게 재현하고, Problem 3에서 하드웨어 친화적 양자 확산 아이디어를 작지만 정량적으로 검증한다.
+## Project Scope
 
-이 저장소는 단순 코드 보관소가 아니라, 팀원 모두가 같은 실험 조건과 같은 판단 기준으로 움직이기 위한 대회 운영 레포지토리입니다.
+이 저장소는 지정문제 3번의 세 요구를 작은 state-vector 실험으로 재현하고 비교합니다.
 
----
+1. **Problem 1 - Random-unitary scrambling**
+   - `|00>` 주변의 2-qubit target ensemble 생성
+   - random single-qubit rotations + entangler 기반 forward diffusion
+   - fidelity-based MMD와 infidelity-cost Wasserstein-type distance 계산
 
-## 프로젝트 핵심 전략
+2. **Problem 2 - Hamiltonian projected diffusion**
+   - 2-qubit data system에 1 complement qubit 추가
+   - 고정 Hamiltonian time evolution 후 complement qubit projection
+   - Problem 1과 같은 metric으로 diffusion curve 비교
 
-올해 문제의 핵심은 거대한 Quantum DDPM 전체를 그대로 구현하는 것이 아니라, 작은 시스템에서 양자 확산의 원리를 재현하고 두 diffusion mechanism의 trade-off를 설득력 있게 비교하는 것입니다.
+3. **Problem 3 - Further extension**
+   - toy reverse/denoising step
+   - measurement basis, schedule, Hamiltonian parameter, noise model 등 통제된 변형
+   - baseline 대비 개선점과 손실을 함께 정리
 
-1. **Problem 1 재현**
-   - 2-qubit target ensemble `S0` 생성
-   - random-unitary scrambling trajectory 구현
-   - fidelity-based MMD와 Wasserstein-type distance 계산
+## Tech Stack
 
-2. **Problem 2 재현**
-   - 2-qubit data system + 1 complement qubit 구성
-   - fixed Hamiltonian time evolution
-   - projected ensemble 기반 diffusion curve 분석
+- Python 3.11+
+- NumPy, SciPy
+- Matplotlib
+- pytest
 
-3. **Problem 3 확장**
-   - toy reverse/denoising step 제시
-   - diffusion setting을 통제된 방식으로 수정
-   - baseline 대비 개선점과 희생점을 동시에 정량화
+현재 baseline은 Qiskit/PennyLane 없이 실행됩니다. 외부 양자 SDK는 hardware-aware 분석이나 transpilation이 필요할 때 추가합니다.
 
-최종 발표의 중심 질문은 다음입니다.
-
-> 양자 확산은 얼마나 적은 control로 충분히 잘 퍼지고, 얼마나 싸게 되돌릴 수 있는가?
-
----
-
-## 기술 스택
-
-- **Language**: Python 3.11+
-- **Core simulation**: NumPy, SciPy state-vector simulation
-- **Metrics**: fidelity, MMD, Wasserstein-type distance
-- **Visualization**: Matplotlib
-- **Testing**: pytest
-- **Optional future tools**: Qiskit, PennyLane, IBM Fake Backend
-
-현재 baseline은 외부 양자 SDK 없이 실행 가능하게 유지합니다. Qiskit/PennyLane은 필요성이 명확할 때만 추가합니다.
-
----
-
-## 빠른 시작
+## Quick Start
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e ".[dev]"
-python scripts/run_baselines.py
+python scripts/run_problem_1_2_baselines.py
 pytest
 ```
 
-기본 실행 결과는 `results/baseline/`에 생성됩니다.
+기본 결과는 `results/problem_1_2_baseline/`에 생성됩니다. `results/`의 CSV/PNG/JSON은 기본적으로 Git에 커밋하지 않습니다.
 
-생성된 CSV/PNG/JSON 결과물은 재현 가능해야 하지만 기본적으로 Git에 커밋하지 않습니다.
+## Code Map
 
----
+문제별 실행 파일과 핵심 구현 파일은 아래와 같습니다.
 
-## 프로젝트 구조
+| Problem | Purpose | Entry point | Core implementation |
+| --- | --- | --- | --- |
+| 1(a) | target ensemble 생성 | `scripts/problem_1a_generate_target_ensemble.py` | `src/quantum_cylinder/problem_1a_target_ensemble.py` |
+| 1(b) | fidelity, MMD, Wasserstein metric | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_1b_ensemble_metrics.py` |
+| 1(c) | random-unitary diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_1c_random_unitary_diffusion.py` |
+| 2 | Hamiltonian projected diffusion | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` |
+| 1/2 common | baseline curve, CSV, plot 생성 | `scripts/run_problem_1_2_baselines.py` | `src/quantum_cylinder/experiment_curves.py` |
+| common | small quantum linear algebra utilities | - | `src/quantum_cylinder/quantum_ops.py` |
+
+## Repository Structure
 
 ```text
 .
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   └── experiment.yml
-│   └── pull_request_template.md
-│
-├── configs/
-│   └── baseline.json
-│
-├── data/
-│   ├── raw/                  # 원본/개인정보 포함 가능 파일. Git 커밋 금지
-│   └── processed/            # 전처리 산출물
-│
-├── docs/
-│   ├── 00_problem_brief.md
-│   ├── 01_team_roles.md
-│   ├── 02_roadmap.md
-│   ├── 03_experiment_protocol.md
-│   ├── 04_extension_ideas.md
-│   └── experiments/          # 실험 로그
-│
-├── notebooks/                # 탐색용 노트북. 핵심 로직은 src로 이동
-├── results/                  # 실험 산출물. 기본적으로 Git 커밋 금지
-│
-├── scripts/
-│   └── run_baselines.py
-│
-├── src/
-│   └── quantum_cylinder/
-│       ├── states.py         # 상태 생성, gate, normalization
-│       ├── metrics.py        # fidelity, MMD, Wasserstein
-│       ├── diffusion.py      # random-unitary, Hamiltonian diffusion
-│       └── experiments.py    # 실험 curve/resource proxy helper
-│
-├── tests/
-│   └── test_baselines.py
-│
-├── 1.py                      # 기존 Problem 1-(a) 호환 entry point
-├── pyproject.toml
-└── requirements.txt
+|-- configs/
+|   `-- problem_1_2_baseline.json
+|-- data/
+|   |-- raw/                  # private/raw files. Do not commit contents.
+|   `-- processed/
+|-- docs/
+|   |-- 00_problem_brief.md
+|   |-- 01_team_roles.md
+|   |-- 02_roadmap.md
+|   |-- 03_experiment_protocol.md
+|   |-- 04_extension_ideas.md
+|   `-- experiments/
+|-- notebooks/                # exploration only; reusable logic belongs in src/
+|-- results/                  # generated experiment outputs; ignored by default
+|-- scripts/
+|   |-- problem_1a_generate_target_ensemble.py
+|   `-- run_problem_1_2_baselines.py
+|-- src/quantum_cylinder/
+|   |-- quantum_ops.py
+|   |-- problem_1a_target_ensemble.py
+|   |-- problem_1b_ensemble_metrics.py
+|   |-- problem_1c_random_unitary_diffusion.py
+|   |-- problem_2_hamiltonian_projected_diffusion.py
+|   `-- experiment_curves.py
+`-- tests/
+    `-- test_problem_1_2_baselines.py
 ```
 
----
+## Team Roles
 
-## 팀 역할
+| Member | Primary responsibility | Background fit | Near-term output |
+| --- | --- | --- | --- |
+| 임채진 | 연구 방향, 물리적 해석, 발표 구조 | 물리 데이터 해석과 회귀 모델링 경험을 바탕으로 diffusion behavior를 해석 | 문제 해석, baseline 결과 해석, 발표 흐름 |
+| 김건우 | 양자 회로 구현, resource proxy, hardware-aware 비교 | 양자 터널링 시뮬레이션과 모델 압축 경험을 회로 깊이/게이트 수 분석에 연결 | Problem 1/2 회로 구현 검증, gate/depth proxy 표 |
+| 김승빈 | 실험 파이프라인, 로그 관리, 시각화 | 생성 모델 및 3D reconstruction 파이프라인 경험을 반복 실험 관리에 활용 | 재현 가능한 실행 스크립트, plot/CSV 관리 |
+| 한지후 | metric, loss, 수리 모델링, Problem 3 extension | ML systems, parameter-efficient adaptation, diffusion/loss 분석 경험을 metric과 denoising 설계에 활용 | MMD/Wasserstein 검증, denoising 및 trade-off 분석 |
 
-| 팀원 | 주 담당 | 첫 산출물 |
-| --- | --- | --- |
-| 임채진 | 전체 연구 방향, 물리/정보이론 해석, 발표 논리 | 문제 해석과 final story line |
-| 김건우 | 양자 회로 구현, random-unitary/Hamiltonian baseline, resource proxy | Problem 1/2 baseline 검증 |
-| 김승빈 | 실험 파이프라인, 로그 관리, 시각화, 발표용 figure | 재현 가능한 실행 스크립트와 plot |
-| 한지후 | 수리 모델링, MMD/Wasserstein/loss 분석, Problem 3 extension 설계 | metric 검증과 denoising/loss 후보 비교 |
+세부 역할과 리뷰 구조는 `docs/01_team_roles.md`에 정리합니다.
 
-역할은 책임 영역을 뜻합니다. 모든 PR은 최소 1명의 리뷰 관점을 거칩니다.
+## Git Rules
 
----
+### Branch naming
 
-## Git 운영 규칙
-
-### 기본 브랜치
-
-- `main`
-  - 항상 실행 가능한 상태를 유지합니다.
-  - 직접 작업하지 않습니다.
-  - 모든 변경은 PR을 통해 들어옵니다.
-
-### 브랜치 이름 규칙
-
-브랜치 이름은 반드시 다음 형식을 사용합니다. 브랜치명에는 개인 이름을 넣지 않습니다.
+브랜치명에는 개인 이름, 학번, GitHub username을 넣지 않습니다.
 
 ```text
 <type>/<short-topic>
 ```
 
-허용되는 `type`:
+Allowed `type`:
 
-- `feat`: 새 기능, 새 실험 코드
+- `feat`: 기능 또는 실험 코드
 - `fix`: 버그 수정
-- `exp`: 실험 실행 또는 실험 설정 추가
-- `docs`: 문서 수정
-- `refactor`: 동작 변경 없는 구조 정리
-- `test`: 테스트 추가 또는 수정
-- `chore`: 설정, 템플릿, 기타 관리 작업
+- `exp`: 실험 설정 또는 실험 실행
+- `docs`: 문서
+- `refactor`: 동작 변경 없는 구조 변경
+- `test`: 테스트
+- `chore`: 설정 및 관리 작업
+
+Examples:
 
 ```text
 docs/readme-conventions
-feat/random-unitary-baseline
+feat/problem-1-random-unitary
 exp/projection-basis-sweep
 fix/hamiltonian-projection
 ```
 
-규칙:
+### Pull requests
 
-- 소문자 영어, 숫자, hyphen만 사용합니다.
-- 공백, 한글, underscore는 브랜치명에 쓰지 않습니다.
-- 개인 이름, 학번, GitHub username은 브랜치명에 쓰지 않습니다.
-- 한 브랜치는 하나의 목적만 가집니다.
-- 작업 담당자는 issue, PR 본문, 실험 로그에 적습니다.
+- 모든 변경은 PR로 관리합니다.
+- conflict가 없고 검증이 통과하면 merge합니다.
+- PR 본문에는 목적, 변경 사항, 검증 명령, 결과 또는 판단을 적습니다.
+- 담당자는 브랜치명이 아니라 issue, PR 본문, 실험 로그에 적습니다.
 
-### PR 규칙
-
-PR 제목은 다음 형식을 사용합니다.
-
-```text
-[<type>] <short summary>
-```
-
-예시:
-
-```text
-[docs] tighten README conventions
-[feat] implement random-unitary distance curve
-[exp] compare projection basis sweep
-```
-
-PR 본문에는 반드시 다음을 적습니다.
-
-- 목적: 왜 필요한 변경인가
-- 변경 사항: 무엇이 바뀌었는가
-- 검증: 어떤 명령을 실행했는가
-- 결과: 실험 PR이면 핵심 수치 또는 결과 파일 경로
-- 판단: baseline 대비 좋아진 점과 잃은 점
-
-Conflict가 없고 테스트가 통과하면 PR은 merge합니다. 연구 실험 PR도 실패 결과가 의미 있으면 merge할 수 있지만, 실패 이유와 다음 액션을 문서에 남겨야 합니다.
-
-### 커밋 메시지 규칙
-
-커밋 메시지는 다음 형식을 권장합니다.
+### Commit messages
 
 ```text
 <type>: <summary>
 ```
 
-예시:
+Examples:
 
 ```text
-docs: tighten project conventions
-feat: add fidelity mmd metric
-exp: run hamiltonian z basis baseline
+docs: update readme conventions
+feat: add problem 1 random unitary diffusion
+exp: run projection basis sweep
 fix: normalize projected states
 ```
 
----
+## File Naming Rules
 
-## 파일 이름 규칙
-
-### 공통 규칙
-
-- 파일명과 디렉터리명은 기본적으로 **소문자 영어 + 숫자 + underscore**를 사용합니다.
-- Python 모듈은 `snake_case.py`를 사용합니다.
-- 실험 설정은 `configs/<experiment_name>.json`에 둡니다.
-- 실험 로그는 `docs/experiments/YYYY-MM-DD_short_name.md` 형식을 사용합니다.
-- 결과 디렉터리는 `results/<experiment_name>/` 형식을 사용합니다.
-- 개인정보가 들어간 파일은 저장소에 넣지 않습니다.
-
-### 허용 예시
+문제 풀이와 직접 연결되는 코드는 파일명에 문제 번호를 넣습니다.
 
 ```text
-src/quantum_cylinder/random_unitary.py
-configs/projection_basis_sweep.json
-docs/experiments/2026-06-29_projection_basis_sweep.md
-results/projection_basis_sweep/
-notebooks/2026-06-29_metric_sanity_check.ipynb
+src/quantum_cylinder/problem_<n><subproblem>_<topic>.py
+scripts/problem_<n><subproblem>_<action>.py
+scripts/run_problem_<n>_<m>_<topic>.py
+configs/problem_<n>_<m>_<topic>.json
 ```
 
-### 금지 예시
+Examples:
 
 ```text
-최종실험.py
-new test.py
-ExperimentFinalFinal.ipynb
-result(1).csv
-chaejin_private_application.pdf
+src/quantum_cylinder/problem_1a_target_ensemble.py
+src/quantum_cylinder/problem_1b_ensemble_metrics.py
+src/quantum_cylinder/problem_1c_random_unitary_diffusion.py
+src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py
+scripts/problem_1a_generate_target_ensemble.py
+scripts/run_problem_1_2_baselines.py
+configs/problem_1_2_baseline.json
 ```
 
-### Python 코드 네이밍
+Common utilities that are not specific to one problem may use descriptive names such as `quantum_ops.py` or `experiment_curves.py`.
 
-- 함수/변수: `snake_case`
-- 클래스: `PascalCase`
-- 상수: `UPPER_SNAKE_CASE`
-- private helper: `_helper_name`
-- 실험 seed, sample size, sigma 등은 config 또는 함수 인자로 노출합니다.
+## Reproducibility Rules
 
----
+각 실험은 다음 정보를 남깁니다.
 
-## 실험 재현성 규칙
-
-모든 실험은 다음 정보를 남겨야 합니다.
-
-- 실험 목적
 - 실행 명령
-- config 파일 경로
+- config path
 - seed
 - sample size `N`
 - `sigma`
 - diffusion steps 또는 time grid
 - measurement basis
 - metric 정의
-- 결과 파일 경로
-- 해석과 다음 액션
+- 결과 경로
+- baseline 대비 해석
 
 표준 metric:
 
@@ -279,76 +200,34 @@ chaejin_private_application.pdf
 표준 resource/control proxy:
 
 - random-unitary: layer 수, random rotation 수, 2-qubit entangler 수
-- Hamiltonian diffusion: total evolution time, fixed Hamiltonian term 수, complement qubit 수, measurement basis 수
+- Hamiltonian projected diffusion: total evolution time, fixed Hamiltonian term 수, complement qubit 수, measurement basis
 
----
+## Data and Privacy
 
-## 데이터 및 개인정보 규칙
+- 신청서 원문, 전화번호, 이메일, 서명, 개인정보가 포함된 파일은 커밋하지 않습니다.
+- 원본 문제 PDF나 private 자료는 필요 시 로컬 `data/raw/`에만 둡니다.
+- 외부에 공유 가능한 요약과 실험 기록만 `docs/`에 정리합니다.
 
-- 신청서 원문, 전화번호, 이메일, 서명, 개인정보가 담긴 PDF는 Git에 커밋하지 않습니다.
-- 원본 문제 PDF가 필요하면 로컬 `data/raw/`에 둘 수 있지만, Git에는 올리지 않습니다.
-- 외부에 공유 가능한 내용만 `docs/`에 정리합니다.
-- 결과물에 개인정보가 포함될 가능성이 있으면 PR에 올리기 전에 제거합니다.
-
----
-
-## 현재 baseline
-
-현재 구현은 다음을 제공합니다.
-
-- 2-qubit target ensemble 생성
-- fidelity matrix 계산
-- fidelity-based MMD
-- infidelity cost 기반 Wasserstein-type distance
-- random-unitary forward diffusion trajectory
-- 3-qubit Hamiltonian evolution + complement qubit projection diffusion
-- baseline metric CSV와 distance curve plot 생성
-
-실행:
-
-```powershell
-python scripts/run_baselines.py
-```
-
-검증:
-
-```powershell
-pytest
-```
-
----
-
-## 참고문헌
+## References
 
 - B. Zhang et al., "Generative Quantum Machine Learning via Denoising Diffusion Probabilistic Models", PRL 132, 100602 (2024), arXiv:2310.05866: <https://arxiv.org/abs/2310.05866>
 - Q. H. Tran et al., "Learning Quantum Data Distribution via Chaotic Quantum Diffusion Model", arXiv:2602.22061: <https://arxiv.org/abs/2602.22061>
 
----
-
-## LLM용 개발 가이드
-
-아래 조건을 유지하면서 코드를 작성하거나 수정합니다.
+## LLM Development Guide
 
 ```text
-너는 QuantumCylinder 팀의 연구 개발 파트너다.
+You are helping the QuantumCylinder team build a reproducible solution for the 2026 Quantum Information Hackathon.
 
-프로젝트 조건은 다음과 같다.
+Follow these constraints:
 
-1. 목표는 2026 양자정보경진대회 우승이며, 최소 목표는 수상이다.
-2. Problem 1/2 baseline 재현성과 Problem 3 extension의 정량적 설득력이 가장 중요하다.
-3. main 브랜치는 항상 실행 가능해야 하며, 모든 변경은 PR 단위로 관리한다.
-4. 브랜치명은 <type>/<short-topic> 형식을 따르며, 개인 이름을 넣지 않는다.
-5. 파일명은 소문자 영어, 숫자, underscore 중심으로 통일한다.
-6. Python 모듈은 snake_case.py를 사용한다.
-7. 실험 코드는 scripts/에, 재사용 로직은 src/quantum_cylinder/에 둔다.
-8. 탐색용 노트북에 핵심 로직을 방치하지 말고 src/로 옮긴다.
-9. 실험은 seed, config, metric, 결과 경로가 남아야 한다.
-10. 결과 CSV/PNG/JSON과 raw/private 파일은 기본적으로 Git에 커밋하지 않는다.
-11. 개인정보가 담긴 신청서, 연락처, 이메일, 서명 파일은 절대 커밋하지 않는다.
-12. 새 metric이나 diffusion 변형은 baseline과 같은 조건에서 비교한다.
-13. 개선 주장은 반드시 좋아진 점과 희생한 점을 함께 설명한다.
-14. 테스트가 가능한 로직은 pytest로 검증한다.
-15. 기존 문서와 네이밍 규칙을 우선한다.
-
-이 조건을 항상 유지하면서 작업하라.
+1. Keep the repository readable to external reviewers.
+2. Keep Problem 1/2 baselines reproducible before adding Problem 3 extensions.
+3. Use branch names in the form <type>/<short-topic>; do not include personal names.
+4. Put problem-specific code in files named problem_<n><subproblem>_<topic>.py when a subproblem exists.
+5. Put reusable code under src/quantum_cylinder/.
+6. Put executable experiment scripts under scripts/.
+7. Keep generated results and private/raw files out of Git by default.
+8. Compare new ideas against at least one baseline with the same metrics.
+9. State both improvement and trade-off for experimental claims.
+10. Run pytest when code changes are made.
 ```

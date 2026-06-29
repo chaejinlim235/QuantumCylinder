@@ -6,7 +6,7 @@
 - [x] 문제 브리프 정리
 - [x] 역할 분배 정리
 - [x] baseline 코드 골격 생성
-- [ ] 전원이 `python scripts/run_baselines.py` 실행 확인
+- [ ] 전원이 `python scripts/run_problem_1_2_baselines.py` 실행 확인
 
 ## Day 1: 1/2번 재현
 

@@ -7,5 +7,5 @@
   "hamiltonian_t_max": 4.0,
   "hamiltonian_time_points": 13,
   "measurement_basis": "z",
-  "output_dir": "results/baseline"
+  "output_dir": "results/problem_1_2_baseline"
 }

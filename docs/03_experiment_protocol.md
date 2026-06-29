@@ -49,7 +49,7 @@ Hamiltonian baseline:
 
 ```text
 results/
-└── <experiment_name>/
+└── problem_1_2_baseline/
     ├── random_unitary_metrics.csv
     ├── hamiltonian_metrics.csv
     ├── resource_proxies.csv
@@ -60,7 +60,7 @@ Git에는 결과 파일을 커밋하지 않는다. 보고서에 들어갈 최종
 
 ## 실험 로그 템플릿
 
-`docs/experiments/YYYY-MM-DD_short-name.md` 형식으로 작성한다.
+`docs/experiments/YYYY-MM-DD_short_name.md` 형식으로 작성한다.
 
 ```markdown
 # 실험명
