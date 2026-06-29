@@ -80,7 +80,7 @@ Problem 3 seed sweep 기준:
 
 | Time | Goal | Output | Owner |
 | --- | --- | --- | --- |
-| 00:00-09:00 | overnight automation 또는 중단 후 재개 준비 | `final-sync-fix`, seed sweep log | 한지후 |
+| 00:00-09:00 | 상시 Problem 3 automation 또는 중단 후 재개 준비 | `continuous-p3-improvement`, seed sweep log | 한지후 |
 | 09:00-11:00 | 팀원 최신 변경사항 pull, conflict/check 실패 해결 | clean `main`, passing tests | 한지후 |
 | 11:00-13:00 | Problem 1/2 정성 해석 완성 | cluster/scrambling/projection 설명 | 임채진, 김건우 |
 | 13:00-16:00 | Problem 3 ablation, axis-only 비교, seed robustness 확정 | table/figure 후보 | 김승빈, 한지후 |
@@ -158,4 +158,3 @@ Problem 3 seed sweep를 PowerShell에서 보이는 방식으로 실행:
 | README | 실행 경로와 현재 진행도 최신 상태 |
 | Report/slides | code output과 숫자가 불일치하지 않음 |
 | 제출 파일 | 다른 PC에서 열람 가능 |
-
