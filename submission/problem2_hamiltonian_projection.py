@@ -49,7 +49,7 @@ def solve_problem_2(
     time_points: int = 13,
     measurement_basis: str = "z",
 ) -> dict:
-    """Problem 2: evolve data plus complement qubit with the Qiskit Hamiltonian backend."""
+    """Problem 2: Qiskit-backed Hamiltonian evolution plus complement projection."""
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
 
     random_trajectory = random_unitary_trajectory(target, n_steps=random_steps, seed=seed + 1)
@@ -94,6 +94,7 @@ def solve_problem_2(
 ## Physical Operation
 
 - Add one complement qubit `F` initialized as `|0>`.
+- Backend: Qiskit `SparsePauliOp`, `Operator`, and `Statevector`.
 - Evolve the three-qubit system `(M0, M1, F)` under the fixed Hamiltonian.
 - Measure/project `F` in the `{measurement_basis.upper()}` basis.
 - Keep the projected two-qubit data state as the new ensemble sample.

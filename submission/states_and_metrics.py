@@ -16,7 +16,7 @@ from quantum_cylinder.problem_1b_ensemble_metrics import mmd_fidelity, wasserste
 
 
 def make_target_ensemble(n_samples: int = 80, sigma: float = 0.10, seed: int = 7) -> np.ndarray:
-    """Problem 1(a): states near |00> made by small random single-qubit rotations."""
+    """Problem 1(a): Qiskit Statevector states near |00>."""
     return target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
 
 

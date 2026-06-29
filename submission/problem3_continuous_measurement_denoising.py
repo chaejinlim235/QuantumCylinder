@@ -60,7 +60,7 @@ def solve_problem_3(
     theta_points: int = 13,
     phi_points: int = 16,
 ) -> dict:
-    """Problem 3: search continuous measurement denoising on Qiskit-generated states."""
+    """Problem 3: search continuous measurement bases on the Qiskit Hamiltonian matrix."""
     input_steps = [1, 2, 3, 5, 7, 12] if input_steps is None else input_steps
     target = make_target_ensemble(n_samples=n_samples, sigma=sigma, seed=seed)
     random_trajectory = random_unitary_trajectory(target, n_steps=random_steps, seed=seed + 1)
@@ -104,7 +104,8 @@ def solve_problem_3(
 
 - Start from a diffused Problem 1 ensemble.
 - Attach complement qubit `F = |0>`.
-- Evolve `(M0, M1, F)` with the same fixed Hamiltonian used in Problem 2.
+- Use the same Qiskit-defined fixed Hamiltonian matrix from Problem 2.
+- Evolve `(M0, M1, F)` with that Hamiltonian.
 - Post-select `F` on a continuous Bloch-sphere basis vector.
 - Compare against the best exact `Z/X/Y` axis projection.
 
