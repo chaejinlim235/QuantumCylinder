@@ -11,6 +11,7 @@ param(
     [string]$StopAt = "",
     [int]$MinRemainingMinutesForNextCycle = 0,
     [int[]]$Seeds = (1..20),
+    [string]$SeedList = "",
     [string]$StatusOutput = "results/problem_3_finalist_autopilot/latest_status.md",
     [string]$ProgressLog = "results/problem_3_finalist_autopilot/progress_log.md",
     [string]$LogRoot = "logs/problem_3_finalist_autopilot",
@@ -26,6 +27,21 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($SeedList) {
+    $parsedSeeds = @()
+    foreach ($rawSeed in ($SeedList -split ",")) {
+        $trimmedSeed = $rawSeed.Trim()
+        if (-not $trimmedSeed) {
+            continue
+        }
+        $parsedSeeds += [int]::Parse($trimmedSeed, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($parsedSeeds.Count -eq 0) {
+        throw "SeedList was provided but no valid seeds were parsed."
+    }
+    $Seeds = [int[]]$parsedSeeds
+}
 
 function ConvertTo-CommandLineArgument {
     param([string]$Argument)
@@ -231,6 +247,88 @@ function Resolve-RepoPath {
     return Join-Path $repoRoot $Path
 }
 
+function Set-SharedUtf8Text {
+    param(
+        [string]$Path,
+        [string]$Text
+    )
+
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    for ($attempt = 1; $attempt -le 20; $attempt++) {
+        try {
+            $stream = [System.IO.File]::Open(
+                $Path,
+                [System.IO.FileMode]::Create,
+                [System.IO.FileAccess]::Write,
+                [System.IO.FileShare]::ReadWrite
+            )
+            try {
+                $writer = [System.IO.StreamWriter]::new($stream, $encoding)
+                $stream = $null
+                try {
+                    $writer.Write($Text)
+                }
+                finally {
+                    $writer.Dispose()
+                }
+            }
+            finally {
+                if ($stream) {
+                    $stream.Dispose()
+                }
+            }
+            return
+        }
+        catch {
+            if ($attempt -eq 20) {
+                throw
+            }
+            Start-Sleep -Milliseconds 250
+        }
+    }
+}
+
+function Add-SharedUtf8Text {
+    param(
+        [string]$Path,
+        [string]$Text
+    )
+
+    $encoding = [System.Text.UTF8Encoding]::new($false)
+    for ($attempt = 1; $attempt -le 20; $attempt++) {
+        try {
+            $stream = [System.IO.File]::Open(
+                $Path,
+                [System.IO.FileMode]::Append,
+                [System.IO.FileAccess]::Write,
+                [System.IO.FileShare]::ReadWrite
+            )
+            try {
+                $writer = [System.IO.StreamWriter]::new($stream, $encoding)
+                $stream = $null
+                try {
+                    $writer.Write($Text)
+                }
+                finally {
+                    $writer.Dispose()
+                }
+            }
+            finally {
+                if ($stream) {
+                    $stream.Dispose()
+                }
+            }
+            return
+        }
+        catch {
+            if ($attempt -eq 20) {
+                throw
+            }
+            Start-Sleep -Milliseconds 250
+        }
+    }
+}
+
 function Get-FileTextIfExists {
     param([string]$Path)
 
@@ -323,7 +421,7 @@ function Initialize-ProgressLog {
             '- detailed logs: `logs/problem_3_finalist_autopilot/`',
             ""
         )
-        $lines -join "`n" | Set-Content -LiteralPath $resolvedPath -Encoding UTF8
+        Set-SharedUtf8Text -Path $resolvedPath -Text (($lines -join "`n") + "`n")
     }
 
     return $resolvedPath
@@ -364,7 +462,7 @@ function Add-ProgressLogEntry {
         ""
     ) + $changeMarkdown + @("")
 
-    Add-Content -LiteralPath $resolvedPath -Value ($entry -join "`n") -Encoding UTF8
+    Add-SharedUtf8Text -Path $resolvedPath -Text (($entry -join "`n") + "`n")
     Write-Step "Appended progress log: $resolvedPath"
 }
 
@@ -469,7 +567,7 @@ function Write-AutopilotStatus {
         '```'
     )
 
-    $lines -join "`n" | Set-Content -LiteralPath $resolvedPath -Encoding UTF8
+    Set-SharedUtf8Text -Path $resolvedPath -Text (($lines -join "`n") + "`n")
     Write-Step "Wrote autopilot status: $resolvedPath"
 }
 
@@ -551,7 +649,7 @@ function Start-DetachedAutopilot {
     if ($StopAt) {
         $childArgs += @("-StopAt", $StopAt)
     }
-    $childArgs += @("-Seeds", ($Seeds -join ","))
+    $childArgs += @("-SeedList", ($Seeds -join ","))
     if ($Python) {
         $childArgs += @("-Python", $Python)
     }

@@ -4,8 +4,11 @@ param(
     [int]$MaxCycles = 0,
     [int]$FullSeedSweepEvery = 3,
     [int[]]$HybridSeeds = (2026, 2027),
+    [string]$HybridSeedList = "",
     [double[]]$AngleScales = (0.5, 3.141592653589793),
+    [string]$AngleScaleList = "",
     [int[]]$SweepSeeds = (1..20),
+    [string]$SweepSeedList = "",
     [string]$StatusOutput = "",
     [string]$ProgressLog = "",
     [string]$LogRoot = "",
@@ -20,6 +23,51 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($HybridSeedList) {
+    $parsedHybridSeeds = @()
+    foreach ($rawSeed in ($HybridSeedList -split ",")) {
+        $trimmedSeed = $rawSeed.Trim()
+        if (-not $trimmedSeed) {
+            continue
+        }
+        $parsedHybridSeeds += [int]::Parse($trimmedSeed, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($parsedHybridSeeds.Count -eq 0) {
+        throw "HybridSeedList was provided but no valid seeds were parsed."
+    }
+    $HybridSeeds = [int[]]$parsedHybridSeeds
+}
+
+if ($AngleScaleList) {
+    $parsedAngleScales = @()
+    foreach ($rawAngle in ($AngleScaleList -split ",")) {
+        $trimmedAngle = $rawAngle.Trim()
+        if (-not $trimmedAngle) {
+            continue
+        }
+        $parsedAngleScales += [double]::Parse($trimmedAngle, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($parsedAngleScales.Count -eq 0) {
+        throw "AngleScaleList was provided but no valid angle scales were parsed."
+    }
+    $AngleScales = [double[]]$parsedAngleScales
+}
+
+if ($SweepSeedList) {
+    $parsedSweepSeeds = @()
+    foreach ($rawSeed in ($SweepSeedList -split ",")) {
+        $trimmedSeed = $rawSeed.Trim()
+        if (-not $trimmedSeed) {
+            continue
+        }
+        $parsedSweepSeeds += [int]::Parse($trimmedSeed, [System.Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($parsedSweepSeeds.Count -eq 0) {
+        throw "SweepSeedList was provided but no valid seeds were parsed."
+    }
+    $SweepSeeds = [int[]]$parsedSweepSeeds
+}
 
 function ConvertTo-CommandLineArgument {
     param([string]$Argument)
@@ -424,9 +472,9 @@ function Start-DetachedWorker {
         "-CycleMinutes", [string]$CycleMinutes,
         "-MaxCycles", [string]$MaxCycles,
         "-FullSeedSweepEvery", [string]$FullSeedSweepEvery,
-        "-HybridSeeds", ($HybridSeeds -join ","),
-        "-AngleScales", ($AngleScales -join ","),
-        "-SweepSeeds", ($SweepSeeds -join ","),
+        "-HybridSeedList", ($HybridSeeds -join ","),
+        "-AngleScaleList", ($AngleScales -join ","),
+        "-SweepSeedList", ($SweepSeeds -join ","),
         "-StatusOutput", $StatusOutput,
         "-ProgressLog", $ProgressLog,
         "-LogRoot", $LogRoot
