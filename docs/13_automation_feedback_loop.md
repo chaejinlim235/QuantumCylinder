@@ -36,9 +36,16 @@ Hermes에게 전체 루프를 맡길 때:
 .\scripts\invoke_hermes_task.ps1 feedback-loop -Yolo -MaxTurns 260
 ```
 
+마지막 제출 전 팀원 변경 반영과 실패 수정 루프까지 맡길 때:
+
+```powershell
+.\scripts\invoke_hermes_task.ps1 final-sync-fix -Yolo -MaxTurns 360
+```
+
 PowerShell에서 직접 보면서 돌릴 때:
 
 ```powershell
+.\scripts\sync_latest_team_changes.ps1
 .\scripts\run_final_pipeline_visible.ps1
 .\scripts\sync_hackathon_issues.ps1 -Apply
 ```

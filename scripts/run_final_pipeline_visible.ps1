@@ -1,7 +1,8 @@
 param(
     [int[]]$Seeds = (1..20),
     [string]$SeedSweepOutputRoot = "results/problem_3_seed_sweep",
-    [string]$Python = ""
+    [string]$Python = "",
+    [switch]$SkipTeamSync
 )
 
 $ErrorActionPreference = "Stop"
@@ -43,6 +44,14 @@ try {
     Write-Step "Final automated pipeline started."
     Write-Step "Repository: $repoRoot"
     Write-Step "Python: $projectPython"
+
+    if (-not $SkipTeamSync) {
+        Write-Step "Syncing latest team changes before running checks."
+        & (Join-Path $PSScriptRoot "sync_latest_team_changes.ps1")
+        if ($LASTEXITCODE -ne 0) {
+            throw "sync_latest_team_changes.ps1 failed with exit code $LASTEXITCODE"
+        }
+    }
 
     Write-Step "Initial git status."
     git status --short --branch

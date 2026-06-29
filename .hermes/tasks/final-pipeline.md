@@ -13,10 +13,12 @@ Read these first:
 Run the full pre-submission automation pipeline and produce a concise Korean status report for the team.
 
 This is the high-level task to use when the team wants Hermes to handle the whole flow instead of running each step manually.
+The visible pipeline now syncs latest teammate changes before running checks.
 
 ## Hard Constraints
 
-- Do not modify tracked source or documentation files.
+- Do not manually modify tracked source or documentation files.
+- Fast-forward updates from `origin/main` are allowed through `scripts/sync_latest_team_changes.ps1`.
 - Do not commit anything.
 - Generated files under `results/` are allowed.
 - Do not touch private/raw PDFs, application forms, phone numbers, emails, signatures, or other PII.

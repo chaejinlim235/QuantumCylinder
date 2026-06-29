@@ -12,15 +12,17 @@ Read these first:
 
 Run the self-analysis feedback loop:
 
-1. Execute the final pipeline.
-2. Read generated summaries.
-3. Decide whether the current Problem 3 claim is safe.
-4. Sync GitHub issues so each teammate has a current next task.
-5. Report the next action in Korean.
+1. Sync latest teammate changes from `origin/main`.
+2. Execute the final pipeline.
+3. Read generated summaries.
+4. Decide whether the current Problem 3 claim is safe.
+5. Sync GitHub issues so each teammate has a current next task.
+6. Report the next action in Korean.
 
 ## Hard Constraints
 
 - Do not edit tracked files.
+- Fast-forward updates from `origin/main` are allowed through `scripts/sync_latest_team_changes.ps1`.
 - Do not commit anything.
 - Generated files under `results/` are allowed.
 - Do not touch private/raw PDFs or application forms.
