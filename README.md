@@ -11,16 +11,18 @@
 | Area | Status | Owner | Next action |
 | --- | --- | --- | --- |
 | Repository setup | Done | 한지후 | PR 단위 변경과 자동 CI 유지 |
-| Problem 1 baseline | Locked | 한지후 | 3번 extension의 비교 기준으로 유지 |
-| Problem 2 baseline | Locked | 한지후 | comparable-strength resource match 표를 보고서에 반영 |
+| Problem 1 baseline | Validated + diagnostics generated | 한지후 | 1(b) metric sanity와 cluster fidelity 수치를 팀 검토에 사용 |
+| Problem 2 baseline | Validated + diagnostics generated | 한지후 | Hamiltonian/projection/Bloch 진단 결과를 물리 해석에 반영 |
 | CI/local tests | Passing | 한지후 | 모든 코드 PR 전 `pytest`와 GitHub Actions 확인 |
 | Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
 | Submission layer | Done | 한지후 | `submission/run_all.py`를 심사자용 entry point로 유지 |
 | Problem 3 extension | Validated main candidate | 한지후 | 새 기능 추가보다 claim/figure/reproducibility 안정화 |
 | Problem 3 seed sweep | Done | 김승빈 | figure/table 후보와 재현 로그 정리 |
-| Physics/resource validation | In progress | 김건우 | Qiskit/backend와 post-selection proxy 설명 검증 |
-| Final report/story | In progress | 임채진 | seed sweep 숫자와 limitation을 최종 보고서에 반영 |
-| Feedback automation | Available | 한지후 | Hermes `feedback-loop`로 결과 분석과 issue 동기화 반복 |
+| Quantitative evaluation | Generated and handed off | 한지후 | `docs/experiments/2026-06-29_quantitative_evaluation_handoff.md` 기준으로 팀원 검토 |
+| Physics/resource validation | Ready for review | 김건우 | Hamiltonian term, projection probability, reduced Bloch plot 해석 검증 |
+| Final report/story | Evidence ready | 임채진 | Problem 1/2 정성 설명과 Problem 3 limitation 문장 정리 |
+| Result packaging | Ready for review | 김승빈 | quantitative evaluation figure/table 후보 재현 및 패키징 |
+| Feedback automation | Available | 한지후 | Hermes `final-sync-fix`와 `quantitative-evaluation` 반복 |
 
 ## Current Issue Assignments
 
