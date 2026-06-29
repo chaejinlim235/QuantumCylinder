@@ -147,6 +147,7 @@
       "## 다음 작업",
       "",
       "- `results/continuous_problem_3/latest_status.md`를 기준으로 루프 상태 확인.",
+      "- `results/continuous_problem_3/progress_log.md`에서 cycle별 변화 기록 확인.",
       "- pipeline 결과가 `use_as_main`인지 확인.",
       "- CI/check 실패 시 즉시 원인 확인 및 PR 처리.",
       "- 팀원 issue가 최신 결과와 일치하는지 확인.",

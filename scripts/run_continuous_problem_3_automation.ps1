@@ -6,6 +6,7 @@ param(
     [int]$HermesRetryDelaySeconds = 0,
     [int]$IdleTimeoutMinutes = 45,
     [string]$StatusOutput = "results/continuous_problem_3/latest_status.md",
+    [string]$ProgressLog = "results/continuous_problem_3/progress_log.md",
     [switch]$KeepDisplayOff,
     [switch]$AllowNonMainBranch,
     [switch]$StatusOnly
@@ -143,6 +144,115 @@ function Get-MarkdownMetric {
     return ""
 }
 
+function Resolve-RepoPath {
+    param([string]$Path)
+
+    if ([System.IO.Path]::IsPathRooted($Path)) {
+        return $Path
+    }
+    return Join-Path $repoRoot $Path
+}
+
+function Get-Problem3Metrics {
+    $seedSummaryPath = Join-Path $repoRoot "results\problem_3_seed_sweep\seed_sweep_summary.md"
+    $seedSummary = Get-FileTextIfExists -Path $seedSummaryPath
+
+    return @{
+        recommendation = Get-MarkdownMetric -Text $seedSummary -Label "Main-claim recommendation"
+        total_seeds = Get-MarkdownMetric -Text $seedSummary -Label "Total seeds"
+        use_as_main = Get-MarkdownMetric -Text $seedSummary -Label "use_as_main"
+        main_fraction = Get-MarkdownMetric -Text $seedSummary -Label "main_candidate row fraction"
+        mmd_improvement = Get-MarkdownMetric -Text $seedSummary -Label "continuous_mmd_improvement"
+        wasserstein_improvement = Get-MarkdownMetric -Text $seedSummary -Label "continuous_wasserstein_improvement"
+        axis_margin = Get-MarkdownMetric -Text $seedSummary -Label "continuous_score_minus_axis_score"
+        diversity = Get-MarkdownMetric -Text $seedSummary -Label "continuous_diversity_retention"
+        success_probability = Get-MarkdownMetric -Text $seedSummary -Label "continuous_mean_success_probability"
+    }
+}
+
+function Get-CurrentChangeLines {
+    $tracked = @(git diff --name-status)
+    $staged = @(git diff --cached --name-status)
+    $untracked = @(git ls-files --others --exclude-standard | Where-Object {
+        $_ -notmatch '^(results|logs)/' -and $_ -notmatch '^(results|logs)\\'
+    } | ForEach-Object { "?? $($_)" })
+
+    $changes = @()
+    $changes += $tracked
+    $changes += $staged
+    $changes += $untracked
+
+    if ($changes.Count -eq 0) {
+        return @("none")
+    }
+
+    return @($changes | Select-Object -Unique)
+}
+
+function Initialize-ProgressLog {
+    param([string]$Path)
+
+    $resolvedPath = Resolve-RepoPath -Path $Path
+    $logDir = Split-Path -Parent $resolvedPath
+    New-Item -ItemType Directory -Force -Path $logDir | Out-Null
+
+    if (-not (Test-Path -LiteralPath $resolvedPath)) {
+        $lines = @(
+            '# Continuous Problem 3 Progress Log',
+            "",
+            'This generated log records each automation cycle so the team can see progress while the loop is running.',
+            "",
+            '- source status: generated under `results/`, ignored by Git',
+            '- main status file: `results/continuous_problem_3/latest_status.md`',
+            '- detailed Hermes logs: `logs/continuous_problem_3/`',
+            ""
+        )
+        $lines -join "`n" | Set-Content -LiteralPath $resolvedPath -Encoding UTF8
+    }
+
+    return $resolvedPath
+}
+
+function Add-ProgressLogEntry {
+    param(
+        [string]$Path,
+        [pscustomobject]$CycleResult,
+        [string[]]$ChangeLines
+    )
+
+    $resolvedPath = Initialize-ProgressLog -Path $Path
+    $metrics = Get-Problem3Metrics
+    $gitHead = (git rev-parse --short HEAD).Trim()
+    $branch = (git branch --show-current).Trim()
+    $changeMarkdown = @($ChangeLines | ForEach-Object { "- $_" })
+
+    $entry = @(
+        "## Cycle $($CycleResult.cycle) - $($CycleResult.finished_at)",
+        "",
+        ('- status: `{0}`' -f $CycleResult.status),
+        ('- branch: `{0}`' -f $branch),
+        ('- head: `{0}`' -f $gitHead),
+        ('- started_at: `{0}`' -f $CycleResult.started_at),
+        ('- finished_at: `{0}`' -f $CycleResult.finished_at),
+        ('- duration: `{0}`' -f $CycleResult.duration),
+        ('- note: {0}' -f $CycleResult.note),
+        ('- recommendation: `{0}`' -f $metrics.recommendation),
+        ('- MMD improvement: `{0}`' -f $metrics.mmd_improvement),
+        ('- Wasserstein improvement: `{0}`' -f $metrics.wasserstein_improvement),
+        ('- axis-only score margin: `{0}`' -f $metrics.axis_margin),
+        ('- diversity retention: `{0}`' -f $metrics.diversity),
+        ('- success probability: `{0}`' -f $metrics.success_probability),
+        "",
+        "### Current Source Changes",
+        ""
+    ) + $changeMarkdown + @(
+        ""
+    )
+
+    Add-Content -LiteralPath $resolvedPath -Value ($entry -join "`n") -Encoding UTF8
+    Write-Step "Appended progress log: $resolvedPath"
+}
+
 function Write-ContinuousStatus {
     param(
         [string]$Path,
@@ -160,27 +270,18 @@ function Write-ContinuousStatus {
 
     $seedSummaryPath = Join-Path $repoRoot "results\problem_3_seed_sweep\seed_sweep_summary.md"
     $p3SummaryPath = Join-Path $repoRoot "results\problem_3_continuous_denoising\problem_3_summary.md"
-    $seedSummary = Get-FileTextIfExists -Path $seedSummaryPath
-
-    $recommendation = Get-MarkdownMetric -Text $seedSummary -Label "Main-claim recommendation"
-    $totalSeeds = Get-MarkdownMetric -Text $seedSummary -Label "Total seeds"
-    $useAsMain = Get-MarkdownMetric -Text $seedSummary -Label "use_as_main"
-    $mainFraction = Get-MarkdownMetric -Text $seedSummary -Label "main_candidate row fraction"
-    $mmdImprovement = Get-MarkdownMetric -Text $seedSummary -Label "continuous_mmd_improvement"
-    $wassersteinImprovement = Get-MarkdownMetric -Text $seedSummary -Label "continuous_wasserstein_improvement"
-    $axisMargin = Get-MarkdownMetric -Text $seedSummary -Label "continuous_score_minus_axis_score"
-    $diversity = Get-MarkdownMetric -Text $seedSummary -Label "continuous_diversity_retention"
-    $successProbability = Get-MarkdownMetric -Text $seedSummary -Label "continuous_mean_success_probability"
+    $metrics = Get-Problem3Metrics
 
     $branch = (git branch --show-current).Trim()
     $gitStatus = @(git status --short --branch)
     $cycleLines = if ($script:CycleResults.Count -gt 0) {
         @($script:CycleResults | Select-Object -Last 12 | ForEach-Object {
-            "- cycle {0}: `{1}` started `{2}`, duration `{3}` - {4}" -f `
+            "- cycle {0}: `{1}` started `{2}`, duration `{3}`, changes `{4}` - {5}" -f `
                 $_.cycle, `
                 $_.status, `
                 $_.started_at, `
                 $_.duration, `
+                $_.changed_files, `
                 $_.note
         })
     }
@@ -204,19 +305,20 @@ function Write-ContinuousStatus {
         '- loop purpose: `experiment -> analyze -> decide -> apply -> verify -> record`',
         '- seed summary: `results/problem_3_seed_sweep/seed_sweep_summary.md`',
         '- default summary: `results/problem_3_continuous_denoising/problem_3_summary.md`',
+        ('- progress log: `{0}`' -f $ProgressLog),
         '- logs: `logs/continuous_problem_3/`',
         "",
         "## Latest Problem 3 Gate",
         "",
-        ('- recommendation: `{0}`' -f $recommendation),
-        ('- total seeds: `{0}`' -f $totalSeeds),
-        ('- use_as_main seeds: `{0}`' -f $useAsMain),
-        ('- main_candidate row fraction: `{0}`' -f $mainFraction),
-        ('- median MMD improvement: `{0}`' -f $mmdImprovement),
-        ('- median Wasserstein improvement: `{0}`' -f $wassersteinImprovement),
-        ('- median axis-only score margin: `{0}`' -f $axisMargin),
-        ('- median diversity retention: `{0}`' -f $diversity),
-        ('- median success probability: `{0}`' -f $successProbability),
+        ('- recommendation: `{0}`' -f $metrics.recommendation),
+        ('- total seeds: `{0}`' -f $metrics.total_seeds),
+        ('- use_as_main seeds: `{0}`' -f $metrics.use_as_main),
+        ('- main_candidate row fraction: `{0}`' -f $metrics.main_fraction),
+        ('- median MMD improvement: `{0}`' -f $metrics.mmd_improvement),
+        ('- median Wasserstein improvement: `{0}`' -f $metrics.wasserstein_improvement),
+        ('- median axis-only score margin: `{0}`' -f $metrics.axis_margin),
+        ('- median diversity retention: `{0}`' -f $metrics.diversity),
+        ('- median success probability: `{0}`' -f $metrics.success_probability),
         "",
         "## Recent Cycles",
         ""
@@ -281,6 +383,7 @@ try {
     }
 
     if ($StatusOnly) {
+        Initialize-ProgressLog -Path $ProgressLog | Out-Null
         Write-ContinuousStatus -Path $StatusOutput -Mode "status-only"
         Write-Step "Status-only mode finished."
         return
@@ -314,6 +417,13 @@ try {
 
         $endedAt = Get-Date
         $duration = New-TimeSpan -Start $startedAt -End $endedAt
+        $changeLines = Get-CurrentChangeLines
+        $changedFiles = if ($changeLines.Count -eq 0 -or ($changeLines.Count -eq 1 -and $changeLines[0] -eq "none")) {
+            "none"
+        }
+        else {
+            ($changeLines | Select-Object -First 8) -join "; "
+        }
         $script:CycleResults += [pscustomobject]@{
             cycle = $cycle
             status = $status
@@ -321,8 +431,10 @@ try {
             finished_at = $endedAt.ToString("s")
             duration = (Format-RunDuration -Duration $duration)
             note = $note
+            changed_files = $changedFiles
         }
 
+        Add-ProgressLogEntry -Path $ProgressLog -CycleResult $script:CycleResults[-1] -ChangeLines $changeLines
         Write-ContinuousStatus -Path $StatusOutput -Mode "continuous"
         Write-Step "END: continuous Problem 3 cycle $cycle with status $status"
 

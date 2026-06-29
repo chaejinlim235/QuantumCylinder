@@ -4,10 +4,13 @@ Read these first:
 
 - `.hermes.md`
 - `README.md`
+- `docs/00_team_dashboard.md`
 - `docs/11_problem_3_continuous_denoising.md`
 - `docs/13_automation_feedback_loop.md`
 - `docs/16_three_day_roadmap.md`
 - `results/problem_3_seed_sweep/seed_sweep_summary.md`, if it exists
+- `results/continuous_problem_3/latest_status.md`, if it exists
+- `results/continuous_problem_3/progress_log.md`, if it exists
 - `src/quantum_cylinder/problem_3_continuous_projected_denoising.py`
 - `scripts/run_problem_3_continuous_denoising.py`
 - `scripts/run_problem_3_seed_sweep_visible.ps1`
@@ -126,6 +129,7 @@ If the axis-only score margin remains near `0.010000`, this is acceptable but mu
 Respond in Korean and include:
 
 - what was attempted this cycle,
+- what changed in source/docs/results,
 - whether source/docs changed,
 - whether tests passed,
 - whether the 20-seed sweep passed,
@@ -133,4 +137,3 @@ Respond in Korean and include:
 - whether the main claim should be preserved or changed,
 - the safest report wording,
 - next action for the team.
-

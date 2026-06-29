@@ -108,7 +108,15 @@ Problem 3를 계속 개선해야 할 때는 상시 루프를 사용한다.
 .\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
-이 루프는 `continuous-p3-improvement`를 cycle 사이 대기 없이 반복한다. `-MaxCycles 0`은 `Ctrl+C`로 중지할 때까지 계속 실행한다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`에 기록된다. 의도적으로 쉬게 만들 때만 `-CycleMinutes 30`처럼 값을 준다.
+이 루프는 `continuous-p3-improvement`를 cycle 사이 대기 없이 반복한다. `-MaxCycles 0`은 `Ctrl+C`로 중지할 때까지 계속 실행한다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 변화 기록은 `results/continuous_problem_3/progress_log.md`에 기록된다. 의도적으로 쉬게 만들 때만 `-CycleMinutes 30`처럼 값을 준다.
+
+실행 중 확인:
+
+```powershell
+Get-Content results\continuous_problem_3\latest_status.md -Tail 80
+Get-Content results\continuous_problem_3\progress_log.md -Tail 120
+Get-Content logs\continuous_problem_3\latest_state.json
+```
 
 ## 장시간 실행 watchdog
 
