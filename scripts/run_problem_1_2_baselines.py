@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -12,13 +13,25 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from quantum_cylinder.experiment_curves import closest_metric_pair, distance_curve, hamiltonian_resource_proxy
+from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 from quantum_cylinder.problem_1c_random_unitary_diffusion import (  # noqa: E402
     random_unitary_resource_proxy,
     random_unitary_trajectory,
 )
 from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory  # noqa: E402
-from quantum_cylinder.experiment_curves import closest_metric_pair, distance_curve, hamiltonian_resource_proxy
-from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
+
+METRICS = ("mmd", "wasserstein")
+
+
+@dataclass(frozen=True)
+class ExperimentResult:
+    """All derived Problem 1/2 data needed for files, plots, and summaries."""
+
+    random_rows: list[dict]
+    hamiltonian_rows: list[dict]
+    resource_rows: list[dict]
+    comparable_rows: list[dict]
 
 
 def load_config(path: Path) -> dict:
@@ -32,7 +45,10 @@ def parse_args() -> argparse.Namespace:
     known, remaining = config_parser.parse_known_args()
     defaults = load_config(known.config)
 
-    parser = argparse.ArgumentParser(parents=[config_parser])
+    parser = argparse.ArgumentParser(
+        parents=[config_parser],
+        description="Run readable Problem 1/2 baseline experiments and write judge-facing diagnostics.",
+    )
     parser.add_argument("--n-samples", type=int, default=defaults.get("n_samples", 80))
     parser.add_argument("--sigma", type=float, default=defaults.get("sigma", 0.1))
     parser.add_argument("--seed", type=int, default=defaults.get("seed", 7))
@@ -56,6 +72,7 @@ def parse_args() -> argparse.Namespace:
 def write_rows(path: Path, rows: list[dict]) -> None:
     if not rows:
         raise ValueError(f"No rows to write for {path}")
+
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         writer.writeheader()
@@ -68,106 +85,217 @@ def write_json(path: Path, payload: dict) -> None:
         f.write("\n")
 
 
-def plot_curves(random_rows: list[dict], ham_rows: list[dict], output_path: Path) -> None:
+def values(rows: list[dict], key: str) -> list[float]:
+    return [float(row[key]) for row in rows]
+
+
+def non_initial_rows(rows: list[dict]) -> list[dict]:
+    return [row for row in rows if int(row["index"]) != 0]
+
+
+def native_parameter_label(row: dict) -> str:
+    if row["parameter_name"] == "step":
+        return f"k={int(row['parameter'])}"
+    return f"t={float(row['parameter']):.2f}"
+
+
+def build_target_ensemble(args: argparse.Namespace) -> np.ndarray:
+    return target_ensemble(args.n_samples, sigma=args.sigma, seed=args.seed)
+
+
+def run_problem_1_random_unitary(args: argparse.Namespace, initial: np.ndarray) -> list[dict]:
+    trajectory = random_unitary_trajectory(
+        initial,
+        n_steps=args.random_steps,
+        angle_scale=args.random_angle_scale,
+        seed=args.seed + 1,
+    )
+    return distance_curve(initial, trajectory, parameter_name="step")
+
+
+def run_problem_2_hamiltonian_projection(args: argparse.Namespace, initial: np.ndarray) -> tuple[np.ndarray, list[dict]]:
+    times = np.linspace(0.0, args.hamiltonian_t_max, args.hamiltonian_time_points)
+    trajectory = hamiltonian_projected_trajectory(
+        initial,
+        times=times,
+        measurement_basis=args.measurement_basis,
+        seed=args.seed + 2,
+    )
+    return times, distance_curve(initial, trajectory, parameters=times, parameter_name="time")
+
+
+def build_resource_rows(args: argparse.Namespace, times: np.ndarray) -> list[dict]:
+    random_rows = [random_unitary_resource_proxy(step) for step in range(args.random_steps + 1)]
+    hamiltonian_rows = [
+        hamiltonian_resource_proxy(float(time), measurement_basis=args.measurement_basis) for time in times
+    ]
+    return [*random_rows, *hamiltonian_rows]
+
+
+def comparable_strength_resource_rows(
+    random_rows: list[dict],
+    hamiltonian_rows: list[dict],
+    measurement_basis: str,
+) -> list[dict]:
+    """Match mechanisms by output distance, not by native x-axis value."""
+    rows = []
+    for metric in METRICS:
+        match = closest_metric_pair(random_rows, hamiltonian_rows, metric=metric)
+        random_row = random_rows[match["reference_index"]]
+        hamiltonian_row = hamiltonian_rows[match["candidate_index"]]
+        random_resource = random_unitary_resource_proxy(int(round(random_row["parameter"])))
+        hamiltonian_resource = hamiltonian_resource_proxy(
+            float(hamiltonian_row["parameter"]),
+            measurement_basis=measurement_basis,
+        )
+
+        rows.append(
+            {
+                "matched_by": metric,
+                "random_step": int(round(random_row["parameter"])),
+                "hamiltonian_time": float(hamiltonian_row["parameter"]),
+                "random_mmd": float(random_row["mmd"]),
+                "hamiltonian_mmd": float(hamiltonian_row["mmd"]),
+                "mmd_gap": abs(float(random_row["mmd"]) - float(hamiltonian_row["mmd"])),
+                "random_wasserstein": float(random_row["wasserstein"]),
+                "hamiltonian_wasserstein": float(hamiltonian_row["wasserstein"]),
+                "wasserstein_gap": abs(float(random_row["wasserstein"]) - float(hamiltonian_row["wasserstein"])),
+                "random_single_qubit_rotations": random_resource["single_qubit_rotations"],
+                "random_two_qubit_entanglers": random_resource["two_qubit_entanglers"],
+                "random_controls": random_resource["random_controls"],
+                "hamiltonian_total_time": hamiltonian_resource["total_hamiltonian_time"],
+                "hamiltonian_fixed_terms": hamiltonian_resource["fixed_hamiltonian_terms"],
+                "hamiltonian_fixed_parameters": hamiltonian_resource["fixed_hamiltonian_parameters"],
+                "measurement_basis": measurement_basis,
+            }
+        )
+    return rows
+
+
+def run_experiment(args: argparse.Namespace) -> ExperimentResult:
+    initial = build_target_ensemble(args)
+    random_rows = run_problem_1_random_unitary(args, initial)
+    times, hamiltonian_rows = run_problem_2_hamiltonian_projection(args, initial)
+
+    return ExperimentResult(
+        random_rows=random_rows,
+        hamiltonian_rows=hamiltonian_rows,
+        resource_rows=build_resource_rows(args, times),
+        comparable_rows=comparable_strength_resource_rows(
+            random_rows,
+            hamiltonian_rows,
+            measurement_basis=args.measurement_basis,
+        ),
+    )
+
+
+def plot_native_parameter_curves(random_rows: list[dict], hamiltonian_rows: list[dict], output_path: Path) -> None:
+    """Show each mechanism on its own native x-axis: step k or time t."""
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
 
-    axes[0].plot([r["parameter"] for r in random_rows], [r["mmd"] for r in random_rows], marker="o", label="MMD")
-    axes[0].plot(
-        [r["parameter"] for r in random_rows],
-        [r["wasserstein"] for r in random_rows],
-        marker="s",
-        label="Wasserstein",
+    plot_distance_curve(
+        axes[0],
+        random_rows,
+        title="Random-unitary diffusion",
+        xlabel="step k",
     )
-    axes[0].set_title("Random-unitary diffusion")
-    axes[0].set_xlabel("step k")
-    axes[0].set_ylabel("distance to S0")
-    axes[0].grid(alpha=0.25)
-    axes[0].legend()
-
-    axes[1].plot([r["parameter"] for r in ham_rows], [r["mmd"] for r in ham_rows], marker="o", label="MMD")
-    axes[1].plot(
-        [r["parameter"] for r in ham_rows],
-        [r["wasserstein"] for r in ham_rows],
-        marker="s",
-        label="Wasserstein",
+    plot_distance_curve(
+        axes[1],
+        hamiltonian_rows,
+        title="Hamiltonian projected diffusion",
+        xlabel="time t",
     )
-    axes[1].set_title("Hamiltonian projected diffusion")
-    axes[1].set_xlabel("time t")
-    axes[1].set_ylabel("distance to S0")
-    axes[1].grid(alpha=0.25)
-    axes[1].legend()
 
     fig.savefig(output_path, dpi=180)
     plt.close(fig)
 
 
-def plot_metric_aligned_comparison(random_rows: list[dict], ham_rows: list[dict], output_path: Path) -> None:
-    """Plot a mechanism comparison without putting step k and time t on one shared x-axis."""
+def plot_distance_curve(axis, rows: list[dict], title: str, xlabel: str) -> None:
+    axis.plot(values(rows, "parameter"), values(rows, "mmd"), marker="o", label="MMD")
+    axis.plot(values(rows, "parameter"), values(rows, "wasserstein"), marker="s", label="Wasserstein")
+    axis.set_title(title)
+    axis.set_xlabel(xlabel)
+    axis.set_ylabel("distance to S0")
+    axis.grid(alpha=0.25)
+    axis.legend()
+
+
+def plot_metric_aligned_comparison(random_rows: list[dict], hamiltonian_rows: list[dict], output_path: Path) -> None:
+    """Compare mechanisms by output distance instead of sharing the x-axis."""
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), constrained_layout=True)
 
+    plot_metric_space(axes[0], random_rows, hamiltonian_rows)
+    plot_nearest_metric_matches(axes[1], random_rows, hamiltonian_rows)
+
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
+
+
+def plot_metric_space(axis, random_rows: list[dict], hamiltonian_rows: list[dict]) -> None:
     for rows, label, color, marker in (
         (random_rows, "random-unitary", "#1f77b4", "o"),
-        (ham_rows, "Hamiltonian projection", "#d62728", "s"),
+        (hamiltonian_rows, "Hamiltonian projection", "#d62728", "s"),
     ):
-        non_initial_rows = [row for row in rows if int(row["index"]) != 0]
-        axes[0].scatter(
-            [row["mmd"] for row in non_initial_rows],
-            [row["wasserstein"] for row in non_initial_rows],
+        rows_to_plot = non_initial_rows(rows)
+        axis.scatter(
+            values(rows_to_plot, "mmd"),
+            values(rows_to_plot, "wasserstein"),
             label=label,
             color=color,
             marker=marker,
             alpha=0.78,
         )
-        for row in non_initial_rows:
-            native_label = "k" if row["parameter_name"] == "step" else "t"
-            parameter = int(row["parameter"]) if native_label == "k" else round(float(row["parameter"]), 2)
-            axes[0].annotate(
-                f"{native_label}={parameter}",
-                (row["mmd"], row["wasserstein"]),
+        for row in rows_to_plot:
+            axis.annotate(
+                native_parameter_label(row),
+                (float(row["mmd"]), float(row["wasserstein"])),
                 fontsize=7,
                 alpha=0.68,
                 xytext=(3, 3),
                 textcoords="offset points",
             )
 
-    axes[0].set_title("Metric-space comparison")
-    axes[0].set_xlabel("MMD distance to S0")
-    axes[0].set_ylabel("Wasserstein-type distance to S0")
-    axes[0].grid(alpha=0.25)
-    axes[0].legend()
+    axis.set_title("Metric-space comparison")
+    axis.set_xlabel("MMD distance to S0")
+    axis.set_ylabel("Wasserstein-type distance to S0")
+    axis.grid(alpha=0.25)
+    axis.legend()
 
-    match_rows = [
-        ("MMD", closest_metric_pair(random_rows, ham_rows, metric="mmd")),
-        ("Wasserstein", closest_metric_pair(random_rows, ham_rows, metric="wasserstein")),
-    ]
-    x_positions = np.arange(len(match_rows))
+
+def plot_nearest_metric_matches(axis, random_rows: list[dict], hamiltonian_rows: list[dict]) -> None:
+    matches = [(metric, closest_metric_pair(random_rows, hamiltonian_rows, metric=metric)) for metric in METRICS]
+    x_positions = np.arange(len(matches))
     width = 0.36
-    axes[1].bar(
+
+    axis.bar(
         x_positions - width / 2,
-        [row["reference_metric_value"] for _, row in match_rows],
+        [match["reference_metric_value"] for _, match in matches],
         width,
         label="random-unitary",
         color="#1f77b4",
         alpha=0.82,
     )
-    axes[1].bar(
+    axis.bar(
         x_positions + width / 2,
-        [row["candidate_metric_value"] for _, row in match_rows],
+        [match["candidate_metric_value"] for _, match in matches],
         width,
         label="Hamiltonian projection",
         color="#d62728",
         alpha=0.82,
     )
-    axes[1].set_xticks(x_positions)
-    axes[1].set_xticklabels([name for name, _ in match_rows])
-    axes[1].set_title("Nearest comparable-strength pairs")
-    axes[1].set_ylabel("matched metric value")
-    axes[1].grid(axis="y", alpha=0.25)
-    axes[1].legend()
-    for idx, (_, match) in enumerate(match_rows):
-        axes[1].text(
+
+    axis.set_xticks(x_positions)
+    axis.set_xticklabels(["MMD", "Wasserstein"])
+    axis.set_title("Nearest comparable-strength pairs")
+    axis.set_ylabel("matched metric value")
+    axis.grid(axis="y", alpha=0.25)
+    axis.legend()
+
+    for idx, (_, match) in enumerate(matches):
+        y_position = max(match["reference_metric_value"], match["candidate_metric_value"]) + 0.025
+        axis.text(
             idx,
-            max(match["reference_metric_value"], match["candidate_metric_value"]) + 0.025,
+            y_position,
             f"k={match['reference_parameter']:.0f}\n"
             f"t={match['candidate_parameter']:.2f}\n"
             f"gap={match['absolute_gap']:.4f}",
@@ -176,67 +304,15 @@ def plot_metric_aligned_comparison(random_rows: list[dict], ham_rows: list[dict]
             fontsize=8,
         )
 
-    fig.savefig(output_path, dpi=180)
-    plt.close(fig)
-
-
-def comparable_strength_resource_rows(
-    random_rows: list[dict],
-    ham_rows: list[dict],
-    measurement_basis: str,
-) -> list[dict]:
-    rows = []
-    for metric in ("mmd", "wasserstein"):
-        match = closest_metric_pair(random_rows, ham_rows, metric=metric)
-        random_row = random_rows[match["reference_index"]]
-        ham_row = ham_rows[match["candidate_index"]]
-        random_resource = random_unitary_resource_proxy(int(round(random_row["parameter"])))
-        ham_resource = hamiltonian_resource_proxy(float(ham_row["parameter"]), measurement_basis=measurement_basis)
-        rows.append(
-            {
-                "matched_by": metric,
-                "random_step": int(round(random_row["parameter"])),
-                "hamiltonian_time": float(ham_row["parameter"]),
-                "random_mmd": float(random_row["mmd"]),
-                "hamiltonian_mmd": float(ham_row["mmd"]),
-                "mmd_gap": abs(float(random_row["mmd"]) - float(ham_row["mmd"])),
-                "random_wasserstein": float(random_row["wasserstein"]),
-                "hamiltonian_wasserstein": float(ham_row["wasserstein"]),
-                "wasserstein_gap": abs(float(random_row["wasserstein"]) - float(ham_row["wasserstein"])),
-                "random_single_qubit_rotations": random_resource["single_qubit_rotations"],
-                "random_two_qubit_entanglers": random_resource["two_qubit_entanglers"],
-                "random_controls": random_resource["random_controls"],
-                "hamiltonian_total_time": ham_resource["total_hamiltonian_time"],
-                "hamiltonian_fixed_terms": ham_resource["fixed_hamiltonian_terms"],
-                "hamiltonian_fixed_parameters": ham_resource["fixed_hamiltonian_parameters"],
-                "measurement_basis": measurement_basis,
-            }
-        )
-    return rows
-
 
 def write_summary(
     path: Path,
     args: argparse.Namespace,
-    random_rows: list[dict],
-    ham_rows: list[dict],
-    comparable_rows: list[dict],
+    result: ExperimentResult,
 ) -> None:
-    random_final = random_rows[-1]
-    ham_max_mmd = max(ham_rows, key=lambda row: row["mmd"])
-    ham_max_wasserstein = max(ham_rows, key=lambda row: row["wasserstein"])
-    comparable_lines = "\n".join(
-        [
-            (
-                f"- Matched by `{row['matched_by']}`: random step `{row['random_step']}` "
-                f"vs Hamiltonian time `t = {row['hamiltonian_time']:.6f}`; "
-                f"MMD gap `{row['mmd_gap']:.6f}`, Wasserstein gap `{row['wasserstein_gap']:.6f}`; "
-                f"random controls `{row['random_controls']}`, entanglers `{row['random_two_qubit_entanglers']}`, "
-                f"Hamiltonian fixed terms `{row['hamiltonian_fixed_terms']}`, total time `{row['hamiltonian_total_time']:.6f}`."
-            )
-            for row in comparable_rows
-        ]
-    )
+    random_final = result.random_rows[-1]
+    hamiltonian_max_mmd = max(result.hamiltonian_rows, key=lambda row: row["mmd"])
+    hamiltonian_max_wasserstein = max(result.hamiltonian_rows, key=lambda row: row["wasserstein"])
 
     text = f"""# Problem 1/2 Baseline Summary
 
@@ -266,8 +342,8 @@ Random-unitary diffusion applies random local `Rz Ry Rx` rotations on each qubit
 
 Hamiltonian projected diffusion uses the fixed three-qubit Hamiltonian from the problem statement, evolves `M + F`, then projects the complement qubit.
 
-- Max Hamiltonian MMD: {ham_max_mmd["mmd"]:.6f} at `t = {ham_max_mmd["parameter"]:.6f}`
-- Max Hamiltonian Wasserstein-type distance: {ham_max_wasserstein["wasserstein"]:.6f} at `t = {ham_max_wasserstein["parameter"]:.6f}`
+- Max Hamiltonian MMD: {hamiltonian_max_mmd["mmd"]:.6f} at `t = {hamiltonian_max_mmd["parameter"]:.6f}`
+- Max Hamiltonian Wasserstein-type distance: {hamiltonian_max_wasserstein["wasserstein"]:.6f} at `t = {hamiltonian_max_wasserstein["parameter"]:.6f}`
 
 ## Comparable Diffusion Strength
 
@@ -277,7 +353,7 @@ The comparison below matches points by the reported distance metric instead.
 
 The nearest non-initial pairs are:
 
-{comparable_lines}
+{format_comparable_rows(result.comparable_rows)}
 
 ## Interpretation
 
@@ -299,61 +375,58 @@ The nearest non-initial pairs are:
     path.write_text(text, encoding="utf-8")
 
 
-def main() -> None:
-    args = parse_args()
-    output_dir = args.output_dir
+def format_comparable_rows(rows: list[dict]) -> str:
+    lines = []
+    for row in rows:
+        lines.append(
+            f"- Matched by `{row['matched_by']}`: random step `{row['random_step']}` "
+            f"vs Hamiltonian time `t = {row['hamiltonian_time']:.6f}`; "
+            f"MMD gap `{row['mmd_gap']:.6f}`, Wasserstein gap `{row['wasserstein_gap']:.6f}`; "
+            f"random controls `{row['random_controls']}`, entanglers `{row['random_two_qubit_entanglers']}`, "
+            f"Hamiltonian fixed terms `{row['hamiltonian_fixed_terms']}`, total time `{row['hamiltonian_total_time']:.6f}`."
+        )
+    return "\n".join(lines)
+
+
+def settings_payload(args: argparse.Namespace) -> dict:
+    return {
+        "n_samples": args.n_samples,
+        "sigma": args.sigma,
+        "seed": args.seed,
+        "random_steps": args.random_steps,
+        "random_angle_scale": args.random_angle_scale,
+        "random_entangler": "cz",
+        "hamiltonian_t_max": args.hamiltonian_t_max,
+        "hamiltonian_time_points": args.hamiltonian_time_points,
+        "hamiltonian_parameters": {"hx": 0.8090, "hy": 0.9045, "J": 1.0},
+        "complement_initial_state": "|0>",
+        "measurement_basis": args.measurement_basis,
+        "metrics": ["fidelity_mmd", "infidelity_wasserstein"],
+    }
+
+
+def write_outputs(output_dir: Path, args: argparse.Namespace, result: ExperimentResult) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    s0 = target_ensemble(args.n_samples, sigma=args.sigma, seed=args.seed)
-
-    random_traj = random_unitary_trajectory(
-        s0,
-        n_steps=args.random_steps,
-        angle_scale=args.random_angle_scale,
-        seed=args.seed + 1,
+    write_rows(output_dir / "random_unitary_metrics.csv", result.random_rows)
+    write_rows(output_dir / "hamiltonian_metrics.csv", result.hamiltonian_rows)
+    write_rows(output_dir / "resource_proxies.csv", result.resource_rows)
+    write_rows(output_dir / "comparable_strength_resource_matches.csv", result.comparable_rows)
+    plot_native_parameter_curves(result.random_rows, result.hamiltonian_rows, output_dir / "distance_curves.png")
+    plot_metric_aligned_comparison(
+        result.random_rows,
+        result.hamiltonian_rows,
+        output_dir / "metric_aligned_comparison.png",
     )
-    random_rows = distance_curve(s0, random_traj, parameter_name="step")
+    write_json(output_dir / "problem_1_2_settings.json", settings_payload(args))
+    write_summary(output_dir / "problem_1_2_summary.md", args, result)
 
-    times = np.linspace(0.0, args.hamiltonian_t_max, args.hamiltonian_time_points)
-    ham_traj = hamiltonian_projected_trajectory(
-        s0,
-        times=times,
-        measurement_basis=args.measurement_basis,
-        seed=args.seed + 2,
-    )
-    ham_rows = distance_curve(s0, ham_traj, parameters=times, parameter_name="time")
 
-    resource_rows = []
-    resource_rows.extend(random_unitary_resource_proxy(k) for k in range(args.random_steps + 1))
-    resource_rows.extend(hamiltonian_resource_proxy(float(t), measurement_basis=args.measurement_basis) for t in times)
-    comparable_rows = comparable_strength_resource_rows(random_rows, ham_rows, args.measurement_basis)
-
-    write_rows(output_dir / "random_unitary_metrics.csv", random_rows)
-    write_rows(output_dir / "hamiltonian_metrics.csv", ham_rows)
-    write_rows(output_dir / "resource_proxies.csv", resource_rows)
-    write_rows(output_dir / "comparable_strength_resource_matches.csv", comparable_rows)
-    plot_curves(random_rows, ham_rows, output_dir / "distance_curves.png")
-    plot_metric_aligned_comparison(random_rows, ham_rows, output_dir / "metric_aligned_comparison.png")
-    write_json(
-        output_dir / "problem_1_2_settings.json",
-        {
-            "n_samples": args.n_samples,
-            "sigma": args.sigma,
-            "seed": args.seed,
-            "random_steps": args.random_steps,
-            "random_angle_scale": args.random_angle_scale,
-            "random_entangler": "cz",
-            "hamiltonian_t_max": args.hamiltonian_t_max,
-            "hamiltonian_time_points": args.hamiltonian_time_points,
-            "hamiltonian_parameters": {"hx": 0.8090, "hy": 0.9045, "J": 1.0},
-            "complement_initial_state": "|0>",
-            "measurement_basis": args.measurement_basis,
-            "metrics": ["fidelity_mmd", "infidelity_wasserstein"],
-        },
-    )
-    write_summary(output_dir / "problem_1_2_summary.md", args, random_rows, ham_rows, comparable_rows)
-
-    print(f"Wrote metrics and plot to {output_dir}")
+def main() -> None:
+    args = parse_args()
+    result = run_experiment(args)
+    write_outputs(args.output_dir, args, result)
+    print(f"Wrote Problem 1/2 metrics, plots, and summary to {args.output_dir}")
 
 
 if __name__ == "__main__":
