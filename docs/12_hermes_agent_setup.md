@@ -60,6 +60,7 @@ For Problem 3, only treat a result as main if the adoption gate passes.
 | Task | Purpose | Typical command |
 | --- | --- | --- |
 | `p3-status` | 테스트, git 상태, Problem 3 현재 결과 확인 | `.\scripts\invoke_hermes_task.ps1 p3-status` |
+| `feedback-loop` | 최종 파이프라인 실행, 결과 분석, GitHub issue 재할당 반복 | `.\scripts\invoke_hermes_task.ps1 feedback-loop -Yolo -MaxTurns 260` |
 | `final-pipeline` | 테스트, 제출용 실행, 20 seed sweep, 최종 claim 점검 자동 실행 | `.\scripts\invoke_hermes_task.ps1 final-pipeline -Yolo -MaxTurns 240` |
 | `p3-seed-sweep` | 20개 seed 반복 실행과 robustness 요약 생성 | `.\scripts\invoke_hermes_task.ps1 p3-seed-sweep -Yolo -MaxTurns 180` |
 | `p3-report-draft` | 실제 결과에 기반한 보고서 초안 생성 | `.\scripts\invoke_hermes_task.ps1 p3-report-draft -Yolo` |
@@ -74,6 +75,13 @@ Hermes가 PATH에 없다면 이 저장소의 래퍼는 Windows 기본 설치 경
 ```
 
 장시간 seed sweep처럼 승인 프롬프트 없이 진행하고 싶은 작업에는 `-Yolo`를 붙인다. 코드 수정까지 허용되는 task에는 먼저 prompt의 허용 범위를 확인한다.
+
+GitHub issue 자동 할당은 `docs/github_issue_plan.json`을 원본으로 삼는다. 실제 반영 전에는 dry-run을 먼저 확인한다.
+
+```powershell
+.\scripts\sync_hackathon_issues.ps1
+.\scripts\sync_hackathon_issues.ps1 -Apply
+```
 
 ## 수동 요청 예시
 
