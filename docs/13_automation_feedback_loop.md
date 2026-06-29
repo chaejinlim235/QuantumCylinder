@@ -33,12 +33,12 @@
 Problem 3를 상시 개선하는 명령:
 
 ```powershell
-.\scripts\run_continuous_problem_3_automation.ps1 -KeepDisplayOff
+.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
 이 명령은 `continuous-p3-improvement` Hermes task를 반복 실행한다. 각 cycle은 팀원 최신 변경 반영, 테스트, Problem 3 재실험, seed sweep, 결과 분석, 필요한 최소 수정, 검증, 상태 기록 순서로 진행된다.
 
-기본 반복 간격은 90분이다. `-MaxCycles 0`은 종료 조건 없이 `Ctrl+C`까지 계속 돈다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 로그는 `logs/continuous_problem_3/`에 남긴다.
+기본 반복 간격은 0분이다. 즉 한 cycle이 끝나면 바로 다음 cycle을 시작한다. `-MaxCycles 0`은 종료 조건 없이 `Ctrl+C`까지 계속 돈다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 로그는 `logs/continuous_problem_3/`에 남긴다.
 
 최종 표준 명령:
 

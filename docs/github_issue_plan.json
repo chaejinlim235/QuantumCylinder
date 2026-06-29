@@ -128,7 +128,7 @@
       "상시 Problem 3 개선:",
       "",
       "```powershell",
-      ".\\scripts\\run_continuous_problem_3_automation.ps1 -KeepDisplayOff",
+      ".\\scripts\\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff",
       "```",
       "",
       "단일 Hermes task 실행:",

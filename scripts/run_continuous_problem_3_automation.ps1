@@ -1,8 +1,9 @@
 param(
-    [int]$CycleMinutes = 90,
+    [int]$CycleMinutes = 0,
     [int]$MaxCycles = 0,
     [int]$HermesMaxTurns = 420,
     [int]$HermesAttempts = 2,
+    [int]$HermesRetryDelaySeconds = 0,
     [int]$IdleTimeoutMinutes = 45,
     [string]$StatusOutput = "results/continuous_problem_3/latest_status.md",
     [switch]$KeepDisplayOff,
@@ -199,6 +200,7 @@ function Write-ContinuousStatus {
         ('- max_cycles: `{0}` (`0` means run until Ctrl+C)' -f $MaxCycles),
         ('- hermes_max_turns: `{0}`' -f $HermesMaxTurns),
         ('- hermes_attempts_per_cycle: `{0}`' -f $HermesAttempts),
+        ('- hermes_retry_delay_seconds: `{0}`' -f $HermesRetryDelaySeconds),
         '- loop purpose: `experiment -> analyze -> decide -> apply -> verify -> record`',
         '- seed summary: `results/problem_3_seed_sweep/seed_sweep_summary.md`',
         '- default summary: `results/problem_3_continuous_denoising/problem_3_summary.md`',
@@ -259,6 +261,7 @@ try {
     Write-Step "Continuous Problem 3 automation started."
     Write-Step "Repository: $repoRoot"
     Write-Step "Cycle minutes: $CycleMinutes"
+    Write-Step "Hermes retry delay seconds: $HermesRetryDelaySeconds"
     if ($MaxCycles -eq 0) {
         Write-Step "Max cycles: unlimited until Ctrl+C"
     }
@@ -269,6 +272,12 @@ try {
     $currentBranch = (git branch --show-current).Trim()
     if ($currentBranch -ne "main" -and -not $AllowNonMainBranch) {
         throw "Current branch is '$currentBranch'. Switch to main or pass -AllowNonMainBranch intentionally."
+    }
+    if ($CycleMinutes -lt 0) {
+        throw "CycleMinutes must be 0 or greater."
+    }
+    if ($HermesRetryDelaySeconds -lt 0) {
+        throw "HermesRetryDelaySeconds must be 0 or greater."
     }
 
     if ($StatusOnly) {
@@ -290,6 +299,7 @@ try {
                 -Yolo `
                 -MaxTurns $HermesMaxTurns `
                 -Attempts $HermesAttempts `
+                -RetryDelaySeconds $HermesRetryDelaySeconds `
                 -IdleTimeoutMinutes $IdleTimeoutMinutes `
                 -LogRoot "logs/continuous_problem_3" `
                 -KeepDisplayOff:$KeepDisplayOff
@@ -321,7 +331,12 @@ try {
             break
         }
 
-        $sleepSeconds = [Math]::Max(1, $CycleMinutes * 60)
+        if ($CycleMinutes -eq 0) {
+            Write-Step "Starting next cycle immediately. Press Ctrl+C to stop."
+            continue
+        }
+
+        $sleepSeconds = $CycleMinutes * 60
         Write-Step "Sleeping for $CycleMinutes minutes before next cycle. Press Ctrl+C to stop."
         Start-Sleep -Seconds $sleepSeconds
     }

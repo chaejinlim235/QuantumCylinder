@@ -123,10 +123,10 @@ Task prompt는 `.hermes/tasks/`에 있습니다.
 Problem 3를 상시 개선하려면 아래 명령을 켜 둡니다. 이 루프는 Hermes에게 `continuous-p3-improvement` task를 반복 실행시켜 `실험 -> 분석 -> 판단 -> 수정 -> 검증 -> 기록` 사이클을 계속 돌립니다.
 
 ```powershell
-.\scripts\run_continuous_problem_3_automation.ps1 -KeepDisplayOff
+.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
-기본값은 90분마다 반복하며, `-MaxCycles 0`은 `Ctrl+C`로 멈출 때까지 계속 실행한다는 뜻입니다. 진행 상태는 `results/continuous_problem_3/latest_status.md`, 로그는 `logs/continuous_problem_3/`에 남습니다.
+기본값은 cycle 사이 대기 없이 바로 다음 cycle을 시작하며, `-MaxCycles 0`은 `Ctrl+C`로 멈출 때까지 계속 실행한다는 뜻입니다. 진행 상태는 `results/continuous_problem_3/latest_status.md`, 로그는 `logs/continuous_problem_3/`에 남습니다. 일부러 쉬게 만들고 싶을 때만 `-CycleMinutes 30`처럼 값을 줍니다.
 
 최종 표준 자동화는 아래 명령 하나를 사용합니다.
 
