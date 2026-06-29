@@ -351,8 +351,9 @@ finally {
 
 if ($completed) {
     Write-Step "Hermes watchdog completed successfully."
-    exit 0
+    $global:LASTEXITCODE = 0
+    return
 }
 
-Write-Step "Hermes watchdog failed after $Attempts attempts. See logs: $logRootPath"
-exit $finalExitCode
+$global:LASTEXITCODE = $finalExitCode
+throw "Hermes watchdog failed after $Attempts attempts. See logs: $logRootPath"
