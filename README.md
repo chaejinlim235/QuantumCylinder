@@ -137,10 +137,10 @@ pytest
 
 ### 브랜치 이름 규칙
 
-브랜치 이름은 반드시 다음 형식을 사용합니다.
+브랜치 이름은 반드시 다음 형식을 사용합니다. 브랜치명에는 개인 이름을 넣지 않습니다.
 
 ```text
-<type>/<owner>/<short-topic>
+<type>/<short-topic>
 ```
 
 허용되는 `type`:
@@ -153,20 +153,20 @@ pytest
 - `test`: 테스트 추가 또는 수정
 - `chore`: 설정, 템플릿, 기타 관리 작업
 
-`owner`는 작업 주도자를 소문자 영문으로 씁니다.
-
 ```text
-docs/jihu/readme-conventions
-feat/geonwoo/random-unitary-baseline
-exp/seungbin/projection-basis-sweep
-fix/chaejin/hamiltonian-projection
+docs/readme-conventions
+feat/random-unitary-baseline
+exp/projection-basis-sweep
+fix/hamiltonian-projection
 ```
 
 규칙:
 
 - 소문자 영어, 숫자, hyphen만 사용합니다.
 - 공백, 한글, underscore는 브랜치명에 쓰지 않습니다.
+- 개인 이름, 학번, GitHub username은 브랜치명에 쓰지 않습니다.
 - 한 브랜치는 하나의 목적만 가집니다.
+- 작업 담당자는 issue, PR 본문, 실험 로그에 적습니다.
 
 ### PR 규칙
 
@@ -337,7 +337,7 @@ pytest
 1. 목표는 2026 양자정보경진대회 우승이며, 최소 목표는 수상이다.
 2. Problem 1/2 baseline 재현성과 Problem 3 extension의 정량적 설득력이 가장 중요하다.
 3. main 브랜치는 항상 실행 가능해야 하며, 모든 변경은 PR 단위로 관리한다.
-4. 브랜치명은 <type>/<owner>/<short-topic> 형식을 따른다.
+4. 브랜치명은 <type>/<short-topic> 형식을 따르며, 개인 이름을 넣지 않는다.
 5. 파일명은 소문자 영어, 숫자, underscore 중심으로 통일한다.
 6. Python 모듈은 snake_case.py를 사용한다.
 7. 실험 코드는 scripts/에, 재사용 로직은 src/quantum_cylinder/에 둔다.
