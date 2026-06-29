@@ -11,6 +11,7 @@ Read these first:
 - `docs/19_problem_3_finalist_autopilot.md`, if it exists
 - `results/problem_3_seed_sweep/seed_sweep_summary.md`, if it exists
 - `results/problem_3_continuous_denoising/problem_3_summary.md`, if it exists
+- `results/problem_3_hybrid_diffusion_toy/hybrid_toy_summary.md`, if it exists
 - `results/problem_3_finalist_autopilot/latest_status.md`, if it exists
 - `results/problem_3_finalist_autopilot/progress_log.md`, if it exists
 - `src/quantum_cylinder/problem_3_continuous_projected_denoising.py`
@@ -36,11 +37,11 @@ Every cycle must improve the team answer to at least one of those three requirem
 
 ## Finalist Thesis
 
-Preferred thesis:
+Chosen finalist thesis:
 
-> QuantumCylinder reproduces random-unitary and Hamiltonian projected diffusion under the same fidelity-based metrics, then uses continuous measurement-basis post-selection to evaluate quantum diffusion by recoverability, post-selection success probability, diversity retention, and control/resource cost.
+> QuantumCylinder treats Problem 3 as a small research problem: combine random-unitary scrambling with Hamiltonian-inspired projected dynamics, then evaluate the hybrid diffusion/denoising idea by recoverability, post-selection success probability, diversity retention, and control/resource cost.
 
-This is stronger than simply saying "we found a slightly better measurement basis." It frames the work as a recoverability-aware benchmark.
+The current continuous post-selection result remains the safety baseline and evaluation protocol. The hybrid idea is the front-facing extension because it is more memorable, more aligned with the "write a mini-paper" interpretation of Problem 3, and can be shown as a 2-qubit IBM-compatible toy.
 
 ## Current Main Result To Preserve
 
@@ -61,31 +62,38 @@ Preserve this as the main result unless a new result is at least as robust, easi
 
 Work in this order. Stop after one focused, verified improvement if time is running long.
 
-1. Condition coverage audit:
+1. Hybrid random-unitary + Hamiltonian-inspired toy:
+   - Run or create `scripts/run_problem_3_hybrid_diffusion_toy.py`.
+   - Treat it as a 1-data-qubit + 1-auxiliary-qubit IBM-compatible state-vector toy.
+   - Compare random-unitary input against hybrid post-selected output.
+   - Report MMD, Wasserstein, diversity retention, and success probability.
+   - If it underperforms, keep it as appendix evidence and preserve the main continuous post-selection result.
+
+2. Condition coverage audit:
    - Check whether Problem 3(a), 3(b), and 3(c) are each directly answered.
    - If a part is weak, improve the report-ready artifact or code output for that part.
 
-2. Frozen-parameter holdout:
+3. Frozen-parameter holdout:
    - Defend against the question "did you choose the best point separately for every seed?"
    - Evaluate a fixed parameter chosen from reference/train seeds on held-out seeds.
    - It is okay if frozen holdout is weaker than oracle grid-best, as long as it is honest.
 
-3. Baseline and collapse-defense table:
+4. Baseline and collapse-defense table:
    - Include identity/no-denoising.
    - Include best exact `Z/X/Y` axis projection.
    - Include continuous measurement-basis post-selection.
    - Add a collapse or strong-filter baseline if feasible, to show why distance improvement alone is insufficient.
    - Report MMD, Wasserstein, diversity retention, and success probability together.
 
-4. Strong-scrambling and parameter ablation:
+5. Strong-scrambling and parameter ablation:
    - Check angle scales such as `0.2`, `0.5`, and `pi` if supported by current code.
    - Use this for Q&A defense, not necessarily as the main result.
 
-5. Figure/table packaging:
+6. Figure/table packaging:
    - Produce a judge-facing result package under `results/problem_3_finalist_package/`.
-   - Prefer a 2x2 story: pipeline, Problem 1/2 baselines, Problem 3 before/after, Pareto trade-off.
+   - Prefer a 2x2 story: hybrid pipeline, Problem 1/2 baselines, Problem 3 before/after, Pareto trade-off.
 
-6. Final-report wording:
+7. Final-report wording:
    - Add concise claim, limitation, and do-not-claim text.
    - Keep wording safe for a small state-vector toy experiment.
 
@@ -118,7 +126,14 @@ If a full seed sweep is too expensive for the current cycle, preserve the existi
 
 ## Decision Rules
 
-Keep the current continuous post-selected denoising as the main Problem 3 result if:
+Use the hybrid story as the front-facing extension if:
+
+- it has at least one positive MMD or Wasserstein improvement row,
+- diversity retention and success probability are not collapsed,
+- the report clearly states it is a 1M+1F two-qubit toy,
+- it is compared against at least one baseline.
+
+Keep the existing continuous post-selected denoising as the quantitative main result if:
 
 - seed sweep recommendation remains `use_as_main`,
 - MMD or Wasserstein improvement remains positive,
@@ -132,7 +147,7 @@ If a new idea does not beat the current gate, keep it as an appendix candidate a
 
 Use this wording unless newer evidence justifies a change:
 
-> In small state-vector experiments, continuous measurement-basis post-selection is a reproducible post-selected toy denoising proxy. It improves MMD/Wasserstein metrics across the 20-seed sweep, while its axis-only margin remains small; therefore it should be presented as a recoverability-aware benchmark/probe, not as hardware advantage or broad quantum advantage.
+> Our main quantitative result is a reproducible continuous measurement-basis post-selection benchmark over the 2-data-qubit setting. As a hardware-motivated extension, we also test a 1-data-qubit + 1-auxiliary-qubit hybrid random-unitary/Hamiltonian-inspired toy that can be mapped toward IBM-style circuits. This is a small state-vector benchmark/probe, not hardware advantage or broad quantum advantage.
 
 ## Final Response
 

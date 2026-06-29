@@ -273,6 +273,19 @@ function Get-Problem3Metrics {
     }
 }
 
+function Get-HybridToyMetrics {
+    $hybridSummaryPath = Join-Path $repoRoot "results\problem_3_hybrid_diffusion_toy\hybrid_toy_summary.md"
+    $hybridSummary = Get-FileTextIfExists -Path $hybridSummaryPath
+
+    return @{
+        positive_rows = Get-MarkdownMetric -Text $hybridSummary -Label "positive-improvement rows"
+        mmd_improvement = Get-MarkdownMetric -Text $hybridSummary -Label "median MMD improvement"
+        wasserstein_improvement = Get-MarkdownMetric -Text $hybridSummary -Label "median Wasserstein improvement"
+        diversity = Get-MarkdownMetric -Text $hybridSummary -Label "median diversity retention"
+        success_probability = Get-MarkdownMetric -Text $hybridSummary -Label "median success probability"
+    }
+}
+
 function Get-CurrentChangeLines {
     $tracked = @(git diff --name-status)
     $staged = @(git diff --cached --name-status)
@@ -366,6 +379,7 @@ function Write-AutopilotStatus {
     New-Item -ItemType Directory -Force -Path $statusDir | Out-Null
 
     $metrics = Get-Problem3Metrics
+    $hybridMetrics = Get-HybridToyMetrics
     $branch = (git branch --show-current).Trim()
     $gitStatus = @(git status --short --branch)
     $cycleLines = if ($script:CycleResults.Count -gt 0) {
@@ -407,6 +421,7 @@ function Write-AutopilotStatus {
         '- hermes_task: `problem-3-finalist-autopilot`',
         '- loop purpose: `sync -> verify -> evidence improvement -> verify -> optional seed sweep -> record`',
         '- seed summary: `results/problem_3_seed_sweep/seed_sweep_summary.md`',
+        '- hybrid toy summary: `results/problem_3_hybrid_diffusion_toy/hybrid_toy_summary.md`',
         '- progress log: `results/problem_3_finalist_autopilot/progress_log.md`',
         '- logs: `logs/problem_3_finalist_autopilot/`',
         "",
@@ -426,6 +441,14 @@ function Write-AutopilotStatus {
         ('- median diversity retention: `{0}`' -f $metrics.diversity),
         ('- median success probability: `{0}`' -f $metrics.success_probability),
         ('- nonpositive axis-margin rows: `{0}`' -f $metrics.nonpositive_axis_rows),
+        "",
+        "## Hybrid Toy Gate",
+        "",
+        ('- positive-improvement rows: `{0}`' -f $hybridMetrics.positive_rows),
+        ('- median MMD improvement: `{0}`' -f $hybridMetrics.mmd_improvement),
+        ('- median Wasserstein improvement: `{0}`' -f $hybridMetrics.wasserstein_improvement),
+        ('- median diversity retention: `{0}`' -f $hybridMetrics.diversity),
+        ('- median success probability: `{0}`' -f $hybridMetrics.success_probability),
         "",
         "## Recent Cycles",
         ""

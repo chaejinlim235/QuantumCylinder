@@ -6,9 +6,15 @@
 
 우리 팀은 ML과 구현에는 강하지만 양자물리 해석은 약하다. 따라서 Problem 3에서는 복잡한 양자 이론을 과장해서 주장하기보다, 작은 state-vector 실험에서 재현 가능한 benchmark를 만들고 그 결과를 방어 가능하게 설명하는 것이 승률이 높다.
 
+선택한 최종 방향은 **hybrid random-unitary + Hamiltonian-inspired diffusion을 앞에 세우고, 기존 continuous post-selection 결과를 안전한 정량 baseline으로 유지하는 전략**이다.
+
 핵심 메시지는 다음과 같다.
 
 > 좋은 quantum diffusion은 단순히 `S0`에서 멀리 퍼지는지만으로 평가할 수 없다. Recoverability, post-selection success probability, diversity retention, control/resource cost를 함께 봐야 하며, QuantumCylinder는 이 trade-off를 작은 실험으로 정량화했다.
+
+발표에서 기억될 리본은 다음이다.
+
+> random-unitary와 Hamiltonian projected diffusion을 따로 재현하는 데서 멈추지 않고, 둘을 섞은 2-qubit hardware-compatible toy까지 내려가 보았다.
 
 ## 문제 3에서 반드시 보여야 하는 것
 
@@ -47,12 +53,26 @@ team sync -> pytest -> submission quick -> Hermes evidence improvement
 
 Hermes task는 무작정 best score를 더 찾지 않는다. 우선순위는 다음이다.
 
-1. Problem 3(a/b/c) 조건 충족 여부 점검
-2. Frozen-parameter holdout 추가 또는 보강
-3. Identity / axis-only / continuous / collapse baseline table 보강
-4. Strong-scrambling, angle-scale, parameter ablation
-5. 최종 발표용 figure/table/claim 문장 생성
-6. 실패한 후보는 appendix/fallback으로 기록
+1. Hybrid random-unitary + Hamiltonian-inspired toy 실행 및 결과 정리
+2. Problem 3(a/b/c) 조건 충족 여부 점검
+3. Frozen-parameter holdout 추가 또는 보강
+4. Identity / axis-only / continuous / collapse baseline table 보강
+5. Strong-scrambling, angle-scale, parameter ablation
+6. 최종 발표용 figure/table/claim 문장 생성
+7. 실패한 후보는 appendix/fallback으로 기록
+
+hybrid toy는 다음 명령으로 단독 실행할 수도 있다.
+
+```powershell
+cd C:\Coding\Hackathon\2026Quantum
+python scripts\run_problem_3_hybrid_diffusion_toy.py
+```
+
+생성 결과:
+
+- `results/problem_3_hybrid_diffusion_toy/hybrid_toy_summary.md`
+- `results/problem_3_hybrid_diffusion_toy/hybrid_best_metrics.csv`
+- `results/problem_3_hybrid_diffusion_toy/hybrid_toy_metrics.png`
 
 ## 실행 명령
 
@@ -167,4 +187,4 @@ cd C:\Coding\Hackathon\2026Quantum
 
 ## 안전한 최종 문장
 
-> 작은 state-vector 실험에서 continuous measurement-basis post-selection은 reproducible post-selected toy denoising proxy로 사용할 수 있다. 20-seed sweep에서 MMD/Wasserstein 개선은 재현되지만 axis-only 대비 margin은 작으므로, hardware advantage나 general quantum advantage가 아니라 recoverability-aware benchmark/probe로 제한해 주장한다.
+> 메인 정량 결과는 2-data-qubit setting에서의 continuous measurement-basis post-selection benchmark다. 추가로, random-unitary scrambling과 Hamiltonian-inspired projected dynamics를 섞은 1-data-qubit + 1-auxiliary-qubit hybrid toy를 통해 IBM-style circuit으로 내려갈 수 있는 최소 형태를 실험했다. 두 결과 모두 small-scale state-vector benchmark/probe이며, hardware advantage나 general quantum advantage를 주장하지 않는다.
