@@ -16,6 +16,12 @@ from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import (
     hamiltonian_projected_trajectory,
     three_qubit_hamiltonian_operator,
 )
+from quantum_cylinder.problem_3_continuous_projected_denoising import (
+    adoption_decision,
+    continuous_projection_basis,
+    projected_denoising_step,
+    search_projected_denoising,
+)
 
 
 def test_target_ensemble_is_normalized() -> None:
@@ -89,3 +95,46 @@ def test_closest_metric_pair_skips_initial_point() -> None:
     assert match["reference_parameter"] == 1.0
     assert match["candidate_parameter"] == 0.5
     assert np.isclose(match["absolute_gap"], 0.05)
+
+
+def test_continuous_projection_basis_is_normalized() -> None:
+    basis = continuous_projection_basis(theta=np.pi / 3.0, phi=np.pi / 5.0)
+    assert basis.shape == (2,)
+    assert np.isclose(np.linalg.norm(basis), 1.0)
+
+
+def test_projected_denoising_step_preserves_norm_and_probabilities() -> None:
+    states = target_ensemble(n_samples=5, sigma=0.1, seed=10)
+    denoised, probabilities = projected_denoising_step(states, tau=0.2, theta=np.pi / 2.0, phi=0.0)
+    assert denoised.shape == states.shape
+    assert probabilities.shape == (5,)
+    assert np.allclose(np.linalg.norm(denoised, axis=1), 1.0)
+    assert np.all(probabilities >= 0.0)
+    assert np.all(probabilities <= 1.0 + 1e-10)
+
+
+def test_problem_3_search_returns_candidate_rows() -> None:
+    states = target_ensemble(n_samples=5, sigma=0.1, seed=11)
+    trajectory = random_unitary_trajectory(states, n_steps=1, seed=12)
+    rows = search_projected_denoising(
+        states,
+        trajectory[1],
+        taus=[0.1],
+        basis_specs=[{"basis_family": "continuous", "basis_name": "test", "theta": np.pi / 2.0, "phi": 0.0}],
+    )
+    assert len(rows) == 1
+    assert rows[0]["basis_family"] == "continuous"
+    assert "mmd_improvement" in rows[0]
+    assert "mean_success_probability" in rows[0]
+
+
+def test_adoption_decision_rejects_bad_candidate() -> None:
+    continuous = {
+        "mmd_improvement": -0.1,
+        "wasserstein_improvement": -0.1,
+        "score": -0.1,
+        "diversity_retention": 0.9,
+        "mean_success_probability": 0.5,
+    }
+    axis = {"score": 0.0}
+    assert adoption_decision(continuous, axis) == "do_not_use_as_main"
