@@ -1,19 +1,25 @@
-## 목적
+## Purpose
 
-- 어떤 문제/실험을 해결하는 PR인지 적어주세요.
+- What problem, experiment, or document does this PR address?
 
-## 변경 사항
+## Changes
 
-- 
+-
 
-## 검증
+## Validation
 
 - [ ] `pytest`
-- [ ] `python scripts/run_baselines.py`
-- [ ] 결과 파일 또는 plot 확인
+- [ ] `python scripts/problem_1a_generate_target_ensemble.py`
+- [ ] `python scripts/run_problem_1_2_baselines.py`
+- [ ] Checked generated CSV/plot if this is an experiment PR
 
-## 판단
+## Result / Decision
 
-- baseline 대비 좋아진 점:
-- 잃은 점 또는 한계:
-- 다음 실험:
+- Improvement over baseline:
+- Trade-off or limitation:
+- Next action:
+
+## Notes
+
+- Keep PR body text in English if GitHub shows Korean text as `??`.
+- Korean explanations are fine in UTF-8 Markdown files under `docs/`.
