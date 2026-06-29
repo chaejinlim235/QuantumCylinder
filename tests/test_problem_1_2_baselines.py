@@ -4,8 +4,9 @@ import numpy as np
 
 from quantum_cylinder.problem_1a_target_ensemble import target_ensemble
 from quantum_cylinder.problem_1b_ensemble_metrics import fidelity_matrix, mmd_fidelity, wasserstein_infidelity
-from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_trajectory
+from quantum_cylinder.problem_1c_random_unitary_diffusion import random_unitary_resource_proxy, random_unitary_trajectory
 from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import hamiltonian_projected_trajectory
+from quantum_cylinder.experiment_curves import hamiltonian_resource_proxy
 
 
 def test_target_ensemble_is_normalized() -> None:
@@ -41,3 +42,11 @@ def test_hamiltonian_t0_recovers_initial_ensemble() -> None:
     trajectory = hamiltonian_projected_trajectory(states, times=np.array([0.0]), measurement_basis="z", seed=7)
     assert len(trajectory) == 1
     assert np.allclose(np.abs(np.sum(states * trajectory[0].conj(), axis=1)) ** 2, 1.0)
+
+
+def test_resource_proxy_columns_match() -> None:
+    random_proxy = random_unitary_resource_proxy(step=2)
+    hamiltonian_proxy = hamiltonian_resource_proxy(time=1.0)
+    assert random_proxy.keys() == hamiltonian_proxy.keys()
+    assert hamiltonian_proxy["fixed_hamiltonian_terms"] == 8
+    assert hamiltonian_proxy["fixed_hamiltonian_parameters"] == 3

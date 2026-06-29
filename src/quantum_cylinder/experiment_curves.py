@@ -39,6 +39,7 @@ def hamiltonian_resource_proxy(time: float, measurement_basis: str = "z") -> dic
         "two_qubit_entanglers": 0,
         "random_controls": 0,
         "total_hamiltonian_time": time,
-        "fixed_hamiltonian_terms": 5,
+        "fixed_hamiltonian_terms": 8,
+        "fixed_hamiltonian_parameters": 3,
         "measurement_basis": measurement_basis,
     }
