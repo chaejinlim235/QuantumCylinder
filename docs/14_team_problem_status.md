@@ -235,12 +235,15 @@ python scripts/run_problem_3_continuous_denoising.py
 
 현재 상태:
 
-- random-unitary curve와 Hamiltonian projected curve를 같은 그림에 저장
+- random-unitary는 step `k`, Hamiltonian projected diffusion은 time `t`를 native parameter로 사용하므로 같은 x축 위치로 직접 비교하지 않는다.
+- `distance_curves.png`는 두 native parameter curve를 좌우 subplot으로 분리해 보여준다.
+- `metric_aligned_comparison.png`와 `comparable_strength_resource_matches.csv`는 같은 metric 값에 가까운 지점을 맞춰 비교한다.
 - reference run에서 Hamiltonian MMD는 `t = 1.0` 근처에서 최대 약 `1.249`
 - Hamiltonian Wasserstein-type distance는 `t = 4.0`에서 약 `0.884`
 
 부족한 점:
 
+- `k`와 `t`를 같은 x축처럼 보이게 해석하면 비교가 잘못될 수 있으므로, 보고서에서는 metric-aligned comparison과 comparable-strength matching을 기준으로 설명해야 함
 - 정성 비교가 숫자와 plot만 있고, 사람이 보고 판단할 Bloch sphere 계열 시각화가 없음
 - 2-qubit pure state 전체는 단일 Bloch sphere로 표현할 수 없으므로 주의가 필요함
 

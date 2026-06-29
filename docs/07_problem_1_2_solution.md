@@ -100,6 +100,7 @@ Output:
 
 - `results/problem_1_2_baseline/hamiltonian_metrics.csv`
 - `results/problem_1_2_baseline/distance_curves.png`
+- `results/problem_1_2_baseline/metric_aligned_comparison.png`
 
 Reference run:
 
@@ -128,6 +129,12 @@ Output:
 - `results/problem_1_2_baseline/comparable_strength_resource_matches.csv`
 
 The comparable-strength table directly supports Problem 2(d). It searches non-initial random-unitary and Hamiltonian points whose MMD or Wasserstein-type distances are closest, then reports the resource/control proxies at those matched points.
+
+Important comparison guardrail:
+
+- Random-unitary step `k` and Hamiltonian evolution time `t` are different native diffusion parameters.
+- Do not compare the two mechanisms by reading the same horizontal position on one shared x-axis.
+- Use native-parameter curves for within-mechanism behavior, then use `metric_aligned_comparison.png` and `comparable_strength_resource_matches.csv` for cross-mechanism comparison.
 
 Optional Qiskit check:
 
