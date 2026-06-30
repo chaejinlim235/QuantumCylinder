@@ -1,24 +1,28 @@
 # IBM QPU Validation Summary
 
-Dry-run/transpilation path prepared; real IBM QPU submission requires IBM
-credentials and queue availability.
+Optional IBM QPU validation was performed for tiny representative circuits
+through IBM Quantum / Qiskit Runtime. This remains appendix feasibility evidence
+only; it does not replace the state-vector benchmark.
 
 ## Current Status
 
-- submitted: `False`
+- submitted: `True`
 - primitive: `sampler`
 - shots: `1000`
 - required qubits: `3`
-- backend: `None` in the local dry-run environment
-- runtime status: `qiskit-ibm-runtime` unavailable in the local environment
+- backend: `ibm_fez`
+- job id: `d91qmquu9n7c73an8teg`
+- job status: `DONE`
+- runtime status: loaded from environment token
+- retrieved counts: `job_result_d91qmquu9n7c73an8teg.json`
 
-## Dry-Run Circuits
+## Submitted Circuits
 
 | Circuit | Qubits | Transpiled depth | Two-qubit gates |
 | --- | ---: | ---: | ---: |
-| `problem1_random_unitary_one_step` | 2 | 4 | 2 |
-| `hamiltonian_projection_tiny_proxy` | 3 | 8 | 4 |
-| `two_way_postselection_tiny_proxy` | 3 | 15 | 8 |
+| `problem1_random_unitary_one_step` | 2 | 11 | 2 |
+| `hamiltonian_projection_tiny_proxy` | 3 | 22 | 4 |
+| `two_way_postselection_tiny_proxy` | 3 | 39 | 8 |
 
 This is optional hardware-execution feasibility evidence only. It does not
 replace the reproducible state-vector benchmark and does not imply hardware
