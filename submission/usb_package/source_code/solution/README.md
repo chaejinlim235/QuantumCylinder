@@ -1,10 +1,16 @@
-Open `solution_1.ipynb` first.
+Open the primary split notebooks first:
 
-# QuantumCylinder Final Solution
+- `../../solution/Problem 1.ipynb`
+- `../../solution/Problem 2.ipynb`
+- `../../solution/Problem 3.ipynb`
 
-This folder is the compact final-answer package for the repository. It contains
-the final notebook, the final figures, and the final tables used to support the
-contest submission.
+Then use `solution_1.ipynb` as a compact source-code reference.
+
+# QuantumCylinder Compact Source-Code Reference
+
+This folder contains the compact reference notebook, final figures, and final
+tables used to support source-code inspection. It is not the primary
+judge-facing report.
 
 ## Main Thesis
 
@@ -18,7 +24,7 @@ step.
 
 | File | Role |
 | --- | --- |
-| `solution_1.ipynb` | Final judge-facing answer for Problems 1(a) through 3(c). |
+| `solution_1.ipynb` | Compact source-code reference for Problems 1(a) through 3(c). |
 | `figures/fig2_random_unitary_haar_baseline.png` | Problem 1(c) random-unitary curve with an emphasized Haar reference mean/band and plateau zoom. |
 | `figures/problem_1_2_distance_curves.png` | Random-unitary and Hamiltonian projected-diffusion distance curves. |
 | `figures/problem_1_2_metric_aligned_comparison.png` | Problem 2(d) comparable-strength resource/control comparison. |
@@ -71,11 +77,11 @@ python scripts/run_problem_3_hamiltonian_variant_candidates.py
 python scripts/summarize_problem_3_method_portfolio.py
 ```
 
-## Optional IBM QPU Appendix
+## IBM Cloud/QPU Validation
 
-IBM QPU validation is appendix evidence only. It checks tiny representative
-circuits for the Problem 3-b measurement-basis mechanism and does not replace
-the reproducible state-vector MMD/Wasserstein benchmark.
+IBM Cloud/QPU validation checks tiny representative circuits for the Problem
+3-b measurement-basis mechanism and does not replace the reproducible
+state-vector MMD/Wasserstein benchmark.
 
 Completed `ibm_fez` jobs included in the repository:
 

@@ -2,15 +2,15 @@
 
 This package is organized around the official criteria: completeness and
 appropriateness, fidelity to requirements, novelty of approach, presentation
-quality, source-code inspection readiness, and optional IBM QPU validation
+quality, source-code inspection readiness, and IBM Cloud/QPU validation
 clarity.
 
 ## Completeness And Appropriateness
 
 The USB package contains:
 
-- final split notebooks under `solution/`;
-- compact final source-code notebook under `source_code/solution/`;
+- primary judge-facing split notebooks under `solution/`;
+- compact source-code reference notebook under `source_code/solution/`;
 - English presentation text, storyboard, and checklist under `presentation/`;
 - full source code under `source_code/`;
 - tests, configs, scripts, final figures, and final tables;
@@ -55,8 +55,9 @@ probability.
 ## Presentation And Communication
 
 `Summary.md` gives the five-minute path. The presentation files are in English
-and separate the core story from appendix/Q&A material. IBM QPU details are
-kept in appendix material and do not distract from the state-vector benchmark.
+and support both a five-minute core path and a fifteen-minute expanded path.
+IBM Cloud/QPU validation appears as a short Problem 3(b) core callout, with
+job-level details kept in appendix/Q&A material.
 
 ## Source-Code Inspection Readiness
 
@@ -65,11 +66,12 @@ kept in appendix material and do not distract from the state-vector benchmark.
 commands. `QuantumCylinder_full_source.zip` is a zipped copy of the
 source-code package.
 
-## IBM QPU Validation Clarity
+## IBM Cloud/QPU Validation Clarity
 
-IBM QPU validation is optional appendix evidence. It checks tiny circuits and
-the Problem 3-b measurement-basis mechanism on `ibm_fez`, but the main claims
-remain state-vector based.
+IBM Cloud/QPU validation checks tiny circuits and the Problem 3-b
+measurement-basis mechanism on `ibm_fez`. It is included as
+hardware-execution validation of the mechanism, while the main quantitative
+benchmark remains state-vector based.
 
 Completed included jobs:
 

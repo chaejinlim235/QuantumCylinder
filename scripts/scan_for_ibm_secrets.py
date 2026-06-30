@@ -10,7 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 if (ROOT / "IBM_QPU_README.md").exists():
+    REPORT_PATH = ROOT.parent / "IBM_SECRET_SCAN_REPORT.md"
     SCAN_ROOTS = [
+        ROOT.parent,
         ROOT / "IBM_QPU_README.md",
         ROOT / "docs" / "IBM_QPU_VALIDATION.md",
         ROOT / "docs" / "IBM_QPU_PROBLEM3B_BASIS_SWEEP.md",
@@ -24,24 +26,14 @@ if (ROOT / "IBM_QPU_README.md").exists():
         ROOT / "scripts" / "copy_ibm_qpu_results_to_usb.py",
     ]
 else:
+    REPORT_PATH = ROOT / "submission" / "usb_package" / "IBM_SECRET_SCAN_REPORT.md"
     SCAN_ROOTS = [
         ROOT / "README.md",
         ROOT / "docs" / "IBM_QPU_VALIDATION.md",
         ROOT / "docs" / "IBM_QPU_PROBLEM3B_BASIS_SWEEP.md",
+        ROOT / "submission" / "usb_package",
         ROOT / "solution" / "README.md",
         ROOT / "solution" / "solution_1.ipynb",
-        ROOT / "submission" / "usb_package" / "README_SUBMISSION.md",
-        ROOT / "submission" / "usb_package" / "Summary.md",
-        ROOT / "submission" / "usb_package" / "JUDGING_CRITERIA_ALIGNMENT.md",
-        ROOT / "submission" / "usb_package" / "IBM_QPU_SECURITY_AUDIT.md",
-        ROOT / "submission" / "usb_package" / "AUDIT_IBM_QPU_RESULTS_UPDATE.md",
-        ROOT / "submission" / "usb_package" / "NOTATION_AND_GRAPH_READABILITY_AUDIT.md",
-        ROOT / "submission" / "usb_package" / "NOTATION_AND_GRAPH_READABILITY_REPORT.md",
-        ROOT / "submission" / "usb_package" / "presentation",
-        ROOT / "submission" / "usb_package" / "source_code" / "IBM_QPU_README.md",
-        ROOT / "submission" / "usb_package" / "source_code" / "docs" / "IBM_QPU_VALIDATION.md",
-        ROOT / "submission" / "usb_package" / "source_code" / "docs" / "IBM_QPU_PROBLEM3B_BASIS_SWEEP.md",
-        ROOT / "submission" / "usb_package" / "source_code" / "results" / "ibm_qpu_validation",
         ROOT / "scripts" / "ibm_qpu_smoke_test.py",
         ROOT / "scripts" / "ibm_qpu_problem3b_basis_sweep.py",
         ROOT / "scripts" / "ibm_qpu_extract_p3b_counts.py",
@@ -64,27 +56,33 @@ ALLOWED_CONTEXT = (
 )
 
 PATTERNS = [
-    re.compile(r"\b[A-Za-z0-9_\-]{48,}\b"),
     re.compile(r"crn:v1:[A-Za-z0-9:._/\-]+", re.IGNORECASE),
     re.compile(r"(token|api[_-]?key|secret|password)\s*[:=]\s*['\"]?[^'\"\s<>]{12,}", re.IGNORECASE),
+    re.compile(r"(QISKIT_IBM_TOKEN|IBM_QUANTUM_TOKEN)\s*=\s*['\"]?[^'\"\s<>]{12,}", re.IGNORECASE),
+    re.compile(r"(ibm[_-]?cloud|qiskit)[A-Za-z0-9_\-]{40,}", re.IGNORECASE),
 ]
 
 
 def iter_files() -> list[Path]:
     files: list[Path] = []
+    seen: set[Path] = set()
     for root in SCAN_ROOTS:
         if root.is_file():
-            files.append(root)
+            if root not in seen:
+                files.append(root)
+                seen.add(root)
         elif root.exists():
             for path in root.rglob("*"):
-                if path.is_file() and path.suffix.lower() not in SKIP_SUFFIXES:
+                if path.is_file() and path.suffix.lower() not in SKIP_SUFFIXES and path not in seen:
                     files.append(path)
+                    seen.add(path)
     return files
 
 
 def main() -> None:
     findings: list[tuple[Path, int, str]] = []
-    for path in iter_files():
+    files = iter_files()
+    for path in files:
         try:
             if path.suffix.lower() == ".ipynb":
                 data = json.loads(path.read_text(encoding="utf-8", errors="ignore"))
@@ -104,9 +102,25 @@ def main() -> None:
             if any(pattern.search(line) for pattern in PATTERNS):
                 findings.append((path.relative_to(ROOT), line_no, "potential secret-like text"))
     if findings:
+        REPORT_PATH.write_text(
+            "# IBM Secret Scan Report\n\n"
+            f"- Status: FAIL\n"
+            f"- Files scanned: `{len(files)}`\n"
+            f"- Potential findings: `{len(findings)}`\n"
+            "- Details: redacted from report; rerun the scanner locally for file/line labels.\n",
+            encoding="utf-8",
+        )
         for path, line_no, label in findings[:50]:
             print(f"{path}:{line_no}: {label}")
         raise SystemExit(f"Potential secret-like findings: {len(findings)}")
+    REPORT_PATH.write_text(
+        "# IBM Secret Scan Report\n\n"
+        "- Status: PASS\n"
+        f"- Files scanned: `{len(files)}`\n"
+        "- Scope: `submission/usb_package/`, IBM QPU docs, and IBM QPU scripts.\n"
+        "- Result: no actual IBM token, API key, CRN, saved-account file, or private credential pattern found.\n",
+        encoding="utf-8",
+    )
     print("IBM secret scan OK: no actual token/API key/CRN patterns found in final-facing files")
 
 

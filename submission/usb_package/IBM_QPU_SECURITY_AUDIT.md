@@ -45,5 +45,5 @@ credential JSON files, token files, and private-key file extensions.
 
 ## Guardrail
 
-IBM QPU validation remains appendix-only. It does not claim hardware advantage
+IBM QPU validation remains hardware-execution validation only. It does not claim hardware advantage
 and does not replace the state-vector benchmark.

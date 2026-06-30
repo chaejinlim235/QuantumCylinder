@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "quantum-cylinder"
 version = "0.1.0"
 description = "QuantumCylinder baseline code for the 2026 Quantum Hackathon QML challenge."
-readme = "README.md"
+readme = "README_FOR_JUDGES.md"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",

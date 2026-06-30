@@ -4,7 +4,10 @@
 
 ### Slide 1. QuantumCylinder
 
-**One-sentence contribution:** We compare random-unitary diffusion and Hamiltonian projected diffusion under shared fidelity-based metrics, then analyze measurement-induced projected denoising as a recoverability-success-diversity trade-off.
+**One-sentence contribution:** We compare random-unitary diffusion and
+Hamiltonian projected diffusion under shared fidelity-based metrics, then
+analyze measurement-induced projected denoising as a
+recoverability-success-diversity trade-off.
 
 Speaker note: "The goal is not to overclaim. We give a complete small-scale benchmark and a clear Problem 3 extension."
 
@@ -42,7 +45,9 @@ Notation note:
 
 Figure: `source_code/solution/figures/fig2_random_unitary_haar_baseline.png`
 
-Figure note: the black dashed line and gold band mark the Haar reference mean and one-standard-deviation band; the lower panels zoom into the \(k \geq 1\) plateau so the baseline remains visible.
+Figure note: the black dashed line and gold band mark the Haar reference mean
+and one-standard-deviation band; the lower panels zoom into the \(k \geq 1\)
+plateau so the baseline remains visible.
 
 Speaker note: "The Haar reference is not a target distribution. It is a calibration level for strong scrambling."
 
@@ -66,6 +71,11 @@ Speaker note: "The comparison is qualitative and control-aware, not a universal 
 - Axis-only `Z/X/Y` is a Pauli-basis baseline.
 - Continuous Bloch-sphere basis is a controlled generalization.
 - Main point: \(\Delta D\), \(p_{\mathrm{succ}}\), and \(R_{\mathrm{div}}\) must be reported together.
+- IBM Cloud validation: tiny `M+F` measurement-basis sweep on `ibm_fez`
+  completed. The higher-shot run shows p(F=0) changes from about `0.89` to
+  `0.66` to `0.35` as \(\beta\) rotates, with selected-data entropy
+  increasing. This validates hardware executability of the 3-b mechanism; no
+  hardware advantage is claimed.
 
 Table: `source_code/solution/tables/problem3b_measurement_basis_tradeoff.csv`
 
@@ -97,7 +107,7 @@ Speaker note: "The final result is intentionally scoped and reproducible."
 
 ### A1. Metric Definitions
 
-- Fidelity: `F(psi, phi) = |<psi|phi>|^2`.
+- Fidelity: \(F(\psi,\phi)=|\langle\psi|\phi\rangle|^2\).
 - \(D_{\mathrm{MMD}}\) uses fidelity kernel.
 - \(W_{1-F}\) uses cost `1 - F`.
 
@@ -181,5 +191,5 @@ python scripts/summarize_problem_3_method_portfolio.py
   - beta `0.2500pi`: mean p(F=0) `0.893164`, selected entropy `1.492915`.
   - beta `0.5000pi`: mean p(F=0) `0.661377`, selected entropy `1.581403`.
   - beta `0.7500pi`: mean p(F=0) `0.351270`, selected entropy `1.736465`.
-- IBM QPU Problem 3-b mini validation is appendix hardware-execution evidence only. It tests tiny representative circuits and does not replace the state-vector benchmark.
+- IBM QPU Problem 3-b mini validation is hardware-execution evidence for tiny representative circuits and does not replace the state-vector benchmark.
 - No hardware advantage claim.

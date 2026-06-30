@@ -11,21 +11,27 @@ For a five-minute review, open:
 3. `solution/Problem 2.ipynb`
 4. `solution/Problem 3.ipynb`
 
+For the submitted presentation, open:
+
+1. `presentation/QuantumCylinder_presentation.pdf`
+2. `presentation/PRESENTATION_STORYBOARD_EN.md`
+3. `presentation/PRESENTATION_15MIN_SPEAKER_SCRIPT_EN.md`
+
 For source-code inspection, open:
 
 1. `source_code/README_FOR_JUDGES.md`
 2. `source_code/PROBLEM_REQUIREMENT_MAP.md`
 3. `source_code/REPRODUCIBILITY_COMMANDS.md`
-4. `source_code/solution/solution_1.ipynb`
+4. `source_code/solution/solution_1.ipynb` as a compact reference only
 
 ## What Is Included
 
-- Final split notebooks for Problem 1, Problem 2, and Problem 3.
-- English presentation text/storyboard/checklist.
+- Primary judge-facing split notebooks for Problem 1, Problem 2, and Problem 3.
+- English presentation PDF, text, storyboard, speaker script, and checklist.
 - Full source-code package with `src/`, `scripts/`, `tests/`, `configs/`,
   `submission/`, and `solution/`.
 - Final figures and tables inside `source_code/solution/`.
-- Optional IBM QPU appendix evidence and scripts.
+- IBM Cloud/QPU Problem 3(b) hardware-execution validation evidence and scripts.
 - `QuantumCylinder_full_source.zip`, a zipped copy of the source-code package.
 
 ## What The Submission Claims
@@ -46,4 +52,6 @@ trainable QuDDPM, continuous-basis dominance over axis-only bases, a general
 unknown-target actor-critic denoiser, or universal superiority of Hamiltonian
 projected diffusion over random-unitary diffusion.
 
-IBM QPU material is appendix-only hardware-execution validation.
+IBM QPU material is hardware-execution validation for the tiny Problem 3(b)
+mechanism. It is included as a short core callout and detailed appendix/Q&A
+material, with no hardware advantage or superiority claim.

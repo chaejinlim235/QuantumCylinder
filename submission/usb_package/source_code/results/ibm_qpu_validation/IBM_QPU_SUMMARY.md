@@ -24,6 +24,6 @@ only; it does not replace the state-vector benchmark.
 | `hamiltonian_projection_tiny_proxy` | 3 | 22 | 4 |
 | `two_way_postselection_tiny_proxy` | 3 | 39 | 8 |
 
-This is optional hardware-execution feasibility evidence only. It does not
+This is hardware-execution feasibility evidence for the tiny validation path. It does not
 replace the reproducible state-vector benchmark and does not imply hardware
 advantage.

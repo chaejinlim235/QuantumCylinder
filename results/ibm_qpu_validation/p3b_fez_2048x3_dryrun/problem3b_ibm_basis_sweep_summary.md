@@ -16,7 +16,7 @@ This is a tiny IBM QPU validation of the Problem 3-b measurement-basis trade-off
 - runtime_status: qiskit-ibm-runtime unavailable: No module named 'qiskit_ibm_runtime'
 - sampler_status: SamplerV2 not checked
 
-Claim guardrail: This is appendix validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.
+Claim guardrail: Hardware-execution validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.
 
 ## Aggregate By Basis
 
@@ -27,5 +27,5 @@ extract p(F=0) and selected-data entropy.
 Interpretation: if the aggregate table is present, changes across beta show
 that rotating the complement-qubit measurement basis changes the effective
 post-selected map through both success probability and the selected data
-distribution. This appendix check does not replace the state-vector
+distribution. This hardware-execution check does not replace the state-vector
 MMD/Wasserstein benchmark.

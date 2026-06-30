@@ -27,14 +27,15 @@ bit and the selected data bits are `c1 c0`.
 Problem 3-b asks for a controlled modification of the diffusion setting and an
 analysis of what improves or is sacrificed. Rotating the measurement basis of
 the complement qubit changes the effective post-selected non-unitary map on the
-data system. The appendix check therefore tests the mechanism behind the
+data system. The hardware-execution check therefore tests the mechanism behind the
 recoverability-success-diversity trade-off: different bases can change both
 post-selection success probability and the selected data distribution.
 
 ## What It Does Not Claim
 
-This is appendix validation only. The main scientific claims remain based on
-state-vector MMD/Wasserstein experiments.
+This is hardware-execution validation for a tiny Problem 3-b mechanism check.
+The main scientific claims remain based on state-vector MMD/Wasserstein
+experiments.
 
 - It does not claim quantum advantage.
 - It does not claim hardware advantage.

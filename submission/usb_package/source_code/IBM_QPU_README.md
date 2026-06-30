@@ -1,6 +1,7 @@
-# Optional IBM QPU Validation
+# IBM QPU Validation
 
-This is optional IBM QPU validation, not the main benchmark.
+This is IBM QPU validation for the tiny Problem 3(b) measurement-basis
+mechanism, not the main benchmark.
 
 The main scientific claims in the final notebook come from the reproducible
 state-vector benchmark and the traceable CSV/figure artifacts under
@@ -42,7 +43,7 @@ python scripts/ibm_qpu_smoke_test.py --submit --backend BACKEND_NAME --shots 100
 
 ## Problem 3-b IBM QPU Basis Sweep
 
-This appendix script prepares a tiny `M+F` circuit for Problem 3-b. It sweeps
+This script prepares a tiny `M+F` circuit for Problem 3-b. It sweeps
 the complement-qubit measurement basis and, when QPU counts are available,
 reports post-selection success probability `p(F=0)` and selected data entropy.
 This validates the mechanism that measurement basis changes the effective

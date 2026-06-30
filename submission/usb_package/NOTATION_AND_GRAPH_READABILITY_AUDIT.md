@@ -102,12 +102,12 @@ R_{\mathrm{div}} =
 This is explicitly called a diversity retention proxy and collapse guardrail,
 not a universal diversity metric.
 
-### 7. Are IBM QPU appendix labels clearly appendix-only?
+### 7. Are IBM QPU labels clearly hardware-execution validation?
 
 Yes. The final notebook, presentation text, and IBM documents label IBM QPU
-Problem 3-b validation as appendix hardware-execution evidence only. They state
-that it tests tiny representative circuits and does not replace the
-state-vector benchmark or claim hardware advantage.
+Problem 3-b validation as hardware-execution evidence for tiny representative
+circuits. They state that it does not replace the state-vector benchmark or
+claim hardware advantage.
 
 ## Decision
 

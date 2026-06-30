@@ -7,7 +7,7 @@ the submission.
 
 | Path | Purpose |
 | --- | --- |
-| `solution/solution_1.ipynb` | Compact final answer for Problems 1(a) through 3(c). |
+| `solution/solution_1.ipynb` | Compact source-code reference for Problems 1(a) through 3(c); the primary judge-facing report is `../solution/Problem 1.ipynb`, `../solution/Problem 2.ipynb`, and `../solution/Problem 3.ipynb`. |
 | `solution/README.md` | Human-readable guide to the final notebook, figures, tables, and claim guardrails. |
 | `solution/figures/` | Final figures referenced by the notebook. |
 | `solution/tables/` | Final CSV/Markdown tables supporting numerical claims. |
@@ -20,11 +20,11 @@ for presentation-style reading.
 | Path | Purpose |
 | --- | --- |
 | `src/quantum_cylinder/` | Main implementation for target ensembles, metrics, random-unitary diffusion, Hamiltonian projected diffusion, and Problem 3 denoising variants. |
-| `scripts/` | Experiment, plotting, summary, packaging, and IBM QPU appendix scripts. |
+| `scripts/` | Experiment, plotting, summary, packaging, and IBM QPU validation scripts. |
 | `tests/` | Regression and sanity tests for metrics, submission flow, and Problem 3 summaries. |
 | `configs/` | Experiment configuration files. |
 | `submission/` | Compact standalone execution layer used by `submission/run_all.py`. |
-| `results/` | Selected compact evidence needed by summary scripts and the IBM QPU appendix. |
+| `results/` | Selected compact evidence needed by summary scripts and the IBM QPU validation callout. |
 
 Large exploratory logs are not required for the final answer. The included
 `results/` files are the ones needed for traceability and reproduction of the
@@ -69,7 +69,8 @@ Included completed IBM QPU jobs:
 - `ibm_fez`, job `d91r6pmu9n7c73an9qgg`, `2048` shots, `12` circuits, DONE.
 - `ibm_fez`, job `d91r71fccmks73d5nmg0`, `4096` shots, `20` circuits, DONE.
 
-IBM QPU evidence is appendix-only and is not used to claim hardware advantage.
+IBM QPU evidence is hardware-execution validation for a tiny Problem 3(b)
+mechanism check and is not used to claim hardware advantage.
 
 ## Environment Files
 

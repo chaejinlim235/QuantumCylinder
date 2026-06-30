@@ -449,7 +449,7 @@
       "two_qubit_gate_count": 4
     }
   ],
-  "claim_guardrail": "This is appendix validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.",
+  "claim_guardrail": "This is hardware-execution validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.",
   "counts_extracted": true,
   "credentials_available": true,
   "dry_run": false,

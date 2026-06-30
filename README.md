@@ -16,28 +16,22 @@ For a fast review, use these entry points:
 
 | Purpose | File or folder |
 | --- | --- |
-| Final repository answer | `solution/solution_1.ipynb` |
-| Final repository guide | `solution/README.md` |
+| Primary judge-facing report | `submission/usb_package/solution/Problem 1.ipynb`, `Problem 2.ipynb`, `Problem 3.ipynb` |
+| Submitted presentation deck | `submission/usb_package/presentation/QuantumCylinder_presentation.pdf` |
 | USB package overview | `submission/usb_package/Summary.md` |
 | USB submission guide | `submission/usb_package/README_SUBMISSION.md` |
 | Source-code inspection guide | `submission/usb_package/source_code/README_FOR_JUDGES.md` |
 | Requirement mapping | `submission/usb_package/source_code/PROBLEM_REQUIREMENT_MAP.md` |
 | Reproducibility commands | `submission/usb_package/source_code/REPRODUCIBILITY_COMMANDS.md` |
-| Optional IBM QPU appendix | `docs/IBM_QPU_VALIDATION.md` |
+| IBM Cloud/QPU validation details | `docs/IBM_QPU_VALIDATION.md` |
 
-The root `solution/` folder is the compact final solution. The USB package also
-contains split presentation notebooks under `submission/usb_package/solution/`
-for quick onsite reading.
+The USB split notebooks are the primary judge-facing report. The compact
+notebook under `submission/usb_package/source_code/solution/solution_1.ipynb`
+and the root `solution/` folder remain source-code/reference copies.
 
 ## Final Submission Structure
 
 ```text
-solution/
-  README.md
-  solution_1.ipynb
-  figures/
-  tables/
-
 submission/usb_package/
   Summary.md
   README_SUBMISSION.md
@@ -71,9 +65,9 @@ post-selection proposal in Problem 3(c).
 
 | Contest criterion | Where it is addressed |
 | --- | --- |
-| Completeness and appropriateness | `solution/solution_1.ipynb`, `submission/usb_package/JUDGING_CRITERIA_ALIGNMENT.md` |
+| Completeness and appropriateness | split notebooks under `submission/usb_package/solution/`, `submission/usb_package/JUDGING_CRITERIA_ALIGNMENT.md` |
 | Fidelity to problem requirements | `submission/usb_package/source_code/PROBLEM_REQUIREMENT_MAP.md` |
-| Novelty of plan and approach | Problem 3(b)/(c) in `solution/solution_1.ipynb` |
+| Novelty of plan and approach | Problem 3(b)/(c) in `submission/usb_package/solution/Problem 3.ipynb` |
 | Presentation and communication | `submission/usb_package/presentation/` and `submission/usb_package/Summary.md` |
 | Source-code inspection readiness | `submission/usb_package/source_code/README_FOR_JUDGES.md` |
 | IBM QPU validation clarity | `docs/IBM_QPU_VALIDATION.md`, `submission/usb_package/source_code/IBM_QPU_README.md` |
@@ -123,11 +117,11 @@ The submission does not claim:
   diffusion;
 - that IBM QPU results prove superiority.
 
-IBM QPU results are appendix-only hardware-execution validation. The main
-scientific claims remain based on reproducible state-vector benchmarks and
-traceable CSV/figure artifacts.
+IBM QPU results are hardware-execution validation for a tiny Problem 3(b)
+measurement-basis sweep. They support executability of the mechanism but do
+not replace the reproducible state-vector benchmarks or prove superiority.
 
-## IBM QPU Appendix
+## IBM Cloud/QPU Validation
 
 The package includes a completed Problem 3-b IBM QPU basis-sweep mini
 validation on `ibm_fez`:

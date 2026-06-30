@@ -30,7 +30,7 @@
 | `success` | post-selection success probability, \(p_{\mathrm{succ}}\) |
 | `diversity` | diversity retention proxy, \(R_{\mathrm{div}}\) |
 | `beta sweep` | measurement-basis angle \(\beta\) sweep |
-| `qpu` | IBM QPU appendix hardware-execution validation |
+| `qpu` | IBM QPU hardware-execution validation |
 
 Remaining code-level names may still appear inside implementation scripts or
 generated support summaries. They are not used as unexplained final-facing

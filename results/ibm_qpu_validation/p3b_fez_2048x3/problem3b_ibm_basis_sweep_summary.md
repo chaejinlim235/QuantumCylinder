@@ -7,7 +7,7 @@
 - counts_source_status: `recomputed_from_saved_counts_without_runtime`
 - aggregate_rows: `4`
 
-Claim guardrail: Appendix validation only. Main scientific claims remain state-vector based. No hardware advantage claim.
+Claim guardrail: Hardware-execution validation only. Main scientific claims remain state-vector based. No hardware advantage claim.
 
 ## Aggregate by measurement basis
 

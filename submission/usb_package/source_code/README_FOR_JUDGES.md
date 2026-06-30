@@ -1,33 +1,40 @@
 # README For Judges
 
-Open `solution/solution_1.ipynb` first for the compact final answer inside the
-source-code package.
+The primary judge-facing report is the split notebook set one level up:
+`../solution/Problem 1.ipynb`, `../solution/Problem 2.ipynb`, and
+`../solution/Problem 3.ipynb`.
+
+Inside this `source_code/` package, `solution/solution_1.ipynb` is a compact
+reference notebook for source-code inspection. It is not the primary final
+report.
 
 ## Fast Reading Path
 
-1. `solution/solution_1.ipynb`
-2. `solution/README.md`
-3. `PROBLEM_REQUIREMENT_MAP.md`
-4. `REPRODUCIBILITY_COMMANDS.md`
-5. `CODE_MANIFEST.md`
-6. `IBM_QPU_README.md` for optional appendix validation only
+1. `../solution/Problem 1.ipynb`
+2. `../solution/Problem 2.ipynb`
+3. `../solution/Problem 3.ipynb`
+4. `PROBLEM_REQUIREMENT_MAP.md`
+5. `REPRODUCIBILITY_COMMANDS.md`
+6. `CODE_MANIFEST.md`
+7. `solution/solution_1.ipynb` as a compact source-code reference
+8. `IBM_QPU_README.md` for IBM Cloud/QPU validation details
 
-The top-level USB package also includes split notebooks under `../solution/`.
-Those are easier for presentation-style reading. This `solution/` folder is the
-source-inspection copy of the compact final solution.
+The top-level USB split notebooks preserve the problem-by-problem reading
+order. This `solution/` folder is the source-inspection copy of the compact
+reference solution.
 
 ## What Is Included
 
 | Path | Purpose |
 | --- | --- |
-| `solution/` | Compact final notebook, final figures, and final tables. |
+| `solution/` | Compact reference notebook, final figures, and final tables. |
 | `src/quantum_cylinder/` | Core implementation. |
 | `scripts/` | Experiment, plotting, IBM QPU, and summary scripts. |
 | `tests/` | Sanity and regression tests. |
 | `configs/` | Experiment configuration files. |
 | `submission/` | Compact standalone execution layer. |
 | `results/` | Selected compact evidence used by summary scripts. |
-| `IBM_QPU_README.md` | Optional IBM Quantum / Qiskit Runtime appendix path. |
+| `IBM_QPU_README.md` | IBM Quantum / Qiskit Runtime validation details. |
 
 ## Minimal Commands
 
@@ -71,8 +78,9 @@ python scripts/ibm_qpu_smoke_test.py --dry-run
 
 - Numerical claims in the notebook are tied to CSV/Markdown files under
   `solution/tables/`, `solution/figures/`, and selected `results/` folders.
-- IBM QPU validation is optional appendix evidence and is not required to
-  reproduce the main state-vector benchmark.
+- IBM Cloud/QPU validation is hardware-execution evidence for a tiny Problem
+  3(b) mechanism check. It is not required to reproduce the main state-vector
+  benchmark and does not imply hardware advantage.
 - No IBM token, API key, instance CRN, or private account credential is stored
   in this package.
 

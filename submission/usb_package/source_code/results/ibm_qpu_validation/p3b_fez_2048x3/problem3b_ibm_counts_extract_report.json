@@ -35,7 +35,7 @@
   ],
   "backend": "ibm_fez",
   "channel": "ibm_cloud",
-  "claim_guardrail": "Appendix validation only. Main scientific claims remain state-vector based. No hardware advantage claim.",
+  "claim_guardrail": "Hardware-execution validation only. Main scientific claims remain state-vector based. No hardware advantage claim.",
   "counts_source_status": "recomputed_from_saved_counts_without_runtime",
   "generated_at_utc": "2026-06-30T12:41:27.646909+00:00",
   "instance_env_set": false,

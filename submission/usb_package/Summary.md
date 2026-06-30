@@ -1,23 +1,34 @@
 # QuantumCylinder USB Package Summary
 
 This folder is the USB-ready submission package. It is designed so a judge can
-find the final answer, presentation material, source code, and reproduction
-commands without reading the development repository.
+find the primary split-notebook report, presentation material, source code, and
+reproduction commands without reading the development repository.
 
-## Five-Minute Review Path
+## Primary Review Path
 
 1. Open this file.
 2. Open the split report notebooks under `solution/`:
    - `solution/Problem 1.ipynb`
    - `solution/Problem 2.ipynb`
    - `solution/Problem 3.ipynb`
-3. Open `presentation/PRESENTATION_SLIDE_TEXT_EN.md` or the presentation file
-   if a rendered slide deck is requested.
-4. For source-code inspection, open `source_code/README_FOR_JUDGES.md`.
+3. Open `presentation/QuantumCylinder_presentation.pdf`.
+4. Use `presentation/PRESENTATION_STORYBOARD_EN.md` for the timed 5-minute
+   and 15-minute paths.
+5. For source-code inspection, open `source_code/README_FOR_JUDGES.md`.
 
-The source-code package also contains the compact canonical final notebook at
-`source_code/solution/solution_1.ipynb`. The split notebooks and compact
-notebook tell the same story at different reading granularity.
+## Five-Minute Main-Round Path
+
+Use `presentation/PRESENTATION_STORYBOARD_EN.md` for the timed path:
+
+1. Thesis.
+2. Problem 1/2 baseline comparison with Haar reference.
+3. Problem 3(b) trade-off plus IBM Cloud validation callout.
+4. Problem 3(c) two-way improvement.
+5. Judging-criteria fit and claim guardrails.
+
+The split notebooks under `solution/` are the primary judge-facing report. The
+source-code package also contains a compact reference notebook at
+`source_code/solution/solution_1.ipynb` for inspection and traceability.
 
 ## Folder Map
 
@@ -30,9 +41,12 @@ usb_package/
     Problem 1.ipynb
     Problem 2.ipynb
     Problem 3.ipynb
+    figures/
   presentation/
+    QuantumCylinder_presentation.pdf
     PRESENTATION_SLIDE_TEXT_EN.md
     PRESENTATION_STORYBOARD_EN.md
+    PRESENTATION_15MIN_SPEAKER_SCRIPT_EN.md
     SLIDE_CHECKLIST.md
   source_code/
     README_FOR_JUDGES.md
@@ -46,6 +60,9 @@ usb_package/
     configs/
     submission/
     solution/
+    results/
+    pyproject.toml
+    requirements.txt
 ```
 
 In the repository, this folder is stored as `submission/usb_package/`. On a USB
@@ -80,11 +97,13 @@ modification, not as an overwhelming or universal win over axis-only
 projection. Actor-critic rows, if discussed, are target-aware appendix evidence
 and not a general unknown-target denoiser.
 
-## Optional IBM QPU Appendix
+## IBM Cloud/QPU Validation Callout
 
-Optional IBM QPU validation is included only as appendix feasibility evidence
-under `source_code/results/ibm_qpu_validation/`. It does not replace the
-state-vector benchmark and does not imply hardware advantage.
+IBM Cloud/QPU validation is included as a short Problem 3(b) hardware-execution
+callout and as detailed appendix/Q&A material under
+`source_code/results/ibm_qpu_validation/`. It checks tiny representative
+`M+F` circuits and does not replace the state-vector benchmark or imply
+hardware advantage.
 
 Included Problem 3-b IBM QPU mini-validation jobs:
 
@@ -95,6 +114,11 @@ Slide-ready IBM appendix summary:
 
 - `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`
 - `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.csv`
+
+Higher-shot aggregate: \(p(F=0)\) changes from about `0.89` to `0.66` to
+`0.35` as \(\beta\) rotates, while selected-data entropy increases. This
+validates hardware executability of the 3-b measurement-basis mechanism; no
+hardware advantage is claimed.
 
 ## Reproduction
 

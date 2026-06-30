@@ -3,7 +3,7 @@
 ## Scope
 
 This audit covers the Problem 3-b IBM QPU measurement-basis mini validation
-update. IBM QPU evidence is appendix-only. The main scientific claims remain
+update. IBM QPU evidence is hardware-execution validation for a tiny Problem 3-b mechanism check. The main scientific claims remain
 state-vector based.
 
 ## Checklist
@@ -18,7 +18,7 @@ state-vector based.
 | Are token/API key/CRN absent from files? | Yes | Only environment variable names and placeholders are present. No actual secret-like values were found. |
 | Are IBM QPU results included in source_code package? | Yes | Copied under `submission/usb_package/source_code/results/ibm_qpu_validation/`. |
 | Is presentation appendix A9 updated? | Yes | `presentation/PRESENTATION_SLIDE_TEXT_EN.md` now lists completed job ids and aggregate values. |
-| Is the final notebook or solution README updated? | Yes | `solution/solution_1.ipynb` and `solution/README.md` include appendix-only IBM QPU Problem 3-b validation. |
+| Is the final notebook or solution README updated? | Yes | `solution/solution_1.ipynb` and `solution/README.md` include IBM QPU Problem 3-b hardware-execution validation. |
 | What remains blocking? | None for packaging | Current default Python lacks `qiskit_ibm_runtime`, so live re-retrieval should be run in `.venv_ibm`; existing DONE-job counts and aggregates are already included. |
 
 ## Completed Jobs

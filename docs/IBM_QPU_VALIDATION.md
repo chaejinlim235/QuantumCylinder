@@ -1,7 +1,7 @@
 # IBM QPU Validation
 
-This document describes the optional IBM Quantum / IBM QPU validation path for
-the QuantumCylinder submission.
+This document describes the IBM Quantum / IBM QPU validation path for the
+QuantumCylinder submission.
 
 ## What This Validation Is
 
@@ -22,11 +22,11 @@ It reports:
 ## What This Validation Is Not
 
 This is not the main benchmark. It does not replace the state-vector
-MMD/Wasserstein results in `solution/solution_1.ipynb`, and it does not prove or
-claim hardware advantage.
+MMD/Wasserstein results in the split notebooks and compact source-code
+reference notebook, and it does not prove or claim hardware advantage.
 
-The IBM QPU path is appendix evidence only: it checks small-circuit execution
-feasibility for Q&A or source-code inspection.
+The IBM QPU path is a short Problem 3(b) hardware-execution validation callout,
+with job-level details kept here for Q&A and source-code inspection.
 
 ## Credential Setup
 
@@ -78,7 +78,7 @@ choose a least-busy operational non-simulator backend.
 
 ## Problem 3-b Measurement-Basis Mini Validation
 
-The final package also includes a Problem 3-b-specific IBM QPU appendix check.
+The final package also includes a Problem 3-b-specific IBM QPU validation check.
 It submits tiny `M+F` circuits and sweeps the complement-qubit measurement
 basis. Completed runs:
 

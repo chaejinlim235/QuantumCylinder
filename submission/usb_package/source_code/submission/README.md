@@ -32,5 +32,6 @@ Outputs are written under `results/submission_simple/`.
 ## Scope
 
 This layer is designed for fast inspection. The full implementation is under
-`src/quantum_cylinder/`, and the polished final answer is under
-`solution/solution_1.ipynb`.
+`src/quantum_cylinder/`. The primary judge-facing report is the split notebook
+set under `../solution/`; `solution/solution_1.ipynb` is a compact source-code
+reference.

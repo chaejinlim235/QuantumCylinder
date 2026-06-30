@@ -1,6 +1,6 @@
 # IBM QPU Problem 3-b Mini Validation Summary
 
-This is appendix validation only. The main scientific claims remain based on reproducible state-vector benchmarks. No hardware advantage is claimed.
+This is hardware-execution validation for the tiny Problem 3-b mechanism. The main scientific claims remain based on reproducible state-vector benchmarks. No hardware advantage is claimed.
 
 We submitted tiny `M+F` circuits to IBM Quantum / Qiskit Runtime and swept
 the complement-qubit measurement basis. The appendix result checks whether

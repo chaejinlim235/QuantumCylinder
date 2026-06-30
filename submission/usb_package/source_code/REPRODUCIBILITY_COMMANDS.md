@@ -5,12 +5,14 @@ Run these commands from `submission/usb_package/source_code/`.
 ## Quick Validation
 
 ```powershell
+python -c "import pathlib, py_compile; [py_compile.compile(str(p), doraise=True) for p in pathlib.Path('.').rglob('*.py')]"
 python -m pytest
 python submission/run_all.py --quick
 ```
 
 Expected result:
 
+- `py_compile`: all Python files parse and compile.
 - `pytest`: all tests pass. If Windows reports a temp-directory cleanup issue
   after tests pass, rerun with `python -m pytest --basetemp .pytest_tmp_local`.
 - `submission/run_all.py --quick`: prints compact Problem 1, Problem 2, and
@@ -44,14 +46,17 @@ Expected outputs:
 Read in this order:
 
 1. `README_FOR_JUDGES.md`
-2. `solution/solution_1.ipynb`
-3. `PROBLEM_REQUIREMENT_MAP.md`
-4. `CODE_MANIFEST.md`
-5. `src/quantum_cylinder/`
-6. `scripts/`
-7. `tests/`
+2. `../solution/Problem 1.ipynb`
+3. `../solution/Problem 2.ipynb`
+4. `../solution/Problem 3.ipynb`
+5. `PROBLEM_REQUIREMENT_MAP.md`
+6. `CODE_MANIFEST.md`
+7. `solution/solution_1.ipynb` as a compact reference
+8. `src/quantum_cylinder/`
+9. `scripts/`
+10. `tests/`
 
-## Optional IBM QPU Dry-Run
+## IBM QPU Dry-Run
 
 ```powershell
 python scripts/ibm_qpu_smoke_test.py --dry-run
@@ -61,7 +66,7 @@ This prepares tiny representative circuits and saves a no-submit report under
 `results/ibm_qpu_validation/`. Real IBM QPU submission requires credentials and
 an explicit `--submit` command. It is not required for the main benchmark.
 
-## Optional IBM QPU Problem 3-b Appendix
+## IBM QPU Problem 3-b Validation Details
 
 Dry-run:
 
@@ -83,8 +88,9 @@ python scripts/summarize_ibm_qpu_p3b_results.py
 python scripts/copy_ibm_qpu_results_to_usb.py
 ```
 
-These IBM commands are appendix validation only. The main quantitative claims
-remain state-vector based.
+These IBM commands support the Problem 3(b) hardware-execution validation
+callout and detailed Q&A path. The main quantitative claims remain
+state-vector based.
 
 ## Lightweight Packaging Checks
 
