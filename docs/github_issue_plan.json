@@ -2,7 +2,9 @@
   {
     "number": 6,
     "title": "[임채진] ipynb 최종 보고서 작성 및 claim/storyline 확정",
-    "assignees": ["chaejinlim235"],
+    "assignees": [
+      "chaejinlim235"
+    ],
     "state": "open",
     "body_lines": [
       "담당자: 임채진",
@@ -59,13 +61,18 @@
       "- ipynb 보고서가 위에서 아래로 실행/열람 가능한 구조를 가진다.",
       "- 최종 claim, limitation, figure caption이 같은 숫자를 가리킨다.",
       "- 성능 주장은 small-scale reproducible extension 범위로 제한된다.",
-      "- 발표 Q&A에서 \"post-selection proxy\"와 \"continuous basis search\" 차이를 설명할 수 있다."
+      "- 발표 Q&A에서 \"post-selection proxy\"와 \"continuous basis search\" 차이를 설명할 수 있다.",
+      "- 최종 notebook 사본 `C:\\Users\\sky_m\\Downloads\\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb`에 Hamiltonian 후보 15-row 결과와 figure가 반영됨.",
+      "- 멘토/교수님 피드백은 `docs/25_mentor_feedback_brief.md` 기준으로 받는다.",
+      "- v5 notebook의 3(c) 표가 `results/problem_3_method_portfolio/method_portfolio_summary.csv`와 같은 숫자를 쓰는지 확인."
     ]
   },
   {
     "number": 8,
     "title": "[김승빈] 물리적 해석, figure/table 패키징 및 재현 로그 정리",
-    "assignees": ["dreamerghost77"],
+    "assignees": [
+      "dreamerghost77"
+    ],
     "state": "open",
     "body_lines": [
       "담당자: 김승빈",
@@ -102,13 +109,17 @@
       "",
       "- 최종 보고서에 들어갈 숫자 표가 준비된다.",
       "- figure/table caption이 실제 result file과 일치한다.",
-      "- 다른 팀원이 같은 명령으로 결과를 재현할 수 있다."
+      "- 다른 팀원이 같은 명령으로 결과를 재현할 수 있다.",
+      "- `docs/25_mentor_feedback_brief.md`의 안전한 설명 문장을 물리적으로 검수.",
+      "- Hamiltonian two-way의 success probability `0.227065`를 거리 개선과 함께 trade-off로 설명할 수 있는지 확인."
     ]
   },
   {
     "number": 9,
     "title": "[완료] Problem 3 continuous measurement-induced denoising 구현",
-    "assignees": ["caffeine-fighter"],
+    "assignees": [
+      "caffeine-fighter"
+    ],
     "state": "closed",
     "body_lines": [
       "담당자: 한지후",
@@ -129,7 +140,9 @@
   {
     "number": 19,
     "title": "[김건우] 코드/Qiskit 구현 해석 및 consistency 검수",
-    "assignees": ["koi312500"],
+    "assignees": [
+      "koi312500"
+    ],
     "state": "open",
     "body_lines": [
       "담당자: 김건우",
@@ -171,13 +184,17 @@
       "- 임채진의 ipynb 보고서에 들어갈 코드/Qiskit 구현 해석 문장 5-8개가 준비된다.",
       "- 최종 보고서에 들어갈 resource/control-cost 문장 3-5개가 준비된다.",
       "- judge가 물어볼 \"왜 QML/quantum?\" 질문에 답할 수 있다.",
-      "- Problem 3 claim이 공정한 baseline 비교로 제한된다."
+      "- Problem 3 claim이 공정한 baseline 비교로 제한된다.",
+      "- v5 notebook에서 Hamiltonian 후보 실행 예시와 15-row summary가 서로 다른 역할임을 검수.",
+      "- `method_portfolio_summary.csv`를 읽는 fallback 코드가 제출 환경에서 안전한지 확인."
     ]
   },
   {
     "number": 31,
     "title": "[한지후] Hermes feedback loop 운영 및 최종 gatekeeping",
-    "assignees": ["caffeine-fighter"],
+    "assignees": [
+      "caffeine-fighter"
+    ],
     "state": "open",
     "body_lines": [
       "담당자: 한지후",
@@ -235,13 +252,21 @@
       "",
       "- main branch check가 성공한다.",
       "- README, `docs/github_issue_plan.json`, 실제 GitHub issues가 같은 진행도를 말한다.",
-      "- 최종 claim이 seed sweep summary와 일치한다."
+      "- 최종 claim이 seed sweep summary와 일치한다.",
+      "- 최종 notebook 사본 v5에 Hamiltonian 후보 15-row 결과와 figure를 반영했다.",
+      "- Day 2 16:30 기준 멘토 피드백용 브리프 `docs/25_mentor_feedback_brief.md`를 추가했다.",
+      "- README, `docs/00_team_dashboard.md`, `docs/24_problem_3_method_portfolio.md`, `docs/25_mentor_feedback_brief.md`가 같은 전략을 말하는지 확인."
     ]
   },
   {
     "number": 32,
     "title": "[공통] 최종 제출 리허설 및 QA 체크리스트",
-    "assignees": ["caffeine-fighter", "chaejinlim235", "koi312500", "dreamerghost77"],
+    "assignees": [
+      "caffeine-fighter",
+      "chaejinlim235",
+      "koi312500",
+      "dreamerghost77"
+    ],
     "state": "open",
     "body_lines": [
       "담당자: 전원",
@@ -266,7 +291,9 @@
       "## 완료 기준",
       "",
       "- 제출 폴더에 넣을 코드, 문서, 결과 설명이 서로 모순되지 않는다.",
-      "- 발표자가 Problem 3의 장점과 limitation을 모두 설명할 수 있다."
+      "- 발표자가 Problem 3의 장점과 limitation을 모두 설명할 수 있다.",
+      "- 최종 notebook 사본 v5가 열리고, 물음표 깨짐 또는 깨진 한글 없이 figure가 포함되어 있는지 확인.",
+      "- 멘토 피드백 후 claim 강도, figure/table 우선순위, appendix 분리 여부를 확정."
     ]
   }
 ]

@@ -13,6 +13,12 @@ Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서
 
 따라서 actor-critic은 최종 후보 중 하나이며, 전체 방법론을 대체하지 않는다.
 
+현재 최종 notebook 사본:
+
+```text
+C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb
+```
+
 ## 비교할 후보
 
 | Candidate | 역할 | 보고서에서의 위치 | 주의점 |
@@ -24,6 +30,22 @@ Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서
 | Hamiltonian two-way post-selection | Hamiltonian post-selection을 두 단계로 적용하는 후보 | 3(c) 후보 | 거리 개선이 커질 수 있지만 post-selection success probability가 낮아질 수 있음 |
 | hybrid 1M+1F toy | random-unitary와 Hamiltonian/post-selection을 섞은 hardware-motivated extension | 3(c) 후보 | 1-qubit toy라 main 2-qubit seed sweep과 직접 우열 비교하지 않음 |
 | target-aware actor-critic | raw target reward를 쓰는 policy-search 개선 후보 | 3(c) 후보 또는 appendix | unknown-target 일반 denoiser가 아니라 target-aware toy improvement |
+
+## 현재 고정된 Hamiltonian 후보 수치
+
+아래 수치는 `python scripts/run_problem_3_hamiltonian_variant_candidates.py` 실행 결과이며, `5 seeds x 3 input steps = 15 rows` 요약이다.
+
+| Method | Rows | Positive MMD rows | Positive Wasserstein rows | Median MMD improvement | Median Wasserstein improvement | Median diversity retention | Median success probability |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| continuous post-selection reference | 15 | 14 | 15 | 0.056388 | 0.120620 | 0.848836 | 0.467554 |
+| Hamiltonian + random final kick | 15 | 15 | 15 | 0.056695 | 0.119401 | 0.848403 | 0.467554 |
+| Hamiltonian two-way post-selection | 15 | 15 | 15 | 0.101374 | 0.136426 | 0.829273 | 0.227065 |
+
+해석:
+
+- `Hamiltonian + random final kick`은 MMD는 reference보다 아주 조금 좋아졌지만 Wasserstein은 약간 낮아져, main result가 아니라 mixture ablation 후보로 둔다.
+- `Hamiltonian two-way post-selection`은 거리 개선이 가장 크지만 success probability가 낮아진다. 따라서 3(c)의 좋은 trade-off 후보로 제시한다.
+- main quantitative claim은 여전히 20-seed gate를 통과한 `continuous measurement-basis post-selection`에 둔다.
 
 ## 최종 선택 규칙
 
