@@ -117,4 +117,4 @@ python -m pytest
 
 ## Next Human Step
 
-김건우는 Hamiltonian/projection/post-selection 물리 해석 문장을 검수한다. 임채진은 위 hierarchy를 보고서/발표 흐름에 반영한다. 지후는 이 source/test harvest를 커밋한 뒤 Problem 3 final notebook/report에 숫자를 옮긴다.
+김승빈은 Hamiltonian/projection/post-selection의 물리 해석 문장을 정리한다. 김건우는 그 설명이 실제 코드/Qiskit/backend 구현과 충돌하지 않는지 검수한다. 임채진은 위 hierarchy를 보고서/발표 흐름에 반영한다. 지후는 README, issue plan, 실제 GitHub issue가 같은 진행도를 말하는지 gatekeeping한다.

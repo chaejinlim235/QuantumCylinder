@@ -30,23 +30,23 @@
 
 ## 사용 명령
 
-Problem 3를 상시 개선하는 명령:
+Problem 3 후보를 다시 개선해야 할 때만 finalist autopilot을 사용한다. 현재 기본 전략은 이미 수확한 evidence를 보고서/발표/QA에 정확히 반영하는 것이다.
 
 ```powershell
-.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
+.\scripts\run_problem_3_finalist_autopilot.ps1 -CycleMinutes 0 -KeepDisplayOff
 ```
 
-이 명령은 `continuous-p3-improvement` Hermes task를 반복 실행한다. 각 cycle은 팀원 최신 변경 반영, 테스트, Problem 3 재실험, seed sweep, 결과 분석, 필요한 최소 수정, 검증, 상태 기록 순서로 진행된다.
+이 명령은 `problem-3-finalist-autopilot` Hermes task를 반복 실행한다. 각 cycle은 팀원 최신 변경 반영, 테스트, submission quick run, Problem 3 evidence 점검, 필요한 최소 수정, 검증, 상태 기록 순서로 진행된다.
 
-기본 반복 간격은 0분이다. 즉 한 cycle이 끝나면 바로 다음 cycle을 시작한다. `-MaxCycles 0`은 종료 조건 없이 `Ctrl+C`까지 계속 돈다는 뜻이다. 상태는 `results/continuous_problem_3/latest_status.md`, 변화 기록은 `results/continuous_problem_3/progress_log.md`, 상세 로그는 `logs/continuous_problem_3/`에 남긴다.
+기본 반복 간격은 0분이다. 즉 한 cycle이 끝나면 바로 다음 cycle을 시작한다. `-MaxCycles 0`은 종료 조건 없이 `Ctrl+C`까지 계속 돈다는 뜻이다. 상태는 `results/problem_3_finalist_autopilot/latest_status.md`, 변화 기록은 `results/problem_3_finalist_autopilot/progress_log.md`, 상세 로그는 `logs/problem_3_finalist_autopilot/`에 남긴다.
 
 현재 기본 실행 방식은 `attached` 모드다. Hermes를 숨은 자식 프로세스로 분리하지 않고 현재 PowerShell에 붙여 실행하므로, 진행 출력이 실행 창에 직접 보여야 한다. 예전 watchdog 방식이 꼭 필요할 때만 `-UseWatchdog`를 명시한다.
 
 실행 중 팀원이 보는 순서:
 
-1. `results/continuous_problem_3/latest_status.md`: 현재 gate와 최근 cycle 요약
-2. `results/continuous_problem_3/progress_log.md`: cycle별 변화 기록과 핵심 metric
-3. `logs/continuous_problem_3/latest_state.json`: Hermes 현재 attempt, run mode, log path
+1. `results/problem_3_finalist_autopilot/latest_status.md`: 현재 gate와 최근 cycle 요약
+2. `results/problem_3_finalist_autopilot/progress_log.md`: cycle별 변화 기록과 핵심 metric
+3. `logs/problem_3_finalist_autopilot/latest_state.json`: Hermes 현재 attempt, run mode, log path
 
 최종 표준 명령:
 
@@ -69,10 +69,10 @@ Problem 3를 상시 개선하는 명령:
 .\scripts\run_competition_final_automation.ps1 -KeepDisplayOff
 ```
 
-Hermes에게 전체 루프를 맡길 때:
+Hermes에게 finalist evidence 점검을 맡길 때:
 
 ```powershell
-.\scripts\invoke_hermes_task.ps1 feedback-loop -Yolo -MaxTurns 260
+.\scripts\invoke_hermes_task.ps1 problem-3-finalist-autopilot -Yolo -MaxTurns 620
 ```
 
 마지막 제출 전 팀원 변경 반영과 실패 수정 루프까지 맡길 때:

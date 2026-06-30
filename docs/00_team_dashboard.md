@@ -17,8 +17,9 @@
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
 | 밤샘 Problem 3 실험의 과정/근거/결론 | `docs/22_overnight_problem_3_evidence_handoff.md` |
 | 저장소 구조와 실행 entry point | `README.md` |
-| 자동화 실행 중 상태 | `results/continuous_problem_3/latest_status.md` |
-| 자동화 실행 중 변화 기록 | `results/continuous_problem_3/progress_log.md` |
+| 실제 GitHub issue 동기화 원본 | `docs/github_issue_plan.json` |
+| Problem 3 seed sweep 요약 | `results/problem_3_seed_sweep/seed_sweep_summary.md` |
+| 김승빈 support worker 결과 | `docs/experiments/2026-06-30_problem_3_seungbin_support_worker_results.md` |
 
 `results/` 아래 파일은 생성물이라 Git에 커밋하지 않는다.
 
@@ -26,12 +27,13 @@
 
 | Area | Status | Owner | Next action |
 | --- | --- | --- | --- |
-| Problem 1 | locked | 한지후 | 정성 설명과 diagnostic 출력만 유지 |
-| Problem 2 | locked | 한지후, 김건우 | Hamiltonian/projection 해석 검수 |
-| Problem 3 | harvested main candidate | 한지후 | `docs/22_overnight_problem_3_evidence_handoff.md` 기준으로 final notebook/report 반영 |
+| Problem 1 | locked | 임채진, 한지후 | notebook 형식 유지, 정성 설명과 diagnostic 출력만 정리 |
+| Problem 2 | locked | 김건우, 임채진 | conditional state, Hamiltonian/projection 해석 검수 |
+| Problem 3 | harvested main candidate | 한지후, 김승빈 | `docs/22_overnight_problem_3_evidence_handoff.md` 기준으로 final notebook/report 반영 |
 | Seed sweep | passed + independently reproduced | 김승빈 | support worker 결과에서 최종 표/그림 후보와 로그 위치 정리 |
-| Report/story | evidence ready | 임채진 | claim, limitation, 발표 흐름 정리 |
-| Automation | harvested | 한지후 | 새 자동화보다 수확 근거 정리와 제출물 QA 우선 |
+| Report/story | in progress | 임채진 | 1/2번 형식 유지, 3번 소문항별 답변과 limitation 정리 |
+| Code consistency | in progress | 김건우 | notebook 설명과 실제 Qiskit/backend 구현이 충돌하지 않는지 확인 |
+| Issue/repo metadata | required every change | 한지후 | README, `docs/github_issue_plan.json`, 실제 GitHub issue 동기화 |
 
 Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
 
@@ -42,41 +44,6 @@ Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
 - hardware advantage나 general quantum advantage로 주장하지 않는다.
 
 ## 지금 실행할 명령
-
-Problem 3를 계속 개선할 때:
-
-```powershell
-cd C:\Coding\Hackathon\2026Quantum
-.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
-```
-
-정상 시작 시 실행 PowerShell에 아래 문구가 보여야 한다.
-
-```text
-Hermes run mode: attached
-Attached Hermes attempt 1/2 started. Live output is shown in this PowerShell.
-```
-
-진행 상황 확인:
-
-```powershell
-Get-Content results\continuous_problem_3\latest_status.md -Wait -Tail 80
-Get-Content results\continuous_problem_3\progress_log.md -Wait -Tail 120
-Get-Content logs\continuous_problem_3\latest_state.json
-```
-
-PowerShell이 바로 닫히는지 확인해야 할 때:
-
-```powershell
-powershell -NoProfile -NoExit -ExecutionPolicy Bypass -File .\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
-```
-
-멈춘 실행 정리 후 재시작:
-
-```powershell
-.\scripts\stop_continuous_problem_3_automation.ps1
-.\scripts\run_continuous_problem_3_automation.ps1 -CycleMinutes 0 -KeepDisplayOff
-```
 
 제출 전 전체 검증:
 
@@ -90,16 +57,26 @@ powershell -NoProfile -NoExit -ExecutionPolicy Bypass -File .\scripts\run_contin
 python -m pytest
 python submission/run_all.py --quick
 python scripts/run_problem_3_continuous_denoising.py
+python scripts/summarize_problem_3_seed_sweep.py
 ```
+
+역할, issue, 파일 구조, 진행도가 바뀐 뒤 동기화:
+
+```powershell
+.\scripts\sync_hackathon_issues.ps1 -Apply
+git status --short --branch
+```
+
+새 Problem 3 자동화를 다시 켜는 것은 최종 보고서/QA가 막혔을 때만 한다. 지금 기본 전략은 새 후보를 더 늘리는 것이 아니라, 이미 수확한 evidence를 정확히 보고서와 발표자료에 반영하는 것이다.
 
 ## 역할
 
 | Member | Role | Output |
 | --- | --- | --- |
-| 한지후 | 핵심 구현, 통합, PR/check, 자동화 운영 | main branch 안정화, Problem 3 gatekeeping |
-| 김건우 | Qiskit/resource/물리 검증 | Hamiltonian, projection, resource 설명 |
-| 임채진 | 문제/논문 해석, 보고서 claim | 최종 claim, limitation, 발표 흐름 |
-| 김승빈 | 실행 재현, seed sweep, figure/table | 결과 표/그림 후보와 로그 정리 |
+| 한지후 | 핵심 구현, 통합, gatekeeping, README/issue 동기화 | main branch 안정화, 최종 claim 숫자 관리 |
+| 김건우 | 코드/Qiskit 구현 해석 및 consistency 검수 | conditional state, x축 비교, resource 설명 검수 |
+| 임채진 | ipynb 최종 보고서와 storyline | 1/2번 형식 유지, 3번 소문항별 답변, limitation 정리 |
+| 김승빈 | 물리적 해석, seed sweep, figure/table | measurement-induced denoising 해석과 결과 표/그림 후보 |
 
 ## Decision Gates
 

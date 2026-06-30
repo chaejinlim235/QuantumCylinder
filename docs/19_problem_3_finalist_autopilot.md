@@ -193,9 +193,9 @@ cd C:\Coding\Hackathon\2026Quantum
 | Member | Focus | Output |
 | --- | --- | --- |
 | 한지후 | 자동화 실행, 통합, gatekeeping | status 확인, PR/merge 판단, 최종 claim 고정 |
-| 김건우 | 물리 해석 검수 | Hamiltonian/projection/measurement 설명 검증 |
+| 김건우 | 코드/Qiskit consistency 검수 | conditional state, Hamiltonian/projection, resource 설명 검증 |
 | 임채진 | 문제 해석과 보고서 스토리 | Problem 3(a/b/c) 충족 여부, 발표 문장 정리 |
-| 김승빈 | 실행/로그/figure 보조 | seed sweep 확인, figure/table 재현, 환경 문제 대응 |
+| 김승빈 | 물리 해석, 실행 로그, figure/table 패키징 | measurement-induced denoising 해석, seed sweep 확인, figure/table 재현 |
 
 ## 하지 말아야 할 주장
 

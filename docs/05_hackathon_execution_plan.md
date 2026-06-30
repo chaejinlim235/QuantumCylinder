@@ -1,5 +1,7 @@
 # 3일 해커톤 실행 계획
 
+현재 운영 기준은 `docs/00_team_dashboard.md`, `README.md`, `docs/github_issue_plan.json`을 우선한다. 이 문서는 3일 전체 흐름을 설명하는 계획 문서이며, 역할이 바뀌면 위 세 문서와 실제 GitHub issue를 함께 갱신한다.
+
 제출 목표 시각: **3일차 09:00**
 내부 완료 목표 시각: **3일차 08:00**
 코드/실험 동결 목표 시각: **3일차 07:30**
@@ -13,16 +15,17 @@
 | Qiskit 설치/검증 | 로컬 검증 완료 | 김건우 | 전체 구현 교체가 아니라 resource 설명 보강에 사용 |
 | 테스트 환경 | 구축 완료 | 한지후 | `python -m pytest` 기준으로 PR 검증 |
 | 지정문제/논문 해석 | 진행 중 | 임채진, 김건우, 김승빈 | 전체 번역보다 claim에 필요한 정의와 figure만 추출 |
-| Python 환경 복구 | 진행 중 | 김승빈 | 환경 복구 전에는 코드 구현을 맡기지 않음 |
-| Problem 3 extension | 구현 중 | 한지후 | continuous projected denoising의 채택 게이트 통과 여부 검증 |
-| 최종 보고서/발표 | 스토리라인 초안 있음 | 임채진 | baseline 결과와 Problem 3 claim에 맞춰 보강 |
+| Problem 3 물리 해석/패키징 | 진행 중 | 김승빈 | support worker 결과, figure/table, measurement-induced denoising 해석 정리 |
+| Problem 3 extension | 수확 완료 | 한지후 | 새 기능보다 claim/figure/reproducibility 안정화 |
+| 최종 보고서/발표 | 작성 중 | 임채진 | 1/2번 notebook 형식 유지, 3번 소문항 답변과 limitation 보강 |
+| 코드/Qiskit consistency | 진행 중 | 김건우 | notebook 설명과 실제 구현의 충돌 여부 검수 |
 
 ## 운영 전제
 
 - 한지후가 코드 구현의 대부분과 최종 통합을 담당한다.
-- 김건우는 Qiskit 적용, 회로/resource proxy, 논문 기준 검증을 담당한다.
-- 임채진은 지정문제 해석, 논문 핵심 추출, 최종 보고서 흐름을 담당한다.
-- 김승빈은 Python 환경 복구, 실행 재현, 결과 파일 확인을 담당한다.
+- 김건우는 코드/Qiskit 구현 해석과 resource/control-cost consistency 검수를 담당한다.
+- 임채진은 ipynb 최종 보고서와 storyline을 담당한다.
+- 김승빈은 Problem 3 물리적 해석, figure/table 패키징, 재현 로그 정리를 담당한다.
 - 팀원들은 개발 경험은 충분하지만 첫 해커톤이므로, 작업 단위는 작게 만들고 완료 기준을 명확히 둔다.
 - 논문 해석은 `docs/06_paper_triage.md` 기준으로 제한한다.
 - 모든 작업은 1인 1주 브랜치를 쓰되, 브랜치명에는 개인 이름을 넣지 않는다.
@@ -31,10 +34,10 @@
 
 | Owner | Branch | Scope |
 | --- | --- | --- |
-| 한지후 | `exp/problem-3-denoising-extension` | 핵심 구현, Problem 3 extension, 최종 통합 |
-| 김건우 | `feat/problem-1-2-circuit-validation` | Qiskit 적용, circuit/resource 검증 |
-| 임채진 | `docs/final-report-storyline` | 문제 해석, 논문 핵심, 보고서/발표 흐름 |
-| 김승빈 | `exp/problem-1-2-result-pipeline` | 환경 복구, baseline 실행 재현, 결과 파일 확인 |
+| 한지후 | `docs/metadata-sync` 또는 작업별 branch | 핵심 구현, 최종 통합, README/issue sync |
+| 김건우 | `docs/code-qiskit-consistency` | 코드/Qiskit 구현 해석, conditional state/resource 검수 |
+| 임채진 | `docs/final-report-storyline` | ipynb 최종 보고서, 1/2번 형식 유지, 3번 답변 추가 |
+| 김승빈 | `docs/problem-3-physics-packaging` | 물리 해석, figure/table, support worker 재현 로그 |
 
 ## Timeline
 
@@ -45,7 +48,7 @@
 - 한지후: Problem 1/2 baseline과 테스트를 유지하고 Problem 3 후보를 구현 난도 기준으로 정리한다.
 - 김건우: Qiskit resource check를 실행하고 random-unitary 회로의 depth, rotation 수, entangler 수를 표로 만든다.
 - 임채진: 지정문제에서 요구하는 입력, 출력, 평가 기준을 짧게 정리한다.
-- 김승빈: Python 환경을 복구하고 baseline 실행 명령이 통과하는지 확인한다.
+- 김승빈: Problem 3 물리 해석과 support worker 결과에서 figure/table 후보를 정리한다.
 
 완료 기준:
 
@@ -54,14 +57,14 @@
 - Qiskit resource proxy 표 초안 확보
 - Problem 3 후보 1개와 backup 1개 선택
 
-### Day 1 저녁: Problem 3 최소 구현 시작
+### Day 1 저녁: Problem 3 main candidate 안정화
 
-목표: 새 아이디어를 늘리지 않고 최소 실험 코드를 만든다.
+목표: 새 아이디어를 늘리지 않고 main candidate의 gate, metric, limitation을 안정화한다.
 
-- 한지후: continuous projected denoising 최소 구현과 채택 게이트를 완성한다.
-- 김건우: extension이 기존 resource proxy와 어떻게 비교되는지 정리한다.
-- 임채진: main claim이 발표 가능한 문장인지 확인한다.
-- 김승빈: 환경이 복구되었으면 실행 로그와 결과 저장 경로를 확인한다. 환경이 여전히 깨져 있으면 더 이상 코드를 맡지 않고 문서/체크리스트로 지원한다.
+- 한지후: continuous projected denoising과 채택 게이트가 seed sweep summary와 일치하는지 확인한다.
+- 김건우: extension 설명이 실제 코드/Qiskit/backend 사용 위치와 충돌하지 않는지 검수한다.
+- 임채진: main claim이 발표 가능한 문장인지 확인하고 notebook에 반영한다.
+- 김승빈: 물리 해석, 실행 로그, 결과 저장 경로를 final evidence로 정리한다.
 
 완료 기준:
 

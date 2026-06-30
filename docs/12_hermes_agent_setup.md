@@ -60,14 +60,14 @@ For Problem 3, only treat a result as main if the adoption gate passes.
 | Task | Purpose | Typical command |
 | --- | --- | --- |
 | `p3-status` | 테스트, git 상태, Problem 3 현재 결과 확인 | `.\scripts\invoke_hermes_task.ps1 p3-status` |
-| `feedback-loop` | 최종 파이프라인 실행, 결과 분석, GitHub issue 재할당 반복 | `.\scripts\invoke_hermes_task.ps1 feedback-loop -Yolo -MaxTurns 260` |
 | `final-pipeline` | 테스트, 제출용 실행, 20 seed sweep, 최종 claim 점검 자동 실행 | `.\scripts\invoke_hermes_task.ps1 final-pipeline -Yolo -MaxTurns 240` |
 | `final-sync-fix` | 팀원 최신 변경 반영, 테스트/파이프라인 점검, 실패 시 최소 수정 루프 | `.\scripts\invoke_hermes_task.ps1 final-sync-fix -Yolo -MaxTurns 360` |
 | `quantitative-evaluation` | Problem 1/2 진단, Hamiltonian/projection 확인, Bloch 시각화 생성 | `.\scripts\invoke_hermes_task.ps1 quantitative-evaluation -Yolo -MaxTurns 240` |
-| `continuous-p3-improvement` | Problem 3 실험, 분석, 피드백, 검증을 상시 반복 | `.\scripts\invoke_hermes_task.ps1 continuous-p3-improvement -Yolo -MaxTurns 420` |
+| `problem-3-finalist-autopilot` | finalist 관점의 Problem 3 evidence 개선 및 guardrail 점검 | `.\scripts\invoke_hermes_task.ps1 problem-3-finalist-autopilot -Yolo -MaxTurns 620` |
 | `p3-seed-sweep` | 20개 seed 반복 실행과 robustness 요약 생성 | `.\scripts\invoke_hermes_task.ps1 p3-seed-sweep -Yolo -MaxTurns 180` |
 | `p3-report-draft` | 실제 결과에 기반한 보고서 초안 생성 | `.\scripts\invoke_hermes_task.ps1 p3-report-draft -Yolo` |
 | `p3-judge-review` | 심사자 관점의 약점과 개선 우선순위 점검 | `.\scripts\invoke_hermes_task.ps1 p3-judge-review` |
+| `p3-defense-evidence` | 발표 Q&A 방어 근거 정리 | `.\scripts\invoke_hermes_task.ps1 p3-defense-evidence` |
 
 프롬프트 원문은 `.hermes/tasks/`에 둔다. task를 수정할 때는 실행 명령, 수정 허용 범위, 최종 응답 형식을 명확히 적는다.
 

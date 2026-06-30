@@ -70,9 +70,9 @@ Get-Content results\problem_3_finalist_autopilot\latest_status.md -Wait -Tail 12
 | Member | Focus | Output |
 | --- | --- | --- |
 | 한지후 | 자동화 실행, 통합, 최종 gatekeeping | passing tests, status 확인, merge 판단 |
-| 김건우 | 물리 해석 검수 | Hamiltonian/projection/measurement 설명 검증 |
+| 김건우 | 코드/Qiskit consistency 검수 | conditional state, Hamiltonian/projection, resource 설명 검증 |
 | 임채진 | 문제 해석과 보고서 스토리 | Problem 3(a/b/c) 충족 여부, 발표 문장 |
-| 김승빈 | 실행/로그/figure 보조 | seed sweep 확인, figure/table 재현 |
+| 김승빈 | 물리 해석, 실행 로그, figure/table 패키징 | measurement-induced denoising 해석, seed sweep 확인, figure/table 재현 |
 
 ## 하지 말아야 할 주장
 
