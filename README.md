@@ -24,6 +24,25 @@
 
 현재 진행도와 역할은 `docs/00_team_dashboard.md`에서 먼저 확인하고, 3일 전체 로드맵은 필요할 때 `docs/16_three_day_roadmap.md`에서 확인합니다.
 
+## Subproblem Completion Matrix
+
+아래 표는 지정문제 PDF의 세부 소문항 기준으로 현재 실험과 보고서/해석 준비도를 나눈 상태판입니다. `실험`은 실행 가능한 코드와 결과 산출 여부, `보고서`는 최종 notebook/report에 바로 넣을 수 있는 설명과 figure/table 준비도를 뜻합니다.
+
+| Subproblem | 요구사항 요약 | 실험 | 보고서 | 근거/entry point | 남은 일 |
+| --- | --- | --- | --- | --- | --- |
+| 1(a) | `|00>` 주변 2-qubit target ensemble `S0` 생성 | 완료 | 보강 필요 | `scripts/problem_1a_generate_target_ensemble.py`, `src/quantum_cylinder/problem_1a_target_ensemble.py` | cluster fidelity와 `N=80`, `sigma=0.10` 선택 이유를 최종 보고서에 명시 |
+| 1(b) | fidelity, MMD, Wasserstein-type distance 정의/계산 | 완료 | 거의 완료 | `scripts/problem_1b_check_metrics.py`, `results/quantitative_evaluation/problem_1b_metric_diagnostics.md` | 수식 정의와 `MMD(S0,S0)=0`, `W(S0,S0)=0` sanity check를 notebook에 반영 |
+| 1(c) | random-unitary forward diffusion, 거리 plot, cluster 변화 설명 | 완료 | 보강 필요 | `scripts/run_problem_1_2_baselines.py`, `results/problem_1_2_baseline/distance_curves.png` | strong-scrambling baseline이라는 정성 설명과 cluster 변화 figure 선택 |
+| 2(a) | 3-qubit fixed Hamiltonian 구성 | 완료 | 검수 필요 | `scripts/problem_2a_print_hamiltonian.py`, `results/quantitative_evaluation/problem_2a_hamiltonian_diagnostics.md` | 김건우가 qubit order, Pauli terms, Hermiticity 설명 최종 검수 |
+| 2(b) | Hamiltonian evolution 후 complement qubit projection ensemble 생성 | 완료 | 검수 필요 | `scripts/problem_2b_projection_diagnostics.py`, `results/quantitative_evaluation/problem_2b_projection_diagnostics.md` | auxiliary/complement qubit 측정 후 조건부 상태가 되는 과정을 보고서에 명확히 설명 |
+| 2(c) | `dist(S_t^Ham,S0)` plot 및 random-unitary와 정성 비교 | 완료 | 보강 필요 | `scripts/problem_2c_plot_bloch_comparison.py`, `results/quantitative_evaluation/problem_2c_bloch_summary.md` | `k`와 `t`를 같은 x축으로 비교하지 않는다는 점, reduced Bloch-vector figure 해석 추가 |
+| 2(d) | comparable diffusion strength에서 resource/control-cost proxy 비교 | 완료 | 보강 필요 | `results/problem_1_2_baseline/comparable_strength_resource_matches.csv`, `docs/15_quantitative_evaluation_plan.md` | "절대 우위"가 아니라 random control cost와 fixed-control/time schedule trade-off로 서술 |
+| 3(a) | toy reverse/denoising step 시연 | 완료 | 거의 완료 | `scripts/run_problem_3_continuous_denoising.py`, `submission/problem3_continuous_measurement_denoising.py` | fixed measurement-induced non-unitary map이라는 제한을 명확히 표기 |
+| 3(b) | diffusion setting controlled modification 및 trade-off 분석 | 완료 | 거의 완료 | `results/problem_3_seed_sweep/seed_sweep_summary.md`, `results/problem_3_frozen_parameter_holdout/frozen_holdout_summary.md` | continuous basis search의 이득과 axis-only margin이 작다는 limitation을 함께 제시 |
+| 3(c) | 개선안 제안, baseline과 작은 예제로 비교 | 완료 | 보강 필요 | `docs/22_overnight_problem_3_evidence_handoff.md`, `results/problem_3_baseline_collapse_defense/baseline_collapse_summary.md` | hybrid 2-qubit extension은 front-facing extension으로만 사용하고 hardware advantage 주장은 금지 |
+
+현재 판단: Problem 1/2/3의 **실험 코드는 전 소문항 기준으로 실행 가능**합니다. 최종 경쟁력은 남은 코드 추가보다, 1(c), 2(b), 2(c), 2(d), 3(b), 3(c)의 **정성 해석과 limitation 문장**을 얼마나 정확히 보고서에 옮기는지에 달려 있습니다.
+
 | Area | Status | Owner | Next action |
 | --- | --- | --- | --- |
 | Repository setup | Done | 한지후 | PR 단위 변경과 자동 CI 유지 |
