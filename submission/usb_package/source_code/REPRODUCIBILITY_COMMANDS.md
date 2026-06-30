@@ -30,7 +30,8 @@ python scripts/summarize_problem_3_method_portfolio.py
 
 Expected outputs:
 
-- Problem 1(c) Haar reference figure/table under `solution/`.
+- Problem 1(c) Haar reference figure/table under `solution/`, including the
+  emphasized Haar mean/band and plateau zoom figure.
 - Problem 2 readability figures under `solution/figures/`, including
   `fig_p2_fixed_h_baseline_visible.png`.
 - Problem 3 seed-sweep summary showing the measurement-basis trade-off and the

@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 CSV_FILES = [
+    ROOT / "solution" / "tables" / "problem1_haar_reference.csv",
     ROOT / "solution" / "tables" / "problem_1c_random_unitary_metrics.csv",
     ROOT / "solution" / "tables" / "problem_2_hamiltonian_metrics.csv",
     ROOT / "solution" / "tables" / "problem_2d_resource_matches.csv",
@@ -19,6 +20,7 @@ CSV_FILES = [
 ]
 
 FIGURE_FILES = [
+    ROOT / "solution" / "figures" / "fig2_random_unitary_haar_baseline.png",
     ROOT / "solution" / "figures" / "fig_p2_fixed_h_baseline_visible.png",
     ROOT / "solution" / "figures" / "fig_metric_aligned_comparison_readable.png",
 ]
@@ -60,6 +62,7 @@ def validate_notebook() -> None:
         "S_t^{\\mathrm{Ham}}",
         "p_{\\mathrm{succ}}",
         "R_{\\mathrm{div}}",
+        "fig2_random_unitary_haar_baseline.png",
         "fig_p2_fixed_h_baseline_visible.png",
     ]
     missing = [needle for needle in required if needle not in text]

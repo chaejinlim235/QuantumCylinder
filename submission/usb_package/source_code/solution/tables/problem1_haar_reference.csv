@@ -1,3 +1,3 @@
-metric,haar_mean,haar_std,final_step_distance,notes
-mmd,0.869583,0.024043,0.828093,"64 Haar draws with the same ensemble size N=80; reference level, not a training target"
-wasserstein,0.724439,0.021491,0.686108,"64 Haar draws with the same ensemble size N=80; reference level, not a training target"
+metric_label,haar_mean,haar_std,final_k12_distance,notes
+D_MMD,0.869583,0.024043,0.828093,"64 Haar draws with the same ensemble size N=80; reference level, not a training target"
+W_1_minus_F,0.724439,0.021491,0.686108,"64 Haar draws with the same ensemble size N=80; reference level, not a training target"

@@ -19,14 +19,14 @@ step.
 | File | Role |
 | --- | --- |
 | `solution_1.ipynb` | Final judge-facing answer for Problems 1(a) through 3(c). |
-| `figures/fig2_random_unitary_haar_baseline.png` | Problem 1(c) random-unitary curve with Haar-like reference baseline. |
+| `figures/fig2_random_unitary_haar_baseline.png` | Problem 1(c) random-unitary curve with an emphasized Haar reference mean/band and plateau zoom. |
 | `figures/problem_1_2_distance_curves.png` | Random-unitary and Hamiltonian projected-diffusion distance curves. |
 | `figures/problem_1_2_metric_aligned_comparison.png` | Problem 2(d) comparable-strength resource/control comparison. |
 | `figures/fig_p2_fixed_h_baseline_visible.png` | Problem 2 fixed-\(H\) projected-diffusion baseline shown in a standalone readable panel. |
 | `figures/fig_metric_aligned_comparison_readable.png` | Problem 2(c,d) metric-aligned comparison with fixed-\(H\) baseline emphasized. |
 | `figures/problem_3a_denoising_improvement.png` | Problem 3(a) measurement-induced denoising result. |
 | `figures/problem_3c_hamiltonian_variant_summary.png` | Problem 3(c) two-way and ablation comparison. |
-| `tables/problem1_haar_reference.csv` | Haar reference values used in Problem 1(c). |
+| `tables/problem1_haar_reference.csv` | Haar reference values used in Problem 1(c), labeled with \(D_{\mathrm{MMD}}\) and \(W_{1-F}\). |
 | `tables/problem3b_measurement_basis_tradeoff.csv` | Problem 3(b) measurement-basis trade-off table. |
 | `tables/problem3c_analysis_guided_improvement.csv` | Problem 3(c) baseline, ablation, and two-way comparison table. |
 

@@ -43,13 +43,26 @@ Added:
 - `solution/figures/fig_p2_fixed_h_baseline_visible.png`
 - `solution/figures/fig_metric_aligned_comparison_readable.png`
 
+Regenerated for readability:
+
+- `solution/figures/fig2_random_unitary_haar_baseline.png`
+
 Regeneration command:
 
 ```powershell
+python scripts/create_solution_haar_baseline.py
 python scripts/create_readable_problem2_figures.py
 ```
 
-Both figures use existing CSV data only. No new experimental data was created.
+These figures use existing deterministic result data only. No new experimental
+data was created.
+
+## Problem 1(c) Haar Baseline Visibility
+
+Resolved. The Haar reference mean is now a thicker black dashed line, the
+one-standard-deviation band is highlighted in gold, and a lower zoom row shows
+the \(k \geq 1\) plateau region where the random-unitary trajectory overlaps
+the Haar reference level.
 
 ## P2 Fixed-H Baseline Visibility
 

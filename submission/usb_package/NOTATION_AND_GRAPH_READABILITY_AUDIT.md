@@ -26,6 +26,7 @@ labels such as `mmd`, `wasserstein`, `mmd_gain`, `wasserstein_gain`,
 Updated or clarified final-facing tables:
 
 - `solution/tables/problem_1c_random_unitary_metrics.csv`
+- `solution/tables/problem1_haar_reference.csv`
 - `solution/tables/problem_2_hamiltonian_metrics.csv`
 - `solution/tables/problem_2d_resource_matches.csv`
 - `solution/tables/problem3b_measurement_basis_tradeoff.csv`
@@ -34,6 +35,9 @@ Updated or clarified final-facing tables:
 The notebook and presentation now use \(D_{\mathrm{MMD}}\), \(W_{1-F}\),
 \(S_k^{\mathrm{RU}}\), \(S_t^{\mathrm{Ham}}\), \(\Delta D\),
 \(p_{\mathrm{succ}}\), \(R_{\mathrm{div}}\), and \(\beta\).
+
+The Problem 1(c) Haar-reference figure was also regenerated so the Haar mean
+and one-standard-deviation band remain visible in the plateau region.
 
 ### 2. Does cell 11 or the relevant graph hide the Problem 2 fixed-Hamiltonian baseline?
 

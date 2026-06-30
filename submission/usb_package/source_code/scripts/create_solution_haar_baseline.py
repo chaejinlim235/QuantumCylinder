@@ -52,26 +52,107 @@ def plot_haar_reference(
 ) -> None:
     x_values = [float(row["parameter"]) for row in random_rows]
     metric_specs = [
-        ("mmd", "MMD distance", "#1f77b4"),
-        ("wasserstein", "Wasserstein-type distance", "#d62728"),
+        ("mmd", r"Fidelity-kernel MMD, $D_{\mathrm{MMD}}$", "#1f77b4"),
+        ("wasserstein", r"Wasserstein-type distance, $W_{1-F}$", "#d62728"),
     ]
 
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2), constrained_layout=True)
-    for axis, (metric, ylabel, color) in zip(axes, metric_specs, strict=True):
+    fig, axes = plt.subplots(
+        2,
+        2,
+        figsize=(13.5, 7.8),
+        constrained_layout=True,
+        gridspec_kw={"height_ratios": [1.25, 1.0]},
+    )
+    for col, (metric, ylabel, color) in enumerate(metric_specs):
         y_values = [float(row[metric]) for row in random_rows]
         mean = haar_summary[metric]["mean"]
         std = haar_summary[metric]["std"]
+        lower = mean - std
+        upper = mean + std
 
-        axis.plot(x_values, y_values, marker="o", color=color, label="random-unitary trajectory")
-        axis.axhline(mean, color="#333333", linestyle="--", linewidth=1.5, label="Haar reference mean")
-        axis.fill_between(x_values, mean - std, mean + std, color="#333333", alpha=0.12, label="Haar mean +/- std")
+        axis = axes[0, col]
+        axis.fill_between(
+            x_values,
+            lower,
+            upper,
+            color="#f2c94c",
+            alpha=0.35,
+            label=r"Haar mean $\pm$ std",
+            zorder=1,
+        )
+        axis.plot(
+            x_values,
+            y_values,
+            marker="o",
+            markersize=6.5,
+            markeredgecolor="white",
+            markeredgewidth=0.9,
+            color=color,
+            linewidth=2.2,
+            label=r"random-unitary $S_k^{\mathrm{RU}}$",
+            zorder=3,
+        )
+        axis.axhline(
+            mean,
+            color="#111111",
+            linestyle=(0, (6, 3)),
+            linewidth=2.8,
+            label="Haar reference mean",
+            zorder=5,
+        )
+        axis.annotate(
+            f"Haar mean\n{mean:.4f} +/- {std:.4f}",
+            xy=(x_values[-1], mean),
+            xytext=(x_values[-1] - 2.7, mean + 0.09),
+            arrowprops={"arrowstyle": "->", "color": "#111111", "lw": 1.2},
+            fontsize=8.5,
+            bbox={"boxstyle": "round,pad=0.25", "fc": "white", "ec": "#777777", "alpha": 0.92},
+        )
         axis.set_title(ylabel)
         axis.set_xlabel("random-unitary diffusion step k")
-        axis.set_ylabel("distance to S0")
+        axis.set_ylabel(r"distance to $S_0$")
+        axis.set_ylim(bottom=-0.035)
         axis.grid(alpha=0.25)
-        axis.legend(fontsize=8)
+        axis.legend(loc="lower right", fontsize=8, framealpha=0.94)
 
-    fig.suptitle("Random-unitary diffusion approaches a Haar-like distance plateau")
+        zoom_axis = axes[1, col]
+        plateau_x = x_values[1:]
+        plateau_y = y_values[1:]
+        zoom_axis.fill_between(
+            plateau_x,
+            lower,
+            upper,
+            color="#f2c94c",
+            alpha=0.42,
+            label=r"Haar mean $\pm$ std",
+            zorder=1,
+        )
+        zoom_axis.plot(
+            plateau_x,
+            plateau_y,
+            marker="o",
+            markersize=7.0,
+            markeredgecolor="white",
+            markeredgewidth=0.9,
+            color=color,
+            linewidth=2.3,
+            zorder=3,
+        )
+        zoom_axis.axhline(mean, color="#111111", linestyle=(0, (6, 3)), linewidth=3.0, zorder=5)
+        zoom_axis.axhline(lower, color="#8a6d00", linestyle=":", linewidth=1.4, zorder=4)
+        zoom_axis.axhline(upper, color="#8a6d00", linestyle=":", linewidth=1.4, zorder=4)
+        zoom_axis.set_title(r"Plateau zoom: $k \geq 1$")
+        zoom_axis.set_xlabel("random-unitary diffusion step k")
+        zoom_axis.set_ylabel(r"distance to $S_0$")
+        zoom_min = min(min(plateau_y), lower) - 0.035
+        zoom_max = max(max(plateau_y), upper) + 0.035
+        zoom_axis.set_ylim(zoom_min, zoom_max)
+        zoom_axis.grid(alpha=0.25)
+
+    fig.suptitle(
+        "Problem 1(c): random-unitary diffusion reaches a Haar-like reference plateau",
+        fontsize=15,
+    )
     fig.savefig(path, dpi=180)
     plt.close(fig)
 
@@ -120,17 +201,17 @@ def main() -> None:
     final_random = random_rows[-1]
     table_rows = [
         {
-            "metric": "mmd",
+            "metric_label": "D_MMD",
             "haar_mean": f"{haar_summary['mmd']['mean']:.6f}",
             "haar_std": f"{haar_summary['mmd']['std']:.6f}",
-            "final_step_distance": f"{float(final_random['mmd']):.6f}",
+            "final_k12_distance": f"{float(final_random['mmd']):.6f}",
             "notes": f"{args.haar_draws} Haar draws with the same ensemble size N={n_samples}; reference level, not a training target",
         },
         {
-            "metric": "wasserstein",
+            "metric_label": "W_1_minus_F",
             "haar_mean": f"{haar_summary['wasserstein']['mean']:.6f}",
             "haar_std": f"{haar_summary['wasserstein']['std']:.6f}",
-            "final_step_distance": f"{float(final_random['wasserstein']):.6f}",
+            "final_k12_distance": f"{float(final_random['wasserstein']):.6f}",
             "notes": f"{args.haar_draws} Haar draws with the same ensemble size N={n_samples}; reference level, not a training target",
         },
     ]

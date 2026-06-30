@@ -42,6 +42,8 @@ Notation note:
 
 Figure: `source_code/solution/figures/fig2_random_unitary_haar_baseline.png`
 
+Figure note: the black dashed line and gold band mark the Haar reference mean and one-standard-deviation band; the lower panels zoom into the \(k \geq 1\) plateau so the baseline remains visible.
+
 Speaker note: "The Haar reference is not a target distribution. It is a calibration level for strong scrambling."
 
 ### Slide 4. Problem 2: Hamiltonian Projected Diffusion
