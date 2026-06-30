@@ -1,17 +1,18 @@
-# Problem 3 Method Portfolio
+# Problem 3 Two-Way Main and Appendix Rows
 
 기준 시각: `2026-06-30`
 
-## 핵심 판단
+## 핵심 변경
 
-Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서의 구조는 다음 순서가 되어야 한다.
+김건우 피드백을 반영해 3-b/3-c의 흐름을 다시 정리한다.
 
-1. 여러 reverse/denoising 아이디어를 제시한다.
-2. 같은 거리 지표와 guardrail로 비교 가능한 것은 한 표에 올린다.
-3. 직접 비교가 어려운 후보는 scope와 caveat를 분리해서 적는다.
-4. 최종 채택 후보와 부록/기각 후보를 명확히 나눈다.
+1. 3-b는 숫자 표가 아니라 분석 섹션으로 쓴다.
+2. 3-c는 기존 방향의 연장이 아니라, 3-b에서 얻은 분석을 바탕으로 새 후보를 제안하는 섹션으로 쓴다.
+3. `axis-only projection`은 우리가 제안한 방법이 아니라 discrete measurement baseline이다.
+4. `continuous measurement-basis post-selection`은 3-b의 controlled modification을 분석하기 위한 주 실험 장치다.
+5. 3-c 본문 main은 `Hamiltonian two-way post-selection`으로 둔다. 나머지 후보는 appendix/ablation으로 내린다.
 
-따라서 actor-critic은 최종 후보 중 하나이며, 전체 방법론을 대체하지 않는다.
+상세 보고서 초안은 `docs/26_problem_3b_to_3c_storyline.md`를 기준으로 한다.
 
 현재 최종 notebook 사본:
 
@@ -19,17 +20,44 @@ Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서
 C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb
 ```
 
-## 비교할 후보
+## 3-b 분석 요약
 
-| Candidate | 역할 | 보고서에서의 위치 | 주의점 |
-| --- | --- | --- | --- |
-| identity/no-denoising input | reverse step을 하지 않은 기준점 | baseline | 성능 후보가 아니라 비교 기준 |
-| best Z/X/Y axis projection | discrete measurement baseline | 3(b) 대조군 | continuous basis가 꼭 필요한지 확인하는 기준 |
-| continuous measurement-basis post-selection | 20-seed gate를 통과한 main quantitative result | 3(a), 3(b) 본문 | axis-only 대비 margin이 작다는 limitation을 함께 적음 |
-| Hamiltonian + random final kick | Hamiltonian post-selection 뒤 작은 random-unitary correction을 붙인 mixture 후보 | 3(c) 후보 | random kick은 약간의 개선 또는 악화를 만들 수 있으므로 main result가 아니라 ablation 후보 |
-| Hamiltonian two-way post-selection | Hamiltonian post-selection을 두 단계로 적용하는 후보 | 3(c) 후보 | 거리 개선이 커질 수 있지만 post-selection success probability가 낮아질 수 있음 |
-| hybrid 1M+1F toy | random-unitary와 Hamiltonian/post-selection을 섞은 hardware-motivated extension | 3(c) 후보 | 1-qubit toy라 main 2-qubit seed sweep과 직접 우열 비교하지 않음 |
-| target-aware actor-critic | raw target reward를 쓰는 policy-search 개선 후보 | 3(c) 후보 또는 appendix | unknown-target 일반 denoiser가 아니라 target-aware toy improvement |
+| 관찰값 | 분석 포인트 | 보고서에서의 의미 |
+| --- | --- | --- |
+| `20 / 20` seeds가 `use_as_main` | seed를 바꿔도 효과가 유지된다. | 단일 seed 우연이 아니라 reproducible toy effect로 말할 수 있다. |
+| median MMD improvement `0.097056`, median Wasserstein improvement `0.147983` | target ensemble 쪽으로 거리 감소가 있다. | reverse/denoising 방향의 신호는 있다. |
+| median axis-only score margin `0.010000` | continuous basis가 axis-only보다 압도적으로 좋지는 않다. | "연속 기저가 항상 우월하다"가 아니라 "작지만 일관된 추가 control knob"로 제한한다. |
+| nonpositive axis-margin rows `18 / 120` | 일부 input step에서는 best axis-only가 비슷하거나 더 낫다. | 3-c는 단순히 basis를 더 촘촘히 찾는 방향이 아니라 trade-off를 개선하는 방향이어야 한다. |
+| median diversity retention `0.823217` | 거리 개선이 ensemble collapse만으로 생긴 것은 아니다. | MMD/Wasserstein만으로 평가하지 않는 이유를 만든다. |
+| median success probability `0.468122` | post-selection 비용은 있지만 near-zero rare event는 아니다. | 3-c에서도 거리 개선과 성공확률을 같이 봐야 한다. |
+| frozen holdout median MMD/W improvements `0.073421` / `0.136641` | train에서 고른 하나의 parameter도 holdout에서 작동한다. | 매 row마다 cherry-pick했다는 의심을 줄인다. |
+
+3-b 결론:
+
+> Continuous measurement-basis control은 작은 state-vector 실험에서 거리 지표를 일관되게 개선하지만, best axis-only baseline 대비 margin은 작다. 따라서 3-c는 "continuous가 더 좋다"를 반복하는 섹션이 아니라, 거리 개선, diversity 유지, post-selection 성공확률 사이의 trade-off를 어떻게 개선하거나 다르게 배치할 수 있는지를 제안하는 섹션이어야 한다.
+
+## 왜 axis-only와 continuous를 쓰는가
+
+`axis-only projection`과 `continuous measurement-basis post-selection`은 팀이 3-c에서 새로 내세우는 후보가 아니다.
+
+- `axis-only projection`: `Z/X/Y` 축 측정만 허용했을 때의 discrete baseline이다. continuous control이 실제로 필요한지 확인하기 위한 기준선이다.
+- `continuous measurement-basis post-selection`: 3-b에서 projection basis와 denoising time `tau`를 통제 변수로 바꾸기 위한 실험 장치다. 축 방향만 보는 대신 Bloch sphere 위의 `(theta, phi)`로 측정 기저를 확장한다.
+- 도입 이유: 3-b의 목적은 "controlled modification이 어떤 trade-off를 만드는가"를 보는 것이므로, discrete baseline과 continuous control을 함께 놓아야 효과와 한계를 동시에 설명할 수 있다.
+
+보고서에서는 이 둘을 "제안 후보"가 아니라 "3-b 분석을 가능하게 하는 기준선과 조작 변수"로 설명한다.
+
+## 3-c Main 후보 도출
+
+3-c의 질문은 다음으로 고정한다.
+
+> 3-b에서 확인한 measurement-induced trade-off를 더 강하게 활용하면 distance gain을 키울 수 있는가? 그 대가는 success probability 감소인가?
+
+| 3-b에서 드러난 병목 | 3-c에서의 위치 | 후보 | 제안 이유 | claim 범위 |
+| --- | --- | --- | --- | --- |
+| 강한 post-selection은 distance를 더 줄일 수 있지만 success probability를 희생한다. | 본문 main | Hamiltonian two-way post-selection | 같은 Hamiltonian/post-selection mechanism을 한 번 더 적용하면 거리 개선을 키울 수 있는지 확인한다. | 더 큰 distance gain, 더 낮은 success probability를 보여주는 analysis-guided improvement |
+| 더 강한 조작이 항상 좋은지 불명확하다. | appendix/ablation | Hamiltonian + random final kick | Hamiltonian post-selection 뒤 작은 random-unitary correction을 붙이면 over-contraction을 완화하거나 추가 개선을 만들 수 있는지 본다. | main result가 아니라 mixture ablation |
+| state-vector 결과를 회로 관점으로 설명하기 어렵다. | appendix/extension | hybrid 1M+1F toy | 보조 큐빗 측정과 post-selection 구조를 가장 작은 hardware-style circuit으로 보여준다. | 2-qubit main result와 직접 우열 비교하지 않는 plausibility extension |
+| target 정보를 사용할 수 있다면 control을 더 잘 고를 수 있는가? | appendix/upper bound | target-aware actor-critic | target ensemble을 reward로 사용할 수 있는 조건에서 filter strength를 policy search로 고른다. | unknown-target denoiser가 아니라 target-aware toy improvement |
 
 ## 현재 고정된 Hamiltonian 후보 수치
 
@@ -43,25 +71,22 @@ C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_varia
 
 해석:
 
-- `Hamiltonian + random final kick`은 MMD는 reference보다 아주 조금 좋아졌지만 Wasserstein은 약간 낮아져, main result가 아니라 mixture ablation 후보로 둔다.
-- `Hamiltonian two-way post-selection`은 거리 개선이 가장 크지만 success probability가 낮아진다. 따라서 3(c)의 좋은 trade-off 후보로 제시한다.
-- main quantitative claim은 여전히 20-seed gate를 통과한 `continuous measurement-basis post-selection`에 둔다.
+- `Hamiltonian two-way post-selection`은 거리 개선이 가장 크지만 success probability가 낮아진다. 이는 3-b에서 확인한 "거리 개선 vs post-selection 비용" trade-off를 가장 선명하게 활용하므로 3-c 본문 main으로 둔다.
+- `Hamiltonian + random final kick`은 MMD는 reference보다 아주 조금 좋아졌지만 Wasserstein은 약간 낮아졌다. 따라서 main result가 아니라 "random correction이 언제 도움이 되는가"를 보는 appendix ablation으로 둔다.
+- `continuous post-selection reference`는 3-c의 새 제안이 아니라 3-b 분석에서 이어지는 비교 기준이다.
 
 ## 최종 선택 규칙
 
-- 3(a), 3(b)의 main result는 `continuous measurement-basis post-selection`으로 둔다.
-- 3(b)는 `axis-only`와 `continuous basis`의 통제 비교를 보여준다.
-- 3(c)는 최소 네 후보를 보여준다.
-  - `Hamiltonian + random final kick`: Hamiltonian post-selection 뒤 random-unitary correction을 붙인 mixture 후보.
-  - `Hamiltonian two-way post-selection`: 같은 Hamiltonian post-selection을 두 단계로 적용한 후보.
-  - `hybrid 1M+1F toy`: 하드웨어 동기와 보조 큐빗 측정 구조를 설명하는 후보.
-  - `target-aware actor-critic`: 성능이 강하지만 target 정보를 쓰는 후보.
-- actor-critic 수치가 좋아도 “최종 방법은 actor-critic 하나”라고 쓰지 않는다.
-- 최종 본문 포트폴리오는 실제 실행 후보와 대조군만 포함한다.
+- 3-b는 `axis-only baseline`과 `continuous basis control`을 통해 trade-off를 분석한다.
+- 3-c 본문 main은 `Hamiltonian two-way post-selection`으로 둔다.
+- actor-critic 수치가 좋아도 "최종 방법은 actor-critic 하나"라고 쓰지 않는다.
+- `axis-only projection`은 후보가 아니라 baseline으로만 둔다.
+- `continuous post-selection`은 3-b 분석 장치이자 reference로 둔다.
+- Hamiltonian + random final kick, hybrid 1M+1F toy, target-aware actor-critic은 appendix/ablation/extension으로 내린다.
 
 ## 실행 명령
 
-아래 명령은 이미 생성된 Problem 3 결과물을 읽어 후보 포트폴리오 표와 그림을 만든다.
+아래 명령은 이미 생성된 Problem 3 결과물을 읽어 two-way main과 appendix/ablation row를 비교하는 표와 그림을 만든다.
 
 ```powershell
 python scripts/summarize_problem_3_method_portfolio.py
@@ -77,15 +102,19 @@ python scripts/summarize_problem_3_method_portfolio.py
 
 ## 보고서 문장
 
-최종 보고서의 안전한 서술:
+3-b:
 
-> 우리는 Problem 3에서 하나의 알고리즘만 제안하지 않고, no-denoising baseline, axis-only projection, continuous measurement-basis post-selection을 기준으로 둔 뒤, Hamiltonian + random final kick, Hamiltonian two-way post-selection, hybrid 1M+1F toy, target-aware actor-critic 후보를 같은 recoverability-aware 관점에서 비교했다. 20-seed robustness gate를 통과한 main result는 continuous post-selection이며, 3(c)의 확장 후보로는 Hamiltonian mixture/two-way, hardware-motivated hybrid toy, target-aware actor-critic policy search를 제시한다. Actor-critic은 성능상 강한 후보지만 raw target reward를 사용하므로 unknown-target 일반 denoiser로 주장하지 않는다.
+> 3-b에서는 보조 큐빗 측정 기저를 discrete `Z/X/Y` 축 baseline과 continuous basis control로 나누어 비교했다. 20개 seed 전체에서 continuous control은 MMD와 Wasserstein-type distance를 안정적으로 줄였지만, best axis-only baseline 대비 median score margin은 `0.010000`으로 작고 `18 / 120` row에서는 margin이 양수가 아니었다. 따라서 이 결과는 continuous basis의 압도적 우월성이 아니라, 거리 개선, diversity retention, post-selection success probability를 함께 봐야 하는 recoverability trade-off를 보여준다.
+
+3-c:
+
+> 3-c에서는 3-b에서 관찰한 trade-off를 바탕으로, 더 강하지만 더 비용이 큰 projected denoising step인 two-way Hamiltonian post-selection을 제안한다. 이 방법은 measurement-induced non-unitary contraction을 두 번 적용해 더 큰 MMD/Wasserstein 개선을 만들지만, 두 번의 post-selection을 통과해야 하므로 success probability가 낮아진다. Hamiltonian + random final kick, hybrid 1M+1F toy, target-aware actor-critic은 본문 main이 아니라 appendix/ablation 후보로 제한한다.
 
 ## 팀원별 확인 포인트
 
 | Member | 확인할 것 |
 | --- | --- |
-| 임채진 | 최종 ipynb에서 3(c)가 actor-critic 단독 구조가 아니라 후보 비교 구조인지 확인 |
-| 김승빈 | hybrid 1M+1F와 continuous post-selection의 물리적 해석, 보조 큐빗 측정의 필요성 검수 |
-| 김건우 | 후보별 코드와 metric 해석이 실제 구현과 맞는지 검수 |
+| 임채진 | 최종 ipynb에서 3-b 분석이 먼저 나오고 3-c main이 two-way projected denoising으로 도출되는지 확인 |
+| 김승빈 | post-selection과 보조 큐빗 측정 해석, Hamiltonian two-way의 success probability trade-off 설명 검수 |
+| 김건우 | axis-only/continuous가 제안 후보가 아니라 3-b baseline/control로 설명되는지, 후보별 코드와 metric 해석이 실제 구현과 맞는지 검수 |
 | 한지후 | `summarize_problem_3_method_portfolio.py`, README, issue, notebook 사본 동기화 |

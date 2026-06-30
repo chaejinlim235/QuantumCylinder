@@ -6,7 +6,7 @@
 
 우리 팀은 ML과 구현에는 강하지만 양자물리 해석은 약하다. 따라서 Problem 3에서는 복잡한 양자 이론을 과장해서 주장하기보다, 작은 state-vector 실험에서 재현 가능한 benchmark를 만들고 그 결과를 방어 가능하게 설명하는 것이 승률이 높다.
 
-선택한 최종 방향은 **hybrid random-unitary + Hamiltonian-inspired diffusion을 앞에 세우고, 기존 continuous post-selection 결과를 안전한 정량 baseline으로 유지하는 전략**이다.
+선택한 최종 보고서 방향은 **3-b에서 continuous post-selection을 controlled modification/reference로 분석하고, 3-c에서는 그 trade-off에서 Hamiltonian two-way post-selection을 본문 main으로 도출하는 전략**이다. Hamiltonian+random final kick, hybrid 1M+1F, actor-critic은 appendix/ablation으로 둔다.
 
 핵심 메시지는 다음과 같다.
 
@@ -26,9 +26,9 @@
 
 자동화는 매 cycle마다 이 세 조건 중 하나 이상을 더 잘 방어하도록 설계한다.
 
-## 현재 가장 안전한 메인 결과
+## 현재 가장 안전한 3-b 분석 결과
 
-현재 Problem 3의 주 결과는 continuous measurement-basis post-selection이다.
+현재 Problem 3(b)의 주 분석 장치는 continuous measurement-basis post-selection이다. 이 결과는 3-c의 새 최종 후보가 아니라, 3-c 후보를 도출하기 위한 controlled modification/reference로 사용한다.
 
 | Metric | Current value |
 | --- | --- |
@@ -40,7 +40,7 @@
 | Median diversity retention | `0.823217` |
 | Median success probability | `0.468122` |
 
-이 결과는 main result로 사용할 수 있지만, axis-only 대비 margin이 작으므로 과장하면 위험하다. 발표에서는 "continuous basis가 압도적으로 좋다"가 아니라 "recoverability-aware benchmark를 만들었다"로 말해야 한다.
+이 결과는 3-b 분석 결과로 사용할 수 있지만, axis-only 대비 margin이 작으므로 과장하면 위험하다. 발표에서는 "continuous basis가 압도적으로 좋다"가 아니라 "3-b에서 recoverability trade-off를 확인했고, 3-c는 그 trade-off를 개선하는 후보를 제안했다"로 말해야 한다.
 
 ## 자동화가 하는 일
 

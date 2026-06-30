@@ -6,10 +6,11 @@ Generated from the Day 2 morning harvest after the overnight finalist autopilot 
 
 Problem 3 자동화는 여기서 멈추고 수확 단계로 전환한다. Cycle 수는 충분하다. 최종 전략은 다음 순서로 고정한다.
 
-1. Main quantitative result: 2-data-qubit continuous measurement-basis post-selection benchmark
+1. Problem 3(b) analysis: 2-data-qubit continuous measurement-basis post-selection as controlled modification/reference
 2. Robustness guardrail: frozen-parameter holdout
 3. Judge-facing defense: baseline/collapse table
-4. Front-facing extension: 1-data-qubit + 1-auxiliary-qubit hybrid random-unitary/Hamiltonian toy
+4. Problem 3(c) main derived from the 3-b trade-off: Hamiltonian two-way post-selection
+5. Appendix/ablation candidates: Hamiltonian + random final kick, hybrid 1M+1F, target-aware actor-critic
 
 이 결과는 hardware advantage나 general quantum advantage가 아니다. 작은 state-vector benchmark/probe로 제한해서 주장한다.
 
@@ -33,9 +34,9 @@ Current source changes to keep:
 
 Generated `results/` files are local artifacts and are not committed by default. They can be regenerated with the commands below.
 
-## Main Quantitative Gate
+## 3-b Quantitative Gate
 
-Use the 20-seed continuous post-selection result as the main quantitative claim.
+Use the 20-seed continuous post-selection result as the 3-b controlled modification/reference. It supports the analysis, not a claim that continuous control is the final 3-c proposal by itself.
 
 | Metric | Value |
 | --- | --- |
@@ -49,7 +50,7 @@ Use the 20-seed continuous post-selection result as the main quantitative claim.
 | Median mean success probability | `0.468122` |
 | Nonpositive axis-margin rows | `18 / 120` |
 
-Safe interpretation: the method reproducibly improves the toy post-selected proxy across seeds, but the axis-only margin is small. Do not claim overwhelming continuous-basis superiority.
+Safe interpretation: the method reproducibly improves the toy post-selected proxy across seeds, but the axis-only margin is small. Use this as recoverability trade-off analysis for 3-b, then derive the 3-c two-way post-selection proposal from that trade-off.
 
 ## Frozen-Parameter Holdout
 
@@ -86,7 +87,7 @@ Safe interpretation: distance metrics alone are insufficient. The intentionally 
 
 ## Hybrid Extension
 
-Purpose: give the team a memorable, hardware-motivated extension without replacing the main result.
+Purpose: give the team a memorable, hardware-motivated 3-c candidate without replacing the 3-b analysis.
 
 | Metric | Value |
 | --- | --- |
@@ -113,7 +114,7 @@ python -m pytest
 
 ## Final Report Wording
 
-> Our main quantitative result is a reproducible continuous measurement-basis post-selection benchmark over the 2-data-qubit setting. To defend against parameter-selection bias, we additionally evaluate a single train-selected continuous parameter tuple on held-out seeds. To defend against metric-only collapse, we compare distance improvement with diversity retention and success probability. As a hardware-motivated extension, we test a 1-data-qubit + 1-auxiliary-qubit hybrid random-unitary/Hamiltonian-inspired toy. These are small state-vector benchmarks/probes, not hardware advantage or broad quantum advantage.
+> Problem 3(b) uses continuous measurement-basis post-selection as a controlled modification/reference over the 2-data-qubit setting. It reproducibly improves MMD/Wasserstein, but the margin over the axis-only baseline is small, so we interpret the result as a recoverability trade-off involving distance improvement, diversity retention, and post-selection success probability. Problem 3(c) then proposes candidates that rebalance this trade-off: Hamiltonian two-way, Hamiltonian + random final kick, hybrid 1M+1F, and target-aware actor-critic under a target-aware limitation. These are small state-vector benchmarks/probes, not hardware advantage or broad quantum advantage.
 
 ## Next Human Step
 
