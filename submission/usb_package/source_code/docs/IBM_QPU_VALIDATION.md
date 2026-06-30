@@ -89,8 +89,18 @@ Counts extraction and slide summary generation use standard-library CSV/JSON
 processing:
 
 ```powershell
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r6pmu9n7c73an9qgg --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r71fccmks73d5nmg0 --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_4096x5/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id d91r6pmu9n7c73an9qgg `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
+
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id d91r71fccmks73d5nmg0 `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_4096x5/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+
 python scripts/summarize_ibm_qpu_p3b_results.py
 ```
 

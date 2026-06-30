@@ -1,5 +1,12 @@
 # QuantumCylinder Slide Text
 
+## Deck Route
+
+This is a single submitted 15-minute-capable deck.
+Main round: use the 5-minute core path.
+Final round: use the same deck and expand into the 15-minute path.
+No separate 5-minute deck is submitted.
+
 ## Core Slides
 
 ### Slide 1. QuantumCylinder
@@ -16,7 +23,7 @@ Speaker note: "The goal is not to overclaim. We give a complete small-scale benc
 - Problem 1: target ensemble, metrics, random-unitary diffusion.
 - Problem 2: fixed Hamiltonian projected diffusion and resource/control comparison.
 - Problem 3: measurement-induced denoising, measurement-basis trade-off, two-way post-selection.
-- Package includes final notebook, figures, tables, tests, and source code.
+- Package includes split final notebooks, figures, tables, tests, and source code.
 
 Speaker note: "This slide anchors completeness and source-code clarity."
 
@@ -191,5 +198,6 @@ python scripts/summarize_problem_3_method_portfolio.py
   - beta `0.2500pi`: mean p(F=0) `0.893164`, selected entropy `1.492915`.
   - beta `0.5000pi`: mean p(F=0) `0.661377`, selected entropy `1.581403`.
   - beta `0.7500pi`: mean p(F=0) `0.351270`, selected entropy `1.736465`.
-- IBM QPU Problem 3-b mini validation is hardware-execution evidence for tiny representative circuits and does not replace the state-vector benchmark.
+- IBM QPU Problem 3-b mini validation is hardware-execution evidence for tiny
+  representative circuits and does not replace the state-vector benchmark.
 - No hardware advantage claim.

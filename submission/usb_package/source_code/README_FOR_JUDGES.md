@@ -23,6 +23,10 @@ The top-level USB split notebooks preserve the problem-by-problem reading
 order. This `solution/` folder is the source-inspection copy of the compact
 reference solution.
 
+The submitted presentation route uses one same 15-minute-capable English deck.
+The main round follows the 5-minute core path, and the final round uses the
+same deck expanded to the 15-minute path.
+
 ## What Is Included
 
 | Path | Purpose |

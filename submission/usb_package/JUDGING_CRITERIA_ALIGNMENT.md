@@ -59,6 +59,11 @@ and support both a five-minute core path and a fifteen-minute expanded path.
 IBM Cloud/QPU validation appears as a short Problem 3(b) core callout, with
 job-level details kept in appendix/Q&A material.
 
+The presentation route uses one same submitted 15-minute-capable English deck:
+the main round follows the 5-minute core path, and the final round uses the
+same deck expanded to the 15-minute path. No separate 5-minute deck is
+submitted.
+
 ## Source-Code Inspection Readiness
 
 `source_code/README_FOR_JUDGES.md`, `CODE_MANIFEST.md`, and

@@ -16,6 +16,11 @@ For the submitted presentation, open:
 1. `presentation/QuantumCylinder_presentation.pdf`
 2. `presentation/PRESENTATION_STORYBOARD_EN.md`
 3. `presentation/PRESENTATION_15MIN_SPEAKER_SCRIPT_EN.md`
+4. `presentation/MANUAL_PRESENTATION_EXPORT_GUIDE.md`
+
+The submitted presentation material is one same 15-minute-capable English
+deck. Main round uses the 5-minute core path. Final round uses the same deck
+and expands into the 15-minute path. No separate 5-minute deck is submitted.
 
 For source-code inspection, open:
 

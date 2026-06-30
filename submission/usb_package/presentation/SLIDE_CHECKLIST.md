@@ -4,10 +4,12 @@
 - [x] PDF exists: `QuantumCylinder_presentation.pdf`.
 - [x] PDF metadata opens locally: 15 pages, not encrypted.
 - [x] PDF first page renders locally with a font-substitution warning only.
+- [x] One same submitted deck supports both the 5-minute and 15-minute routes.
 - [x] First 5 minutes tell the full story.
 - [x] 5-minute core path is documented in `PRESENTATION_STORYBOARD_EN.md`.
 - [x] 15-minute expanded path is documented in `PRESENTATION_STORYBOARD_EN.md`.
 - [x] Appendix supports Q&A.
+- [x] Manual PDF/PPT export guide is documented.
 - [x] IBM Cloud validation appears as a short Problem 3(b) core callout in the slide text/storyboard.
 - [x] All numbers are traceable to `solution/tables/` or notebook text.
 - [x] No quantum advantage claim.

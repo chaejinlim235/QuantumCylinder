@@ -3,7 +3,7 @@
 This is IBM QPU validation for the tiny Problem 3(b) measurement-basis
 mechanism, not the main benchmark.
 
-The main scientific claims in the final notebook come from the reproducible
+The main scientific claims in the final split notebooks come from the reproducible
 state-vector benchmark and the traceable CSV/figure artifacts under
 `solution/`. The IBM Quantum path only checks whether tiny representative
 circuits can be prepared, transpiled, and optionally submitted through Qiskit
@@ -52,25 +52,51 @@ post-selected map; it does not replace the state-vector benchmark.
 Dry-run:
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --backend ibm_fez --shots 2048 --repeats 3 --dt 0.20 --trotter-steps 1 --save-dir results/ibm_qpu_validation/p3b_fez_2048x3_dryrun
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --backend ibm_fez `
+  --shots 2048 `
+  --repeats 3 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3_dryrun
 ```
 
 Submit:
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --submit --backend ibm_fez --shots 2048 --repeats 3 --dt 0.20 --trotter-steps 1 --wait-minutes 5 --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --submit `
+  --backend ibm_fez `
+  --shots 2048 `
+  --repeats 3 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --wait-minutes 5 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
 ```
 
 Higher precision submit:
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --submit --backend ibm_fez --shots 4096 --repeats 5 --dt 0.20 --trotter-steps 1 --wait-minutes 10 --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --submit `
+  --backend ibm_fez `
+  --shots 4096 `
+  --repeats 5 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --wait-minutes 10 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
 ```
 
 Retrieve:
 
 ```powershell
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id JOB_ID --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_retrieved_JOB_ID
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id JOB_ID `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_retrieved_JOB_ID
 ```
 
 Completed jobs included in this USB package:
@@ -82,8 +108,17 @@ Retrieve the included jobs again in `.venv_ibm` or any environment with
 `qiskit-ibm-runtime` installed:
 
 ```powershell
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r6pmu9n7c73an9qgg --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r71fccmks73d5nmg0 --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_4096x5/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id d91r6pmu9n7c73an9qgg `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
+
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id d91r71fccmks73d5nmg0 `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_4096x5/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
 ```
 
 Regenerate the slide-ready summary:

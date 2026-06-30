@@ -29,6 +29,10 @@ The USB split notebooks are the primary judge-facing report. The compact
 notebook under `submission/usb_package/source_code/solution/solution_1.ipynb`
 and the root `solution/` folder remain source-code/reference copies.
 
+The submitted presentation material is one same 15-minute-capable English
+deck. Main round uses the 5-minute core path, and final round uses the same
+deck expanded to 15 minutes. No separate 5-minute deck is submitted.
+
 ## Final Submission Structure
 
 ```text

@@ -59,7 +59,13 @@ $env:QISKIT_IBM_CHANNEL = "ibm_cloud"
 ## Dry-Run Command
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --backend ibm_fez --shots 2048 --repeats 3 --dt 0.20 --trotter-steps 1 --save-dir results/ibm_qpu_validation/p3b_fez_2048x3_dryrun
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --backend ibm_fez `
+  --shots 2048 `
+  --repeats 3 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3_dryrun
 ```
 
 Without `--submit`, no real QPU job is submitted. If credentials are missing,
@@ -68,19 +74,39 @@ the script saves a local dry-run report and explains what is missing.
 ## Submit Command
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --submit --backend ibm_fez --shots 2048 --repeats 3 --dt 0.20 --trotter-steps 1 --wait-minutes 5 --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --submit `
+  --backend ibm_fez `
+  --shots 2048 `
+  --repeats 3 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --wait-minutes 5 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
 ```
 
 Higher precision option:
 
 ```powershell
-python scripts/ibm_qpu_problem3b_basis_sweep.py --submit --backend ibm_fez --shots 4096 --repeats 5 --dt 0.20 --trotter-steps 1 --wait-minutes 10 --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+python scripts/ibm_qpu_problem3b_basis_sweep.py `
+  --submit `
+  --backend ibm_fez `
+  --shots 4096 `
+  --repeats 5 `
+  --dt 0.20 `
+  --trotter-steps 1 `
+  --wait-minutes 10 `
+  --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
 ```
 
 ## Retrieve Command
 
 ```powershell
-python scripts/ibm_qpu_extract_p3b_counts.py --job-id JOB_ID --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_retrieved_JOB_ID
+python scripts/ibm_qpu_extract_p3b_counts.py `
+  --job-id JOB_ID `
+  --backend ibm_fez `
+  --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json `
+  --save-dir results/ibm_qpu_validation/p3b_retrieved_JOB_ID
 ```
 
 Retrieval loads the job by id, saves the current status, and analyzes counts if

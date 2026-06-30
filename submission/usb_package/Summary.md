@@ -16,6 +16,18 @@ reproduction commands without reading the development repository.
    and 15-minute paths.
 5. For source-code inspection, open `source_code/README_FOR_JUDGES.md`.
 
+## Single Submitted Deck Route
+
+This is a single submitted 15-minute-capable deck.
+
+- Main round: use the 5-minute core path.
+- Final round: use the same deck and expand into the 15-minute path.
+- No separate 5-minute deck is submitted.
+
+Manual export guidance is in
+`presentation/MANUAL_PRESENTATION_EXPORT_GUIDE.md` and
+`presentation/PDF_EXPORT_CHECKLIST.md`.
+
 ## Five-Minute Main-Round Path
 
 Use `presentation/PRESENTATION_STORYBOARD_EN.md` for the timed path:
@@ -47,6 +59,8 @@ usb_package/
     PRESENTATION_SLIDE_TEXT_EN.md
     PRESENTATION_STORYBOARD_EN.md
     PRESENTATION_15MIN_SPEAKER_SCRIPT_EN.md
+    MANUAL_PRESENTATION_EXPORT_GUIDE.md
+    PDF_EXPORT_CHECKLIST.md
     SLIDE_CHECKLIST.md
   source_code/
     README_FOR_JUDGES.md
