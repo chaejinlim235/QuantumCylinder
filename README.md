@@ -1,103 +1,76 @@
-# QuantumCylinder
+# QuantumCylinder Final Submission
 
-This repository contains the QuantumCylinder final submission package for the
-2026 Quantum Information contest.
+## 1. 가장 먼저 열 파일
 
-The project studies small-scale quantum diffusion and projected denoising:
+1. `submission/usb_package/presentation/QuantumCylinder_presentation.pdf`
+   - 영어 발표자료.
+   - 본선 5분 발표와 결선 15분 발표에 같은 파일을 사용한다.
+2. `submission/usb_package/solution/Problem 1.ipynb`
+   - Problem 1 최종 풀이.
+3. `submission/usb_package/solution/Problem 2.ipynb`
+   - Problem 2 최종 풀이.
+4. `submission/usb_package/solution/Problem 3.ipynb`
+   - Problem 3 최종 풀이.
+5. `submission/usb_package/source_code/README_FOR_JUDGES.md`
+   - 소스코드 실행 및 검증 안내.
 
-- Problem 1: random-unitary scrambling of a two-qubit target ensemble.
-- Problem 2: fixed Hamiltonian evolution with complement-qubit projection.
-- Problem 3: measurement-induced denoising, analyzed through distance gain,
-  post-selection success probability, and ensemble diversity retention.
+`submission/usb_package/solution/Problem 1.ipynb`,
+`Problem 2.ipynb`, `Problem 3.ipynb`가 primary judge-facing
+notebook이다. `submission/usb_package/source_code/solution/solution_1.ipynb`가
+존재하더라도 이는 compact source-code reference일 뿐이며 primary final answer가
+아니다.
 
-## Read This First
+## 2. 한 문장 기여
 
-For a fast review, use these entry points:
+QuantumCylinder는 random-unitary diffusion과 Hamiltonian projected diffusion을
+같은 fidelity 기반 MMD/Wasserstein-type metric으로 비교하고,
+measurement-induced projected denoising에서 recoverability,
+post-selection success probability, diversity retention의 trade-off를 분석하며,
+이 3-b mechanism을 IBM Cloud의 tiny M+F circuit으로도 검증한다.
 
-| Purpose | File or folder |
-| --- | --- |
-| Primary judge-facing report | `submission/usb_package/solution/Problem 1.ipynb`, `Problem 2.ipynb`, `Problem 3.ipynb` |
-| Submitted presentation deck | `submission/usb_package/presentation/QuantumCylinder_presentation.pdf` |
-| USB package overview | `submission/usb_package/Summary.md` |
-| USB submission guide | `submission/usb_package/README_SUBMISSION.md` |
-| Source-code inspection guide | `submission/usb_package/source_code/README_FOR_JUDGES.md` |
-| Requirement mapping | `submission/usb_package/source_code/PROBLEM_REQUIREMENT_MAP.md` |
-| Reproducibility commands | `submission/usb_package/source_code/REPRODUCIBILITY_COMMANDS.md` |
-| IBM Cloud/QPU validation details | `docs/IBM_QPU_VALIDATION.md` |
+## 3. 문제별 풀이 위치
 
-The USB split notebooks are the primary judge-facing report. The compact
-notebook under `submission/usb_package/source_code/solution/solution_1.ipynb`
-and the root `solution/` folder remain source-code/reference copies.
+| 문제 | 요구사항 | 최종 파일 |
+|---|---|---|
+| 1(a) | \(S_0\) target ensemble 생성 | `submission/usb_package/solution/Problem 1.ipynb` |
+| 1(b) | Fidelity, MMD, Wasserstein-type distance | `submission/usb_package/solution/Problem 1.ipynb` |
+| 1(c) | Random-unitary diffusion trajectory + Haar reference | `submission/usb_package/solution/Problem 1.ipynb` |
+| 2(a) | Fixed Hamiltonian \(H\) | `submission/usb_package/solution/Problem 2.ipynb` |
+| 2(b) | Hamiltonian projected ensemble | `submission/usb_package/solution/Problem 2.ipynb` |
+| 2(c) | \(S_t^{Ham}\) distance curves and comparison | `submission/usb_package/solution/Problem 2.ipynb` |
+| 2(d) | Resource/control-cost proxy | `submission/usb_package/solution/Problem 2.ipynb` |
+| 3(a) | Measurement-induced denoising | `submission/usb_package/solution/Problem 3.ipynb` |
+| 3(b) | Measurement-basis trade-off analysis | `submission/usb_package/solution/Problem 3.ipynb` |
+| 3(c) | Two-way post-selection improvement | `submission/usb_package/solution/Problem 3.ipynb` |
 
-The submitted presentation material is one same 15-minute-capable English
-deck. Main round uses the 5-minute core path, and final round uses the same
-deck expanded to 15 minutes. No separate 5-minute deck is submitted.
+## 4. 핵심 결과
 
-## Final Submission Structure
+- Haar reference:
+  - \(D_{\mathrm{MMD}} = 0.869583 \pm 0.024043\)
+  - \(W_{1-F} = 0.724439 \pm 0.021491\)
+  - Haar는 학습 목표가 아니라 strong-scrambling regime을 해석하기 위한
+    reference level이다.
 
-```text
-submission/usb_package/
-  Summary.md
-  README_SUBMISSION.md
-  solution/
-    Problem 1.ipynb
-    Problem 2.ipynb
-    Problem 3.ipynb
-  presentation/
-  source_code/
-    README_FOR_JUDGES.md
-    CODE_MANIFEST.md
-    PROBLEM_REQUIREMENT_MAP.md
-    REPRODUCIBILITY_COMMANDS.md
-    IBM_QPU_README.md
-    src/
-    scripts/
-    tests/
-    configs/
-    submission/
-    solution/
-```
+- Problem 3-b:
+  - continuous measurement-basis post-selection은 MMD와 Wasserstein-type
+    distance를 줄인다.
+  - axis-only 대비 margin은 작으므로 압도적 우월성을 주장하지 않는다.
+  - 핵심은 distance gain, \(p_{\mathrm{succ}}\), \(R_{\mathrm{div}}\)
+    사이의 trade-off를 분석한다는 점이다.
 
-## One-Sentence Thesis
+- Problem 3-c:
+  - two-way post-selection은 더 큰 distance improvement를 만들지만 success
+    probability를 낮춘다.
+  - 따라서 unconditional win이 아니라 analysis-guided trade-off improvement이다.
 
-Complement-qubit measurement basis can be used as a control knob for an
-effective post-selected non-unitary map, giving a measurable
-recoverability-success-diversity trade-off that motivates the two-way
-post-selection proposal in Problem 3(c).
+- IBM Cloud validation:
+  - `ibm_fez`에서 Problem 3-b tiny M+F measurement-basis sweep을 실행한다.
+  - 두 job이 DONE 상태다.
+  - higher-shot run에서 \(p(F=0)\)가 beta에 따라 약
+    \(0.89 \to 0.66 \to 0.35\)로 변한다.
+  - 이는 hardware-execution validation이며 hardware advantage claim이 아니다.
 
-## What To Check
-
-| Contest criterion | Where it is addressed |
-| --- | --- |
-| Completeness and appropriateness | split notebooks under `submission/usb_package/solution/`, `submission/usb_package/JUDGING_CRITERIA_ALIGNMENT.md` |
-| Fidelity to problem requirements | `submission/usb_package/source_code/PROBLEM_REQUIREMENT_MAP.md` |
-| Novelty of plan and approach | Problem 3(b)/(c) in `submission/usb_package/solution/Problem 3.ipynb` |
-| Presentation and communication | `submission/usb_package/presentation/` and `submission/usb_package/Summary.md` |
-| Source-code inspection readiness | `submission/usb_package/source_code/README_FOR_JUDGES.md` |
-| IBM QPU validation clarity | `docs/IBM_QPU_VALIDATION.md`, `submission/usb_package/source_code/IBM_QPU_README.md` |
-
-## Notation Used In Final Figures
-
-- \(S_0\): initial two-qubit target ensemble near \(|00\rangle\).
-- \(S_k^{\mathrm{RU}}\): ensemble after random-unitary layer \(k\).
-- \(S_t^{\mathrm{Ham}}\): projected data-system ensemble after fixed-Hamiltonian time \(t\).
-- \(D_{\mathrm{MMD}}\): fidelity-kernel MMD distance.
-- \(W_{1-F}\): Wasserstein-type distance with cost \(1-F\).
-- \(p_{\mathrm{succ}}\): post-selection success probability.
-- \(R_{\mathrm{div}}\): diversity retention proxy.
-- \(\beta\): complement-qubit measurement-basis angle.
-- fixed \(H\): Problem 2 Hamiltonian with \(h_x=0.8090, h_y=0.9045, J=1.0\).
-
-## Quick Reproduce
-
-From the repository root:
-
-```powershell
-python -m pytest
-python submission/run_all.py --quick
-```
-
-From the USB source-code package:
+## 5. 실행 명령
 
 ```powershell
 cd submission/usb_package/source_code
@@ -105,38 +78,30 @@ python -m pytest
 python submission/run_all.py --quick
 ```
 
-The deeper reproduction path is documented in
-`submission/usb_package/source_code/REPRODUCIBILITY_COMMANDS.md`.
+Optional inspection commands:
 
-## Key Guardrails
+```powershell
+python scripts/validate_final_csvs_no_pandas.py
+python scripts/scan_for_ibm_secrets.py
+```
 
-The submission does not claim:
+## 6. 제출 패키지 구조
 
-- quantum advantage;
-- hardware advantage;
-- a full trainable QuDDPM;
-- that continuous basis always or strongly beats axis-only projection;
-- that actor-critic is a general unknown-target denoiser;
-- that Hamiltonian projected diffusion is always better than random-unitary
-  diffusion;
-- that IBM QPU results prove superiority.
+```text
+submission/usb_package/
+  presentation/
+  solution/
+  source_code/
+  Summary.md
+  README_SUBMISSION.md
+  JUDGING_CRITERIA_ALIGNMENT.md
+```
 
-IBM QPU results are hardware-execution validation for a tiny Problem 3(b)
-measurement-basis sweep. They support executability of the mechanism but do
-not replace the reproducible state-vector benchmarks or prove superiority.
+## 7. Claim guardrails
 
-## IBM Cloud/QPU Validation
-
-The package includes a completed Problem 3-b IBM QPU basis-sweep mini
-validation on `ibm_fez`:
-
-- job `d91r6pmu9n7c73an9qgg`, `2048` shots, `12` circuits, DONE;
-- job `d91r71fccmks73d5nmg0`, `4096` shots, `20` circuits, DONE.
-
-Read:
-
-- `docs/IBM_QPU_VALIDATION.md`
-- `docs/IBM_QPU_PROBLEM3B_BASIS_SWEEP.md`
-- `results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`
-
-These files contain no tokens or private IBM account credentials.
+- full trainable QuDDPM을 구현했다고 주장하지 않는다.
+- quantum advantage를 주장하지 않는다.
+- hardware advantage를 주장하지 않는다.
+- IBM Cloud 실행은 tiny representative circuit의 hardware-execution validation이다.
+- main quantitative benchmark는 state-vector simulation에 기반한다.
+- actor-critic 결과가 있으면 target-aware toy candidate로만 취급한다.
