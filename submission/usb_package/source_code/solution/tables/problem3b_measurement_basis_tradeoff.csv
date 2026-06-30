@@ -1,5 +1,0 @@
-method,mmd_gain,wasserstein_gain,success_probability,diversity_retention,interpretation
-identity/no-denoising random-unitary input,0.000000,0.000000,1.000000,1.000000,identity reference; no reverse denoising step
-best exact Z/X/Y axis projection,0.086055,0.142594,0.465058,0.810592,interpretable Z/X/Y Pauli-basis baseline
-continuous measurement-basis post-selection,0.097056,0.147983,0.468122,0.823217,continuous Bloch-sphere measurement-basis control; small margin over axis-only
-diagnostic collapse-to-target-centroid filter,0.859292,0.714276,1.000000,0.000000,diagnostic failure mode: distance improves while diversity collapses

@@ -1,4 +1,0 @@
-method,mmd_gain,wasserstein_gain,diversity_retention,success_probability,role_or_interpretation
-one-way continuous post-selection reference,0.056388,0.120620,0.848836,0.467554,3-b reference level for one-way measurement-basis post-selection
-Hamiltonian + random final kick,0.056695,0.119401,0.848403,0.467554,ablation only; random correction is not the main improvement
-Hamiltonian two-way post-selection,0.101374,0.136426,0.829273,0.227065,"3-c main trade-off candidate: stronger distance gain, lower success probability"

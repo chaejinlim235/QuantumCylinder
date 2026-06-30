@@ -1,3 +1,0 @@
-matched_by,random_step,hamiltonian_time,random_mmd,hamiltonian_mmd,mmd_gap,random_wasserstein,hamiltonian_wasserstein,wasserstein_gap,random_single_qubit_rotations,random_two_qubit_entanglers,random_controls,hamiltonian_total_time,hamiltonian_fixed_terms,hamiltonian_fixed_parameters,measurement_basis
-mmd,1,0.3333333333333333,0.8826063592273052,0.8848651158670056,0.002258756639700321,0.7333050697887116,0.4687376177688206,0.26456745201989096,6,1,6,0.3333333333333333,8,3,z
-wasserstein,7,3.333333333333333,0.8533451087141584,1.0422166940019404,0.18887158528778203,0.7062436439267634,0.7074631833239261,0.0012195393971626833,42,7,42,3.333333333333333,8,3,z
