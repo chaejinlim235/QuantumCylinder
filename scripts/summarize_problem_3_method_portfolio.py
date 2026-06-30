@@ -51,8 +51,7 @@ def summarize_existing_baselines(collapse_summary_path: Path) -> list[dict[str, 
     for row in rows:
         key = row["method_key"]
         if key == "diagnostic_collapse_centroid":
-            final_use = "기각: 거리만 보는 평가의 실패 예시"
-            caveat = "물리적 reverse process가 아니며 diversity가 0으로 붕괴한다."
+            continue
         elif key == "continuous_postselection":
             final_use = "3(a)/3(b)의 main quantitative result"
             caveat = "axis-only 대비 margin은 작으므로 작은 post-selected proxy로 제한한다."
@@ -134,8 +133,50 @@ def summarize_actor_critic(actor_path: Path) -> dict[str, Any]:
     }
 
 
+def summarize_hamiltonian_variants(variant_summary_path: Path) -> list[dict[str, Any]]:
+    rows = read_csv_rows(variant_summary_path)
+    result = []
+    labels = {
+        "hamiltonian_then_random_final_kick": "Hamiltonian post-selection + random final kick",
+        "hamiltonian_two_way_postselection": "Hamiltonian two-way post-selection",
+    }
+    final_uses = {
+        "hamiltonian_then_random_final_kick": "3(c) mixture candidate",
+        "hamiltonian_two_way_postselection": "3(c) two-stage Hamiltonian candidate",
+    }
+    caveats = {
+        "hamiltonian_then_random_final_kick": "random final kick can slightly help or hurt; use as mixture ablation, not main result.",
+        "hamiltonian_two_way_postselection": "larger distance improvement costs lower post-selection success probability.",
+    }
+    for row in rows:
+        method = row["method"]
+        if method not in labels:
+            continue
+        result.append(
+            {
+                "method_key": method,
+                "method_label": labels[method],
+                "comparison_scope": "same 2-qubit metric, 5 seeds x 3 input steps",
+                "rows": int(row["rows"]),
+                "success_rows": f"{row['positive_mmd_rows']} MMD / {row['positive_wasserstein_rows']} W",
+                "median_mmd": float("nan"),
+                "median_mmd_improvement": number(row, "median_mmd_improvement"),
+                "median_wasserstein": float("nan"),
+                "median_wasserstein_improvement": number(row, "median_wasserstein_improvement"),
+                "median_diversity_retention": number(row, "median_diversity_retention"),
+                "median_success_probability": number(row, "median_success_probability"),
+                "evidence_level": "5 seeds x 3 input steps",
+                "final_use": final_uses[method],
+                "caveat": caveats[method],
+            }
+        )
+    return result
+
+
 def build_portfolio(args: argparse.Namespace) -> list[dict[str, Any]]:
     rows = summarize_existing_baselines(args.collapse_summary)
+    if args.hamiltonian_variants.exists():
+        rows.extend(summarize_hamiltonian_variants(args.hamiltonian_variants))
     if args.hybrid_best.exists():
         rows.append(summarize_hybrid(args.hybrid_best))
     if args.actor_metrics.exists():
@@ -149,7 +190,7 @@ def write_markdown(path: Path, rows: list[dict[str, Any]]) -> None:
         "",
         "## Purpose",
         "",
-        "Problem 3 is presented as a portfolio of candidate reverse/denoising ideas, not as a single actor-critic-only result. The methods are compared with the same distance language whenever possible, and each row states whether it is a main result, a baseline, an extension, or a rejected diagnostic.",
+        "Problem 3 is presented as a portfolio of candidate reverse/denoising ideas, not as a single actor-critic-only result. The methods are compared with the same distance language whenever possible, and each row states whether it is a main result, a baseline, or an extension candidate.",
         "",
         "## Candidate Table",
         "",
@@ -183,13 +224,13 @@ def write_markdown(path: Path, rows: list[dict[str, Any]]) -> None:
             "",
             "1. Use `continuous measurement-basis post-selection` as the main Problem 3(a/b) quantitative result because it has the 20-seed robustness gate.",
             "2. Use `best exact Z/X/Y axis projection` as the controlled baseline for Problem 3(b), not as a failed or hidden method.",
-            "3. Use `hybrid 1M+1F toy` as a hardware-motivated Problem 3(c) extension because it keeps the auxiliary-measurement mechanism visible at the smallest circuit scale.",
-            "4. Use `target-aware actor-critic` only as a stronger 3(c) candidate under a clear target-aware limitation.",
-            "5. Keep the diagnostic collapse row in the report or appendix to explain why MMD/Wasserstein alone are not sufficient.",
+            "3. Use `Hamiltonian + random final kick` and `Hamiltonian two-way post-selection` as explicit Problem 3(c) candidates because they were proposed by the team and actually executed.",
+            "4. Use `hybrid 1M+1F toy` as a hardware-motivated Problem 3(c) extension because it keeps the auxiliary-measurement mechanism visible at the smallest circuit scale.",
+            "5. Use `target-aware actor-critic` only as a stronger 3(c) candidate under a clear target-aware limitation.",
             "",
             "## Report Claim",
             "",
-            "The final report should say that several reverse-process ideas were tested under common recoverability metrics. The selected story is not that actor-critic replaced all methods. The selected story is that continuous post-selection is the robust main denoising proxy, hybrid 1M+1F is the hardware-motivated extension, and actor-critic is an optional target-aware policy-search improvement with a stricter caveat.",
+            "The final report should say that several reverse-process ideas were tested under common recoverability metrics. The selected story is not that actor-critic replaced all methods. The selected story is that continuous post-selection is the robust main denoising proxy, Hamiltonian mixture/two-way variants are executed 3(c) candidates, hybrid 1M+1F is the hardware-motivated extension, and actor-critic is an optional target-aware policy-search improvement with a stricter caveat.",
             "",
         ]
     )
@@ -261,6 +302,11 @@ def parse_args() -> argparse.Namespace:
         "--actor-metrics",
         type=Path,
         default=ROOT / "results" / "problem_3_actor_critic_denoising" / "actor_critic_metrics.csv",
+    )
+    parser.add_argument(
+        "--hamiltonian-variants",
+        type=Path,
+        default=ROOT / "results" / "problem_3_hamiltonian_variants" / "hamiltonian_variant_summary.csv",
     )
     parser.add_argument(
         "--output-dir",

@@ -19,6 +19,7 @@ def test_method_portfolio_keeps_multiple_candidates(tmp_path: Path) -> None:
     collapse_summary = tmp_path / "collapse.csv"
     hybrid_best = tmp_path / "hybrid.csv"
     actor_metrics = tmp_path / "actor.csv"
+    hamiltonian_variants = tmp_path / "variants.csv"
 
     write_rows(
         collapse_summary,
@@ -59,6 +60,53 @@ def test_method_portfolio_keeps_multiple_candidates(tmp_path: Path) -> None:
                 "median_diversity_retention": 0.82,
                 "median_mean_success_probability": 0.45,
             },
+            {
+                "method_key": "diagnostic_collapse_centroid",
+                "method_label": "diagnostic collapse-to-target-centroid filter",
+                "rows": 2,
+                "positive_improvement_rows": "2 / 2",
+                "median_mmd": 0.02,
+                "median_mmd_improvement": 0.78,
+                "median_wasserstein": 0.03,
+                "median_wasserstein_improvement": 0.67,
+                "median_diversity_retention": 0.0,
+                "median_mean_success_probability": 1.0,
+            },
+        ],
+    )
+    write_rows(
+        hamiltonian_variants,
+        [
+            {
+                "method": "continuous_postselection_reference",
+                "rows": 1,
+                "positive_mmd_rows": 1,
+                "positive_wasserstein_rows": 1,
+                "median_mmd_improvement": 0.11,
+                "median_wasserstein_improvement": 0.12,
+                "median_diversity_retention": 0.82,
+                "median_success_probability": 0.45,
+            },
+            {
+                "method": "hamiltonian_then_random_final_kick",
+                "rows": 1,
+                "positive_mmd_rows": 1,
+                "positive_wasserstein_rows": 1,
+                "median_mmd_improvement": 0.12,
+                "median_wasserstein_improvement": 0.11,
+                "median_diversity_retention": 0.83,
+                "median_success_probability": 0.45,
+            },
+            {
+                "method": "hamiltonian_two_way_postselection",
+                "rows": 1,
+                "positive_mmd_rows": 1,
+                "positive_wasserstein_rows": 1,
+                "median_mmd_improvement": 0.18,
+                "median_wasserstein_improvement": 0.15,
+                "median_diversity_retention": 0.80,
+                "median_success_probability": 0.25,
+            },
         ],
     )
     write_rows(
@@ -94,12 +142,16 @@ def test_method_portfolio_keeps_multiple_candidates(tmp_path: Path) -> None:
         collapse_summary=collapse_summary,
         hybrid_best=hybrid_best,
         actor_metrics=actor_metrics,
+        hamiltonian_variants=hamiltonian_variants,
     )
     rows = build_portfolio(args)
 
     keys = {row["method_key"] for row in rows}
     assert "best_axis_projection" in keys
     assert "continuous_postselection" in keys
+    assert "diagnostic_collapse_centroid" not in keys
+    assert "hamiltonian_then_random_final_kick" in keys
+    assert "hamiltonian_two_way_postselection" in keys
     assert "hybrid_1m1f_toy" in keys
     assert "target_aware_actor_critic" in keys
 
@@ -107,4 +159,5 @@ def test_method_portfolio_keeps_multiple_candidates(tmp_path: Path) -> None:
     write_markdown(markdown_path, rows)
     markdown = markdown_path.read_text(encoding="utf-8")
     assert "not as a single actor-critic-only result" in markdown
+    assert "Hamiltonian + random final kick" in markdown
     assert "hybrid 1M+1F" in markdown

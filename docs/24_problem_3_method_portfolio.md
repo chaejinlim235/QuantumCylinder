@@ -20,7 +20,8 @@ Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서
 | identity/no-denoising input | reverse step을 하지 않은 기준점 | baseline | 성능 후보가 아니라 비교 기준 |
 | best Z/X/Y axis projection | discrete measurement baseline | 3(b) 대조군 | continuous basis가 꼭 필요한지 확인하는 기준 |
 | continuous measurement-basis post-selection | 20-seed gate를 통과한 main quantitative result | 3(a), 3(b) 본문 | axis-only 대비 margin이 작다는 limitation을 함께 적음 |
-| diagnostic collapse-to-centroid | 거리 지표만 보는 평가의 실패 예시 | 3(b) 또는 appendix | 물리적 denoiser가 아니며 diversity collapse를 보여주는 방어용 진단 |
+| Hamiltonian + random final kick | Hamiltonian post-selection 뒤 작은 random-unitary correction을 붙인 mixture 후보 | 3(c) 후보 | random kick은 약간의 개선 또는 악화를 만들 수 있으므로 main result가 아니라 ablation 후보 |
+| Hamiltonian two-way post-selection | Hamiltonian post-selection을 두 단계로 적용하는 후보 | 3(c) 후보 | 거리 개선이 커질 수 있지만 post-selection success probability가 낮아질 수 있음 |
 | hybrid 1M+1F toy | random-unitary와 Hamiltonian/post-selection을 섞은 hardware-motivated extension | 3(c) 후보 | 1-qubit toy라 main 2-qubit seed sweep과 직접 우열 비교하지 않음 |
 | target-aware actor-critic | raw target reward를 쓰는 policy-search 개선 후보 | 3(c) 후보 또는 appendix | unknown-target 일반 denoiser가 아니라 target-aware toy improvement |
 
@@ -28,11 +29,13 @@ Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서
 
 - 3(a), 3(b)의 main result는 `continuous measurement-basis post-selection`으로 둔다.
 - 3(b)는 `axis-only`와 `continuous basis`의 통제 비교를 보여준다.
-- 3(c)는 최소 두 후보를 보여준다.
+- 3(c)는 최소 네 후보를 보여준다.
+  - `Hamiltonian + random final kick`: Hamiltonian post-selection 뒤 random-unitary correction을 붙인 mixture 후보.
+  - `Hamiltonian two-way post-selection`: 같은 Hamiltonian post-selection을 두 단계로 적용한 후보.
   - `hybrid 1M+1F toy`: 하드웨어 동기와 보조 큐빗 측정 구조를 설명하는 후보.
   - `target-aware actor-critic`: 성능이 강하지만 target 정보를 쓰는 후보.
 - actor-critic 수치가 좋아도 “최종 방법은 actor-critic 하나”라고 쓰지 않는다.
-- collapse diagnostic은 성능 후보가 아니라, MMD/Wasserstein만으로는 부족하다는 것을 보이는 방어용 표로 둔다.
+- 최종 본문 포트폴리오는 실제 실행 후보와 대조군만 포함한다.
 
 ## 실행 명령
 
@@ -54,7 +57,7 @@ python scripts/summarize_problem_3_method_portfolio.py
 
 최종 보고서의 안전한 서술:
 
-> 우리는 Problem 3에서 하나의 알고리즘만 제안하지 않고, no-denoising baseline, axis-only projection, continuous measurement-basis post-selection, collapse diagnostic, hybrid 1M+1F toy, target-aware actor-critic 후보를 같은 recoverability-aware 관점에서 비교했다. 20-seed robustness gate를 통과한 main result는 continuous post-selection이며, 3(c)의 확장 후보로는 hardware-motivated hybrid toy와 target-aware actor-critic policy search를 제시한다. Actor-critic은 성능상 강한 후보지만 raw target reward를 사용하므로 unknown-target 일반 denoiser로 주장하지 않는다.
+> 우리는 Problem 3에서 하나의 알고리즘만 제안하지 않고, no-denoising baseline, axis-only projection, continuous measurement-basis post-selection을 기준으로 둔 뒤, Hamiltonian + random final kick, Hamiltonian two-way post-selection, hybrid 1M+1F toy, target-aware actor-critic 후보를 같은 recoverability-aware 관점에서 비교했다. 20-seed robustness gate를 통과한 main result는 continuous post-selection이며, 3(c)의 확장 후보로는 Hamiltonian mixture/two-way, hardware-motivated hybrid toy, target-aware actor-critic policy search를 제시한다. Actor-critic은 성능상 강한 후보지만 raw target reward를 사용하므로 unknown-target 일반 denoiser로 주장하지 않는다.
 
 ## 팀원별 확인 포인트
 

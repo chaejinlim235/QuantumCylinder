@@ -8,7 +8,7 @@
 - 한지후 메인 자동화는 cycle 60까지 완료 근거로 수확했고, cycle 62는 실행 중 수동 중단되어 evidence로 쓰지 않는다.
 - 김승빈 support worker는 cycle 28까지 완료했고, 별도 컴퓨터에서 14번의 20-seed sweep과 252개 이상 hybrid toy run을 남겼다.
 - Problem 3 seed sweep gate는 `20/20 use_as_main`으로 재현되었다.
-- Problem 3(c)는 actor-critic 단독 결론이 아니라 후보 포트폴리오로 정리한다. continuous, axis-only, collapse diagnostic, hybrid 1M+1F, actor-critic을 같은 표에서 비교한다.
+- Problem 3(c)는 actor-critic 단독 결론이 아니라 후보 포트폴리오로 정리한다. Hamiltonian+random mixture, Hamiltonian two-way, hybrid 1M+1F, actor-critic을 같은 표에서 비교한다.
 - actor-critic은 기본 10-seed run에서 `30/30` row가 기존 3(a) continuous baseline보다 MMD/Wasserstein 모두 낮았지만, raw target reward를 쓰는 target-aware 후보로 제한해 말한다.
 
 ## 먼저 볼 것
