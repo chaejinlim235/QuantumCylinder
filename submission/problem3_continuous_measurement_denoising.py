@@ -199,10 +199,9 @@ def project_evolved_blocks(
     basis = continuous_projection_basis(theta, phi)
     projected = np.einsum("nfc,c->nf", evolved_blocks, basis.conj())
     probabilities = np.sum(np.abs(projected) ** 2, axis=1).real
-    safe_probabilities = np.maximum(probabilities, min_probability)
-    states = projected / np.sqrt(safe_probabilities)[:, None]
     if np.any(probabilities < min_probability):
-        states[probabilities < min_probability] = np.array([1, 0, 0, 0], dtype=complex)
+        raise ValueError("Post-selection probability is below the candidate validity threshold.")
+    states = projected / np.sqrt(probabilities)[:, None]
     return normalize_rows(states), probabilities
 
 
@@ -224,7 +223,10 @@ def search_projected_denoising(
     for tau in taus:
         blocks = _evolved_data_blocks(input_ensemble, tau=float(tau), hamiltonian=hamiltonian)
         for spec in basis_specs:
-            candidate, probabilities = project_evolved_blocks(blocks, theta=spec["theta"], phi=spec["phi"])
+            try:
+                candidate, probabilities = project_evolved_blocks(blocks, theta=spec["theta"], phi=spec["phi"])
+            except ValueError:
+                continue
             candidate_mmd = mmd_fidelity(reference, candidate)
             candidate_wasserstein = wasserstein_infidelity(reference, candidate)
             candidate_diversity = ensemble_diversity(candidate)
@@ -261,6 +263,8 @@ def select_best_candidate(
     min_mean_success: float = 0.10,
     min_diversity_retention: float = 0.50,
 ) -> dict:
+    if not rows:
+        raise ValueError("No valid post-selection candidates remained after probability filtering.")
     eligible = [
         row
         for row in rows

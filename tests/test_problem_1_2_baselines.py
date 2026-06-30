@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import SparsePauliOp
 
@@ -20,6 +21,7 @@ from quantum_cylinder.problem_2_hamiltonian_projected_diffusion import (
 from quantum_cylinder.problem_3_continuous_projected_denoising import (
     adoption_decision,
     continuous_projection_basis,
+    project_evolved_blocks,
     projected_denoising_step,
     search_projected_denoising,
 )
@@ -120,6 +122,12 @@ def test_projected_denoising_step_preserves_norm_and_probabilities() -> None:
     assert np.allclose(np.linalg.norm(denoised, axis=1), 1.0)
     assert np.all(probabilities >= 0.0)
     assert np.all(probabilities <= 1.0 + 1e-10)
+
+
+def test_projected_denoising_rejects_nearly_impossible_postselection() -> None:
+    impossible_blocks = np.zeros((2, 4, 2), dtype=complex)
+    with pytest.raises(ValueError, match="Post-selection probability"):
+        project_evolved_blocks(impossible_blocks, theta=0.0, phi=0.0)
 
 
 def test_problem_3_search_returns_candidate_rows() -> None:

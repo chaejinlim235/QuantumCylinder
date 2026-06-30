@@ -73,6 +73,8 @@ Hardware advantage, general quantum advantage, full trainable QuDDPM reverse pro
 
 해석: 20개 seed 전체에서 main candidate로 쓸 수 있는 수준의 안정성은 있다. 다만 axis-only 대비 margin은 작으므로 "압도적 우위"라고 말하지 않는다.
 
+Post-selection guardrail: 보조 큐빗 측정 확률이 거의 0인 경우는 성공한 denoising이 아니라 post-selection 불가능 후보로 취급한다. 따라서 코드와 notebook에서는 low-probability sample을 원래 state나 `|00>` 같은 대체 상태로 바꾸지 않고, 해당 candidate를 scoring 전에 제외한다.
+
 ### 김승빈 Support Worker
 
 | Item | Value |
@@ -136,6 +138,8 @@ Hardware advantage, general quantum advantage, full trainable QuDDPM reverse pro
 
 > 우리는 3번을 recoverability-aware quantum diffusion benchmark로 정리한다. 작은 state-vector 실험에서 continuous measurement-basis post-selection은 20개 seed 전반에서 MMD와 Wasserstein-type metric을 안정적으로 개선했다. 단, metric만 개선되는 collapse를 피하기 위해 diversity retention과 post-selection success probability를 함께 보고한다. Frozen-parameter holdout과 승빈의 독립 support worker 반복 실행으로 재현성을 보강했고, 2-qubit hybrid toy는 hardware-motivated extension으로만 제시한다.
 
+보고서 3(a) 문장에는 candidate가 임의 대입된 값이 아니라 명시한 grid에서 선택됐고, near-zero post-selection 확률 후보는 제외됐다는 점을 함께 적는다.
+
 ## 쓰면 안 되는 주장
 
 - "양자 우위가 입증됐다."
@@ -165,4 +169,3 @@ Hardware advantage, general quantum advantage, full trainable QuDDPM reverse pro
 | 김승빈 | support worker 결과에서 figure/table 후보를 고르고, 재현 로그 위치를 발표자료에 연결한다. |
 | 김건우 | Hamiltonian/projection/post-selection 해석 문장과 "왜 auxiliary qubit post-selection이 조건부 상태를 만든다"는 설명을 검수한다. |
 | 임채진 | Problem 1/2 정성 설명과 Problem 3 limitation을 보고서 흐름에 자연스럽게 배치한다. |
-
