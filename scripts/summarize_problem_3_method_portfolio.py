@@ -53,11 +53,11 @@ def summarize_existing_baselines(collapse_summary_path: Path) -> list[dict[str, 
         if key == "diagnostic_collapse_centroid":
             continue
         elif key == "continuous_postselection":
-            final_use = "3(a)/3(b)의 main quantitative result"
-            caveat = "axis-only 대비 margin은 작으므로 작은 post-selected proxy로 제한한다."
+            final_use = "3(b) continuous control/reference"
+            caveat = "3(c)의 새 제안이 아니라 3-b trade-off 분석을 위한 control이다."
         elif key == "best_axis_projection":
             final_use = "3(b) discrete measurement baseline"
-            caveat = "continuous basis가 정말 필요한지 확인하는 대조군이다."
+            caveat = "팀의 제안 후보가 아니라 Z/X/Y 축만 허용했을 때의 대조군이다."
         else:
             final_use = "no-denoising baseline"
             caveat = "reverse step을 하지 않았을 때의 기준점이다."
@@ -102,7 +102,7 @@ def summarize_hybrid(hybrid_best_path: Path) -> dict[str, Any]:
         "median_diversity_retention": median([number(row, "diversity_retention") for row in rows]),
         "median_success_probability": median([number(row, "mean_success_probability") for row in rows]),
         "evidence_level": "single-seed 1M+1F toy over 4 input steps",
-        "final_use": "3(c) hardware-motivated extension candidate",
+        "final_use": "appendix circuit-visibility extension",
         "caveat": "system size differs from the main 2-qubit benchmark; use as plausibility evidence.",
     }
 
@@ -128,7 +128,7 @@ def summarize_actor_critic(actor_path: Path) -> dict[str, Any]:
         "median_diversity_retention": median([number(row, "actor_diversity_retention") for row in rows]),
         "median_success_probability": median([number(row, "actor_success_probability") for row in rows]),
         "evidence_level": "10 seeds x 3 input steps",
-        "final_use": "3(c) strongest target-aware candidate, not the only method",
+        "final_use": "appendix target-aware policy-search candidate",
         "caveat": "not an unknown-target denoiser; claim only target-aware policy selection.",
     }
 
@@ -141,8 +141,8 @@ def summarize_hamiltonian_variants(variant_summary_path: Path) -> list[dict[str,
         "hamiltonian_two_way_postselection": "Hamiltonian two-way post-selection",
     }
     final_uses = {
-        "hamiltonian_then_random_final_kick": "3(c) mixture candidate",
-        "hamiltonian_two_way_postselection": "3(c) two-stage Hamiltonian candidate",
+        "hamiltonian_then_random_final_kick": "appendix mixture ablation from 3-b trade-off",
+        "hamiltonian_two_way_postselection": "3(c) main: two-way projected denoising",
     }
     caveats = {
         "hamiltonian_then_random_final_kick": "random final kick can slightly help or hurt; use as mixture ablation, not main result.",
@@ -186,11 +186,18 @@ def build_portfolio(args: argparse.Namespace) -> list[dict[str, Any]]:
 
 def write_markdown(path: Path, rows: list[dict[str, Any]]) -> None:
     lines = [
-        "# Problem 3 Method Portfolio",
+        "# Problem 3 Two-Way Main and Appendix Rows",
         "",
         "## Purpose",
         "",
-        "Problem 3 is presented as a portfolio of candidate reverse/denoising ideas, not as a single actor-critic-only result. The methods are compared with the same distance language whenever possible, and each row states whether it is a main result, a baseline, or an extension candidate.",
+        "Problem 3(c) is derived from the Problem 3(b) analysis, not from the previous actor-critic-only or broad portfolio direction. Problem 3(b) first shows the recoverability trade-off: continuous measurement-basis control improves MMD/Wasserstein across seeds, but the axis-only margin is small and success probability/diversity must be reported together. Problem 3(c) then uses that analysis to propose one main improvement: two-way projected denoising.",
+        "",
+        "## Why Axis-Only and Continuous Appear",
+        "",
+        "- `best exact Z/X/Y axis projection` is a discrete measurement baseline, not a team-proposed improvement method.",
+        "- `continuous measurement-basis post-selection` is the controlled 3(b) experiment/reference, not a new 3(c) proposal by itself.",
+        "- The main 3(c) proposal is `Hamiltonian two-way post-selection`: stronger projected denoising with a lower success probability.",
+        "- `Hamiltonian + random final kick`, `hybrid 1M+1F`, and `target-aware actor-critic` should be treated as appendix/ablation/extension rows, not as the main report story.",
         "",
         "## Candidate Table",
         "",
@@ -222,15 +229,15 @@ def write_markdown(path: Path, rows: list[dict[str, Any]]) -> None:
             "",
             "## Final Selection Rule",
             "",
-            "1. Use `continuous measurement-basis post-selection` as the main Problem 3(a/b) quantitative result because it has the 20-seed robustness gate.",
-            "2. Use `best exact Z/X/Y axis projection` as the controlled baseline for Problem 3(b), not as a failed or hidden method.",
-            "3. Use `Hamiltonian + random final kick` and `Hamiltonian two-way post-selection` as explicit Problem 3(c) candidates because they were proposed by the team and actually executed.",
-            "4. Use `hybrid 1M+1F toy` as a hardware-motivated Problem 3(c) extension because it keeps the auxiliary-measurement mechanism visible at the smallest circuit scale.",
-            "5. Use `target-aware actor-critic` only as a stronger 3(c) candidate under a clear target-aware limitation.",
+            "1. In Problem 3(b), present the values as analysis: seed robustness, distance improvement, small axis-only margin, diversity retention, and post-selection success probability.",
+            "2. Treat `best exact Z/X/Y axis projection` as the controlled baseline for Problem 3(b), not as a proposed method.",
+            "3. Treat `continuous measurement-basis post-selection` as the 3(b) control/reference that exposes the trade-off, not as the 3(c) story by itself.",
+            "4. Use `Hamiltonian two-way post-selection` as the main Problem 3(c) proposal because it directly tests how the 3-b trade-off changes under stronger projected denoising.",
+            "5. Move `Hamiltonian + random final kick`, `hybrid 1M+1F toy`, and `target-aware actor-critic` to appendix/ablation/extension status.",
             "",
             "## Report Claim",
             "",
-            "The final report should say that several reverse-process ideas were tested under common recoverability metrics. The selected story is not that actor-critic replaced all methods. The selected story is that continuous post-selection is the robust main denoising proxy, Hamiltonian mixture/two-way variants are executed 3(c) candidates, hybrid 1M+1F is the hardware-motivated extension, and actor-critic is an optional target-aware policy-search improvement with a stricter caveat.",
+            "The final report should say that Problem 3(b) revealed a recoverability trade-off: continuous measurement-basis control reduces MMD/Wasserstein reproducibly, but the advantage over axis-only is small and must be interpreted with diversity retention and success probability. Problem 3(c) then proposes two-way Hamiltonian post-selection as an analysis-guided improvement: it increases distance reduction while lowering post-selection success probability. The other rows are appendix or ablation evidence, not the main 3-c story.",
             "",
         ]
     )
@@ -258,7 +265,7 @@ def write_figure(path: Path, rows: list[dict[str, Any]]) -> None:
     )
     axes[0].axhline(0.0, color="black", linewidth=0.8)
     axes[0].set_ylabel("Distance improvement")
-    axes[0].set_title("Problem 3 candidate portfolio: distance metrics")
+    axes[0].set_title("Problem 3 two-way main and appendix rows: distance metrics")
     axes[0].grid(axis="y", alpha=0.25)
     axes[0].legend()
 
@@ -287,7 +294,7 @@ def write_figure(path: Path, rows: list[dict[str, Any]]) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Summarize the Problem 3 method portfolio.")
+    parser = argparse.ArgumentParser(description="Summarize the Problem 3 two-way main and appendix rows.")
     parser.add_argument(
         "--collapse-summary",
         type=Path,

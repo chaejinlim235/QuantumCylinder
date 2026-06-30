@@ -4,6 +4,8 @@
 
 Problem 3의 메인 후보는 **continuous measurement-induced denoising**이다.
 
+현재 최종 보고서 스토리라인은 `docs/26_problem_3b_to_3c_storyline.md`를 우선한다. 이 문서의 continuous 방향은 3-b controlled modification/reference로 사용하고, 3-c의 본문 main은 3-b에서 드러난 trade-off를 바탕으로 two-way projected denoising으로 제안한다.
+
 기본 `Z/X/Y` measurement basis sweep은 문제 PDF가 직접 예시로 든 방향이므로 다른 팀과 겹칠 가능성이 높다. 그래서 우리는 `Z/X/Y`를 baseline으로만 두고, complement qubit projection basis를 Bloch sphere 위의 연속 basis로 넓혀 탐색한다.
 
 ```text
@@ -23,8 +25,8 @@ Problem 3의 메인 후보는 **continuous measurement-induced denoising**이다
 ## 왜 3번 요구와 맞는가
 
 - Problem 3(a): fixed measurement-induced non-unitary map으로 toy reverse/denoising step을 보인다.
-- Problem 3(b): projection basis와 denoising time `tau`를 통제된 방식으로 바꾼다.
-- Problem 3(c): baseline `S_k`와 axis-only `Z/X/Y` projection 대비 개선 여부를 작은 예제로 검증한다.
+- Problem 3(b): projection basis와 denoising time `tau`를 통제된 방식으로 바꾸고, axis-only baseline 대비 이득과 한계를 분석한다.
+- Problem 3(c): 3-b에서 드러난 거리 개선, diversity retention, success probability trade-off를 바탕으로 two-way projected denoising을 제안한다.
 - Continuous 후보를 고를 때 exact `Z/X/Y` 축 basis는 제외한다.
 
 ## 채택 게이트

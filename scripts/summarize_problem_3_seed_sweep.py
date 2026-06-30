@@ -159,14 +159,14 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
     recommendation = "use_as_main" if strong_enough else "fallback_or_appendix"
     if strong_enough:
         report_ready_wording = (
-            f"Use: Across the {main_runs} / {len(run_decisions)} requested seeds, "
+            f"Use in 3-b: Across the {main_runs} / {len(run_decisions)} requested seeds, "
             "continuous measurement-basis post-selection remains a reproducible small-scale "
-            "state-vector denoising proxy, "
+            "state-vector controlled modification/reference, "
             f"with median MMD improvement {format_metric(median_mmd_improvement)} and "
             f"median Wasserstein improvement {format_metric(median_wasserstein_improvement)}. "
             f"The axis-only score margin is small ({format_metric(median_score_margin)}), "
-            "so present it as a limited post-selected proxy improvement, not hardware advantage "
-            "or general quantum advantage."
+            "so present it as a recoverability trade-off analysis, not hardware advantage "
+            "or general quantum advantage. Use this analysis to motivate the 3-c two-way projected denoising proposal."
         )
     else:
         report_ready_wording = (
@@ -226,6 +226,14 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
             f"- minimum continuous_diversity_retention: {format_metric(min_diversity)}",
             f"- minimum continuous_mean_success_probability: {format_metric(min_success)}",
             "",
+            "## 3-b Analysis",
+            "",
+            f"- Seed robustness: `{main_runs} / {len(run_decisions)}` seeds pass the main gate, so the effect is not a single-seed accident.",
+            f"- Distance recovery: median MMD and Wasserstein improvements are {format_metric(median_mmd_improvement)} and {format_metric(median_wasserstein_improvement)}, so the post-selected map moves the ensemble back toward `S0` under both metrics.",
+            f"- Axis comparison: the median continuous-vs-axis score margin is only {format_metric(median_score_margin)}, with `{nonpositive_axis_margin_rows} / {len(rows)}` nonpositive rows. Treat `axis-only` as a discrete baseline, not as a team-proposed method, and do not claim continuous control is overwhelmingly better.",
+            f"- Guardrails: median diversity retention is {format_metric(median_diversity)} and median success probability is {format_metric(median_success)}, so the result should be described as a recoverability trade-off rather than a distance-only win.",
+            "- 3-c implication: use this trade-off to motivate two-way projected denoising as the main improvement; keep random final kick, hybrid 1M+1F, and actor-critic as appendix/ablation candidates.",
+            "",
             "## Report Table",
             "",
             "| Metric | Value | Report use |",
@@ -251,10 +259,10 @@ def build_summary(run_decisions: list[tuple[int, str]], rows: list[dict[str, obj
 
     if strong_enough:
         lines.append(
-            "The seed sweep supports using continuous projected denoising as the main Problem 3 result, "
+            "The seed sweep supports using continuous projected denoising as the Problem 3(b) controlled modification/reference, "
             f"with the caveat that the median axis-only score margin is {format_metric(median_score_margin)}. "
             "Do not claim every input step beats the axis-only projection if fallback rows have weak margins. "
-            "State this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage."
+            "State this as a small-scale recoverability trade-off that motivates the Problem 3(c) two-way projected denoising proposal, not hardware advantage or general quantum advantage."
         )
     else:
         lines.append(

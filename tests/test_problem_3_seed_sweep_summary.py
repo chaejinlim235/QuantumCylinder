@@ -58,6 +58,9 @@ def test_build_summary_mentions_axis_margin_and_advantage_caveat_for_main_claim(
 
     assert "axis-only score margin" in summary
     assert "not hardware advantage or general quantum advantage" in summary
+    assert "## 3-b Analysis" in summary
+    assert "3-c implication" in summary
+    assert "two-way projected denoising" in summary
 
 
 def test_build_summary_reports_worst_case_guardrails() -> None:

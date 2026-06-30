@@ -158,6 +158,9 @@ def test_method_portfolio_keeps_multiple_candidates(tmp_path: Path) -> None:
     markdown_path = tmp_path / "summary.md"
     write_markdown(markdown_path, rows)
     markdown = markdown_path.read_text(encoding="utf-8")
-    assert "not as a single actor-critic-only result" in markdown
+    assert "derived from the Problem 3(b) analysis" in markdown
+    assert "discrete measurement baseline, not a team-proposed improvement method" in markdown
+    assert "two-way projected denoising" in markdown
+    assert "appendix/ablation/extension" in markdown
     assert "Hamiltonian + random final kick" in markdown
     assert "hybrid 1M+1F" in markdown
