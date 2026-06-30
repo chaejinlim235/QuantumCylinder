@@ -82,7 +82,7 @@
 - 3-b to 3-c storyline: `docs/26_problem_3b_to_3c_storyline.md`
 - measurement-basis explainer: `docs/problem3_measurement_basis_explainer.md`
 - two-way main 및 appendix row 문서: `docs/24_problem_3_method_portfolio.md`
-- 최종 notebook 사본: `C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb`
+- 최종 notebook 사본: `solution/solution_1.ipynb`
 - method portfolio figure: `results/problem_3_method_portfolio/method_portfolio_summary.png`
 - Hamiltonian variants figure: `results/problem_3_hamiltonian_variants/hamiltonian_variant_summary.png`
 

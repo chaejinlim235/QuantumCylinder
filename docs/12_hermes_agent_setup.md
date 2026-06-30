@@ -74,7 +74,7 @@ For Problem 3, only treat a result as main if the adoption gate passes.
 Hermes가 PATH에 없다면 이 저장소의 래퍼는 Windows 기본 설치 경로도 자동으로 찾는다. 그래도 실패하면 직접 경로를 넘긴다.
 
 ```powershell
-.\scripts\invoke_hermes_task.ps1 p3-status -HermesPath "C:\Users\sky_m\AppData\Local\Hermes\hermes-agent\venv\Scripts\hermes.exe"
+.\scripts\invoke_hermes_task.ps1 p3-status -HermesPath "<HERMES_EXE_PATH>"
 ```
 
 장시간 seed sweep처럼 승인 프롬프트 없이 진행하고 싶은 작업에는 `-Yolo`를 붙인다. 코드 수정까지 허용되는 task에는 먼저 prompt의 허용 범위를 확인한다.

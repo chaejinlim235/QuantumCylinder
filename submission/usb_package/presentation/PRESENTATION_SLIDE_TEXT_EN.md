@@ -89,8 +89,9 @@ Speaker note: "The final result is intentionally scoped and reproducible."
 ### A3. Measurement-Induced Non-Unitary Map
 
 ```text
-|Psi_i(t)> = exp(-i H t)(|psi_i>_M tensor |0>_F)
-|phi_i_m(t,b)> = (I_M tensor <b_m|)|Psi_i(t)> / sqrt(p_i_m)
+Psi_i(t) = exp(-i H t)(psi_i_M tensor |0>_F)
+phi_i,m(t,b) = (I_M tensor <b_m|) Psi_i(t) / sqrt(p_i,m)
+p_i,m = ||(I_M tensor <b_m|) Psi_i(t)||^2
 ```
 
 ### A4. Axis-Only vs Continuous
@@ -125,3 +126,12 @@ python scripts/summarize_problem_3_method_portfolio.py
 - No full trainable QuDDPM claim.
 - No broad continuous-over-axis claim.
 - Actor-critic is target-aware if mentioned.
+
+### A9. IBM QPU Validation Path
+
+- Optional small-circuit execution path through IBM Quantum / Qiskit Runtime.
+- Uses tiny representative circuits, not full ensemble MMD/Wasserstein.
+- Reports transpiled depth, two-qubit gate count, backend, and job id if submitted.
+- Main claims remain the reproducible state-vector benchmark.
+- No hardware advantage claim.
+- Dry-run/transpilation path prepared; real QPU submission requires IBM credentials and queue availability.

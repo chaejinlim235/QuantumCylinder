@@ -11,6 +11,7 @@ Open `solution/solution_1.ipynb` first. It is the final judge-facing answer.
 - `configs/`: experiment configuration files.
 - `submission/run_all.py`: quick reproduction entry point.
 - `results/`: selected small CSV/Markdown evidence needed by the Problem 3 summary scripts.
+- `IBM_QPU_README.md`: optional IBM Quantum / Qiskit Runtime validation path.
 
 ## Minimal Commands
 
@@ -21,6 +22,7 @@ python -m pytest
 python submission/run_all.py --quick
 python scripts/summarize_problem_3_seed_sweep.py
 python scripts/summarize_problem_3_method_portfolio.py
+python scripts/ibm_qpu_smoke_test.py --dry-run
 ```
 
 ## Expected Results
@@ -29,6 +31,7 @@ python scripts/summarize_problem_3_method_portfolio.py
 - `python submission/run_all.py --quick`: prints a compact Problem 1/2/3 reproduction summary.
 - `python scripts/summarize_problem_3_seed_sweep.py`: prints the 20-seed Problem 3 summary including `20 / 20` passing seeds and median improvements.
 - `python scripts/summarize_problem_3_method_portfolio.py`: prints the 3(c) two-way and appendix comparison table.
+- `python scripts/ibm_qpu_smoke_test.py --dry-run`: builds tiny representative circuits and saves a no-submit IBM QPU validation report.
 
 ## Folder Reading Order
 
@@ -38,6 +41,7 @@ python scripts/summarize_problem_3_method_portfolio.py
 4. `REPRODUCIBILITY_COMMANDS.md`
 5. `CODE_MANIFEST.md`
 6. `scripts/` and `src/` for implementation details
+7. `IBM_QPU_README.md` for optional Q&A-only IBM QPU validation
 
 ## Limitations
 

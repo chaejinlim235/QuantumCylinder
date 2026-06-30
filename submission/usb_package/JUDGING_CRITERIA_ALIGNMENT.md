@@ -17,6 +17,10 @@ Evidence:
 
 The approach is appropriate to the small 2-qubit/3-qubit state-vector benchmark. We do not claim a full trainable QuDDPM, quantum advantage, or hardware advantage.
 
+Optional IBM QPU validation is included only as appendix evidence for tiny
+representative circuits. It checks hardware-execution feasibility through IBM
+Quantum / Qiskit Runtime and does not overclaim hardware performance.
+
 ## 2. Fidelity to Problem Requirements
 
 Each required subproblem is mapped to a concrete artifact in `source_code/PROBLEM_REQUIREMENT_MAP.md`.
@@ -47,6 +51,9 @@ This framing emphasizes that:
 ## 4. Presentation and Communication Quality
 
 The presentation material is English. The first 5 minutes cover the full core story: Problem 1/2 baselines, Problem 3(b) trade-off, and Problem 3(c) two-way improvement. Appendix slides support Q&A and a longer final-round presentation using the same submitted material.
+
+IBM QPU details are kept in the appendix for Q&A only, so the main presentation
+remains focused on the traceable state-vector results and problem requirements.
 
 Presentation files:
 

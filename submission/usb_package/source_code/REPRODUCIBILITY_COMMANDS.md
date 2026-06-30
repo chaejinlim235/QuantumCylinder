@@ -36,6 +36,17 @@ Expected output:
 
 The repository also contains richer experiment scripts in `scripts/`. Inspect `scripts/run_problem_1_2_baselines.py`, `scripts/run_problem_3_continuous_denoising.py`, and `scripts/run_problem_3_hamiltonian_variant_candidates.py` for the main experiment flows.
 
+## Optional IBM QPU Dry-Run
+
+```powershell
+python scripts/ibm_qpu_smoke_test.py --dry-run
+```
+
+This command prepares tiny representative circuits and saves a no-submit report
+under `results/ibm_qpu_validation/`. Real IBM QPU submission requires
+credentials and an explicit `--submit` command; it is not required for the main
+state-vector benchmark.
+
 ## Source Inspection Path
 
 Start from:

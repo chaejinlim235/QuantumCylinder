@@ -10,7 +10,7 @@
 - Problem 3 seed sweep gate는 `20/20 use_as_main`으로 재현되었다.
 - Problem 3(b)는 수치 나열이 아니라 seed robustness, 작은 axis-only margin, diversity/success trade-off를 분석하는 섹션으로 정리한다.
 - Problem 3(c)는 actor-critic 단독 결론이나 후보 나열이 아니라 3-b 분석에서 도출된 two-way projected denoising을 본문 main으로 정리한다. Hamiltonian+random final kick, hybrid 1M+1F, actor-critic은 appendix/ablation으로 내린다.
-- 최종 notebook 사본 `C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb`에는 Hamiltonian 후보 15-row 결과와 figure가 반영되어 있다.
+- 최종 notebook 사본 `solution/solution_1.ipynb`에는 Hamiltonian 후보 15-row 결과와 figure가 반영되어 있다.
 - 멘토/교수님 피드백은 `docs/25_mentor_feedback_brief.md` 기준으로 받는다.
 - actor-critic은 기본 10-seed run에서 `30/30` row가 기존 3(a) continuous baseline보다 MMD/Wasserstein 모두 낮았지만, raw target reward를 쓰는 target-aware 후보로 제한해 말한다.
 

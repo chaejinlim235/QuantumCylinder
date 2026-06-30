@@ -17,7 +17,7 @@
 현재 최종 notebook 사본:
 
 ```text
-C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb
+solution/solution_1.ipynb
 ```
 
 ## 3-b 분석 요약

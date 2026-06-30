@@ -1,7 +1,13 @@
 # QuantumCylinder Final Solution
 Open `solution_1.ipynb` first.
 
-QuantumCylinder compares random-unitary diffusion and Hamiltonian projected diffusion under shared fidelity-based MMD/Wasserstein metrics, then studies measurement-induced projected denoising as a recoverability-success-diversity trade-off. Based on the 3-b trade-off analysis, Problem 3(c) tests two-way Hamiltonian post-selection as a stronger but more costly projected denoising improvement.
+QuantumCylinder compares random-unitary diffusion and Hamiltonian projected
+diffusion under shared fidelity-based MMD/Wasserstein metrics, then studies
+measurement-induced projected denoising as a recoverability-success-diversity
+trade-off.
+
+Based on the 3-b trade-off analysis, Problem 3(c) tests two-way Hamiltonian
+post-selection as a stronger but more costly projected denoising improvement.
 
 ## Main Files
 - `solution_1.ipynb`: final judge-facing answer.
@@ -34,7 +40,22 @@ python scripts/create_solution_haar_baseline.py
 python scripts/summarize_problem_3_seed_sweep.py
 python scripts/run_problem_3_hamiltonian_variant_candidates.py
 python scripts/summarize_problem_3_method_portfolio.py
+python scripts/ibm_qpu_smoke_test.py --dry-run
 ```
 
+## Optional IBM QPU Validation
+
+IBM QPU validation is appendix evidence only. It checks whether tiny
+representative circuits can be prepared for IBM Quantum via Qiskit Runtime and
+reports transpiled depth, two-qubit gate count, shots, backend, and job status
+if a real job is explicitly submitted.
+
+The main MMD/Wasserstein claims remain the reproducible state-vector benchmark.
+
 ## Limitations
-No quantum advantage, hardware advantage, or full trainable QuDDPM claim is made. Continuous basis margin over axis-only is small; two-way post-selection has lower success probability; actor-critic is target-aware if mentioned. The Haar baseline is a reference, not a training target, and the random-unitary curve is interpreted as strong scrambling rather than slow DDPM-like diffusion.
+No quantum advantage, hardware advantage, or full trainable QuDDPM claim is
+made. Continuous basis margin over axis-only is small; two-way post-selection
+has lower success probability; actor-critic is target-aware if mentioned.
+
+The Haar baseline is a reference, not a training target, and the random-unitary
+curve is interpreted as strong scrambling rather than slow DDPM-like diffusion.

@@ -53,7 +53,7 @@ python scripts/run_problem_3_actor_critic_denoising.py
 건우가 주석을 단 notebook 형식을 참고해 actor-critic 3(c) 섹션을 추가한 로컬 사본:
 
 ```text
-C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_actor_critic_commented_v1.ipynb
+historical local actor-critic notebook; final submitted notebook is solution/solution_1.ipynb
 ```
 
 검증:

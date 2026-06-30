@@ -14,6 +14,9 @@ Open order for judges:
 - `presentation/`: English presentation PDF, storyboard, slide text, and slide checklist.
 - `JUDGING_CRITERIA_ALIGNMENT.md`: official judging-criteria mapping.
 - `LIMITATIONS_AND_APPROPRIATENESS.md`: claim boundaries and scope guardrails.
+- `source_code/IBM_QPU_README.md`: optional IBM QPU validation instructions.
+- `CSV_VALIDATION_REPORT.md`, `LATEX_VALIDATION_REPORT.md`, and
+  `HARDWARE_TERMINOLOGY_AUDIT.md`: latest package validation notes.
 - `ONSITE_CHECKLIST.md`: final onsite submission and presentation checklist.
 
 ## Core Thesis
@@ -29,7 +32,14 @@ python -m pytest
 python submission/run_all.py --quick
 python scripts/summarize_problem_3_seed_sweep.py
 python scripts/summarize_problem_3_method_portfolio.py
+python scripts/ibm_qpu_smoke_test.py --dry-run
 ```
+
+## Optional IBM QPU Validation
+
+The package includes an optional IBM Quantum / IBM QPU validation path through
+Qiskit Runtime. It is appendix evidence for tiny representative circuits, not
+the main source of the MMD/Wasserstein claims.
 
 ## Scope
 

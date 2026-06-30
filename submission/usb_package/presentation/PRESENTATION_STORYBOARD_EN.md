@@ -37,7 +37,12 @@
 - A6. Seed robustness and holdout evidence.
 - A7. Source-code package and reproduction commands.
 - A8. Limitations and claim guardrails.
+- A9. IBM QPU validation path: optional tiny-circuit Qiskit Runtime route, with dry-run/transpilation evidence unless a real job is explicitly submitted.
 
 ## Core Story
 
 The first 5 minutes tell the complete story: Problem 1 establishes strong random-unitary scrambling, Problem 2 introduces fixed Hamiltonian projected diffusion and its resource/control profile, Problem 3(b) reframes measurement basis as a control knob for an effective non-unitary map, and Problem 3(c) tests two-way post-selection as a stronger but costlier improvement.
+
+The IBM QPU path is appendix-only Q&A material. It checks tiny representative
+circuit feasibility through IBM Quantum / Qiskit Runtime and does not replace
+the reproducible state-vector benchmark.
