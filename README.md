@@ -11,6 +11,7 @@
 | Need | File |
 | --- | --- |
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
+| 밤샘 Problem 3 실험의 과정/근거/결론 | `docs/22_overnight_problem_3_evidence_handoff.md` |
 | 저장소 구조와 code map | `README.md` |
 | 상시 자동화 상태 | `results/continuous_problem_3/latest_status.md` |
 | 상시 자동화 변화 기록 | `results/continuous_problem_3/progress_log.md` |
@@ -33,7 +34,8 @@
 | Qiskit validation layer | Available | 김건우 | `problem_1_qiskit_resource_check.py` 기준으로 gate/depth 표 정리 |
 | Submission layer | Done | 한지후 | `submission/run_all.py`를 심사자용 entry point로 유지 |
 | Problem 3 extension | Validated main candidate | 한지후 | 새 기능 추가보다 claim/figure/reproducibility 안정화 |
-| Problem 3 seed sweep | Done | 김승빈 | figure/table 후보와 재현 로그 정리 |
+| Problem 3 overnight evidence | Harvested | 한지후, 김승빈 | `docs/22_overnight_problem_3_evidence_handoff.md` 기준으로 보고서/발표 반영 |
+| Problem 3 seed sweep | Done + independently reproduced | 김승빈 | support worker 결과에서 figure/table 후보와 재현 로그 정리 |
 | Quantitative evaluation | Generated and handed off | 한지후 | `docs/experiments/2026-06-29_quantitative_evaluation_handoff.md` 기준으로 팀원 검토 |
 | Physics/resource validation | Ready for review | 김건우 | Hamiltonian term, projection probability, reduced Bloch plot 해석 검증 |
 | Final report/story | Evidence ready | 임채진 | Problem 1/2 정성 설명과 Problem 3 limitation 문장 정리 |

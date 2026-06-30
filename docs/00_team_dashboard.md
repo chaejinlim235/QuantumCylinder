@@ -4,17 +4,18 @@
 
 ## 최신 스냅샷
 
-- 기준 시각: `2026-06-29 22:10 KST`
-- 로컬 `main`과 `origin/main`은 `1b95cd9` 기준으로 동기화되어 있다.
-- PR #49 반영 이후 Problem 3 상시 자동화는 기본적으로 `attached` 모드로 실행된다. Hermes 출력이 실행 중인 PowerShell에 직접 표시되어야 한다.
-- Problem 3 seed sweep gate는 `20/20 use_as_main`으로 유지한다.
-- seed sweep 집계는 요청한 seed 목록만 집계하도록 보정한다. 오래된 `seed_<n>` 결과 폴더가 남아 있어도 최신 sweep 결과에 섞이지 않아야 한다.
+- 기준 시각: `2026-06-30 09:40 KST`
+- 한지후 메인 자동화는 cycle 60까지 완료 근거로 수확했고, cycle 62는 실행 중 수동 중단되어 evidence로 쓰지 않는다.
+- 김승빈 support worker는 cycle 28까지 완료했고, 별도 컴퓨터에서 14번의 20-seed sweep과 252개 이상 hybrid toy run을 남겼다.
+- Problem 3 seed sweep gate는 `20/20 use_as_main`으로 재현되었다.
+- 지금부터는 자동화 추가 실행보다 보고서/발표에 수확 근거를 정확히 반영하는 것이 우선이다.
 
 ## 먼저 볼 것
 
 | Purpose | File |
 | --- | --- |
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
+| 밤샘 Problem 3 실험의 과정/근거/결론 | `docs/22_overnight_problem_3_evidence_handoff.md` |
 | 저장소 구조와 실행 entry point | `README.md` |
 | 자동화 실행 중 상태 | `results/continuous_problem_3/latest_status.md` |
 | 자동화 실행 중 변화 기록 | `results/continuous_problem_3/progress_log.md` |
@@ -27,10 +28,10 @@
 | --- | --- | --- | --- |
 | Problem 1 | locked | 한지후 | 정성 설명과 diagnostic 출력만 유지 |
 | Problem 2 | locked | 한지후, 김건우 | Hamiltonian/projection 해석 검수 |
-| Problem 3 | main candidate | 한지후 | 성능 claim보다 재현성, limitation, figure/table 강화 |
-| Seed sweep | passed + aggregation guarded | 김승빈 | 최종 표/그림 후보 정리, 오래된 seed 결과 혼입 여부 확인 |
+| Problem 3 | harvested main candidate | 한지후 | `docs/22_overnight_problem_3_evidence_handoff.md` 기준으로 final notebook/report 반영 |
+| Seed sweep | passed + independently reproduced | 김승빈 | support worker 결과에서 최종 표/그림 후보와 로그 위치 정리 |
 | Report/story | evidence ready | 임채진 | claim, limitation, 발표 흐름 정리 |
-| Automation | attached continuous loop | 한지후 | 실행 중 PowerShell 출력, status/progress log 확인 |
+| Automation | harvested | 한지후 | 새 자동화보다 수확 근거 정리와 제출물 QA 우선 |
 
 Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
 
@@ -124,4 +125,5 @@ Problem 3를 main으로 유지하는 조건:
 | Hermes 세부 설정 | `docs/12_hermes_agent_setup.md` |
 | 자동화 운영 원칙 | `docs/13_automation_feedback_loop.md` |
 | 3일 로드맵 | `docs/16_three_day_roadmap.md` |
+| 밤샘 Problem 3 evidence handoff | `docs/22_overnight_problem_3_evidence_handoff.md` |
 | GitHub issue 원본 | `docs/github_issue_plan.json` |
