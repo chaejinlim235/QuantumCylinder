@@ -11,6 +11,22 @@ Optional IBM QPU validation is documented in `docs/IBM_QPU_VALIDATION.md`.
 It is appendix evidence only and does not replace the reproducible
 state-vector benchmark.
 
+Required final-submission entry points:
+
+- `solution/solution_1.ipynb`
+- `solution/README.md`
+- `solution/figures/`
+- `solution/tables/`
+- `submission/usb_package/`
+- `submission/usb_package/source_code/`
+
+Judging criteria alignment:
+
+- Completeness and appropriateness: final notebook, English presentation material, source code, tests, figures, and tables are included in the USB package.
+- Fidelity to the problem requirements: Problems 1(a) through 3(c) are mapped to concrete code, metrics, and final artifacts.
+- Novelty of the plan and approach: the complement-qubit post-selection basis controls an effective non-unitary map on the data system, and the result is analyzed as a recoverability-success-diversity trade-off.
+- Presentation and communication quality: the submitted PDF/PPT-facing material emphasizes traceable claims, limitations, and reproducibility commands.
+
 2026 양자정보경진대회 Technical Challenge, Quantum Machine Learning 지정문제 3번을 위한 팀 저장소입니다.
 
 팀명은 **양자실린더 / QuantumCylinder**입니다. 대회 목표는 수상권 이상이며, 가능하면 우승까지 목표로 합니다. 이 저장소는 그 목표를 위해 재현 가능한 실험 코드와 문서를 관리합니다.

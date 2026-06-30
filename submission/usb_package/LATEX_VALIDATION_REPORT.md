@@ -42,17 +42,37 @@ p_{i,m}
 \right\|^2
 ```
 
-The slide text uses safe plain-text notation inside a fenced `text` code block:
+The slide text now uses fenced display math:
 
-```text
-Psi_i(t) = exp(-i H t)(psi_i_M tensor |0>_F)
-phi_i,m(t,b) = (I_M tensor <b_m|) Psi_i(t) / sqrt(p_i,m)
-p_i,m = ||(I_M tensor <b_m|) Psi_i(t)||^2
+```math
+|\Psi_i(t)\rangle =
+e^{-iHt}
+\left(
+|\psi_i\rangle_M \otimes |0\rangle_F
+\right)
+```
+
+```math
+|\phi_{i,m}(t,b)\rangle =
+\frac{
+(I_M \otimes \langle b_m|)
+|\Psi_i(t)\rangle
+}{
+\sqrt{p_{i,m}}
+}
+```
+
+```math
+p_{i,m}
+=
+\left\|
+(I_M \otimes \langle b_m|)
+|\Psi_i(t)\rangle
+\right\|^2
 ```
 
 ## Remaining Suspicious Patterns
 
 - No broken notebook equation fragments remain.
-- The only remaining `<b_m|` fragments in presentation Markdown are inside a
-  fenced `text` block, so Markdown does not interpret them as HTML.
+- No remaining raw measurement-bra presentation Markdown fragments are expected.
 - `PRESENTATION_STORYBOARD_EN.md` contains no raw bra-ket equation block.

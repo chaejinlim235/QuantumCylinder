@@ -2,6 +2,8 @@
 
 ## 1. Completeness and Appropriateness of Result
 
+Official criterion: Completeness and appropriateness.
+
 The submission contains both English presentation material and source code. The final notebook answers Problem 1(a) through Problem 3(c), with final figures and tables included in `source_code/solution/figures/` and `source_code/solution/tables/`. Source code is included under `source_code/` with reproduction commands.
 
 Evidence:
@@ -23,6 +25,8 @@ Quantum / Qiskit Runtime and does not overclaim hardware performance.
 
 ## 2. Fidelity to Problem Requirements
 
+Official criterion: Fidelity to the problem requirements.
+
 Each required subproblem is mapped to a concrete artifact in `source_code/PROBLEM_REQUIREMENT_MAP.md`.
 
 Summary:
@@ -38,7 +42,9 @@ Summary:
 
 ## 3. Novelty of Plan and Approach
 
-The novelty is to interpret the complement-qubit measurement basis as a control knob for the effective non-unitary map induced on the data system. This converts Problem 3 into a recoverability-success-diversity trade-off analysis, and motivates the two-way post-selection improvement in Problem 3(c).
+Official criterion: Novelty of the plan and approach.
+
+The novelty is not simply scanning a measurement basis. It is to interpret the complement-qubit post-selection basis as a control knob for the effective non-unitary map induced on the data system. This converts Problem 3 into a recoverability-success-diversity trade-off analysis, and motivates the two-way post-selection improvement in Problem 3(c).
 
 This framing emphasizes that:
 
@@ -49,6 +55,8 @@ This framing emphasizes that:
 - two-way post-selection is stronger but costlier, not an unconditional win.
 
 ## 4. Presentation and Communication Quality
+
+Official criterion: Presentation and communication quality.
 
 The presentation material is English. The first 5 minutes cover the full core story: Problem 1/2 baselines, Problem 3(b) trade-off, and Problem 3(c) two-way improvement. Appendix slides support Q&A and a longer final-round presentation using the same submitted material.
 

@@ -15,6 +15,13 @@ from submission.problem3_continuous_measurement_denoising import solve_problem_3
 from submission.states_and_metrics import write_text
 
 
+def display_path(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the simple submission layer for Problems 1, 2, and 3.")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "results" / "submission_simple")
@@ -77,13 +84,13 @@ def main() -> None:
 
 - Final MMD: `{problem1['final']['mmd']:.6f}`
 - Final Wasserstein-type distance: `{problem1['final']['wasserstein']:.6f}`
-- Summary: `{problem1['summary']}`
+- Summary: `{display_path(problem1['summary'])}`
 
 ## Problem 2
 
 - Max MMD: `{problem2['max_mmd']['mmd']:.6f}` at `{problem2['max_mmd']['parameter']:.6f}`
 - Max Wasserstein-type distance: `{problem2['max_wasserstein']['wasserstein']:.6f}` at `{problem2['max_wasserstein']['parameter']:.6f}`
-- Summary: `{problem2['summary']}`
+- Summary: `{display_path(problem2['summary'])}`
 
 ## Problem 3
 
@@ -96,7 +103,7 @@ def main() -> None:
 - Minimum continuous-vs-axis score margin: `{problem3_min_axis_margin:.6f}`
 - Nonpositive axis-margin rows: `{problem3_nonpositive_axis_rows} / {len(problem3_axis_margins)}`
 - Caveat: Do not claim every input step beats the axis-only projection; state this as a small-scale post-selected proxy improvement, not hardware advantage or general quantum advantage.
-- Summary: `{problem3['summary']}`
+- Summary: `{display_path(problem3['summary'])}`
 """
     write_text(args.output_dir / "SUMMARY.md", text)
     print(text)

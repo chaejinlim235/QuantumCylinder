@@ -88,10 +88,31 @@ Speaker note: "The final result is intentionally scoped and reproducible."
 
 ### A3. Measurement-Induced Non-Unitary Map
 
-```text
-Psi_i(t) = exp(-i H t)(psi_i_M tensor |0>_F)
-phi_i,m(t,b) = (I_M tensor <b_m|) Psi_i(t) / sqrt(p_i,m)
-p_i,m = ||(I_M tensor <b_m|) Psi_i(t)||^2
+```math
+|\Psi_i(t)\rangle =
+e^{-iHt}
+\left(
+|\psi_i\rangle_M \otimes |0\rangle_F
+\right)
+```
+
+```math
+|\phi_{i,m}(t,b)\rangle =
+\frac{
+(I_M \otimes \langle b_m|)
+|\Psi_i(t)\rangle
+}{
+\sqrt{p_{i,m}}
+}
+```
+
+```math
+p_{i,m}
+=
+\left\|
+(I_M \otimes \langle b_m|)
+|\Psi_i(t)\rangle
+\right\|^2
 ```
 
 ### A4. Axis-Only vs Continuous

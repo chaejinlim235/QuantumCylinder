@@ -1,5 +1,6 @@
+Open solution_1.ipynb first.
+
 # QuantumCylinder Final Solution
-Open `solution_1.ipynb` first.
 
 QuantumCylinder compares random-unitary diffusion and Hamiltonian projected
 diffusion under shared fidelity-based MMD/Wasserstein metrics, then studies
