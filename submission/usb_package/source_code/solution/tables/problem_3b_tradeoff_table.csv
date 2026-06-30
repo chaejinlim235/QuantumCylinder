@@ -1,0 +1,5 @@
+method_key,method_label,rows,positive_improvement_rows,median_mmd,median_mmd_improvement,median_wasserstein,median_wasserstein_improvement,median_diversity_retention,median_mean_success_probability,report_use
+identity_no_denoising,identity/no-denoising random-unitary input,120,0,0.8655833178900751,0.0,0.7195964476036945,0.0,1.0,1.0,baseline: what happens if we do no reverse step
+best_axis_projection,best exact Z/X/Y axis projection,120,120,0.7787147900529059,0.086054568343928,0.5776449321056387,0.1425935405133426,0.8105916051807794,0.4650579009763409,discrete measurement baseline from the problem statement
+continuous_postselection,continuous measurement-basis post-selection,120,120,0.7709440111631809,0.09705605243512905,0.574148019895411,0.14798313379645034,0.8232173986002509,0.4681220831559322,main quantitative candidate when seed gate passes
+diagnostic_collapse_centroid,diagnostic collapse-to-target-centroid filter,120,120,0.006006252958819019,0.8592921718845974,0.004808460500702756,0.7142758596959671,0.0,1.0,failure mode: distance can improve while diversity collapses

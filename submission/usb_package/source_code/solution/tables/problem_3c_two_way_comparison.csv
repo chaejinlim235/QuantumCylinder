@@ -1,0 +1,4 @@
+method,rows,positive_mmd_rows,positive_wasserstein_rows,median_mmd_improvement,median_wasserstein_improvement,median_diversity_retention,median_success_probability
+continuous_postselection_reference,15,14,15,0.05638795797131613,0.12061950601546312,0.8488362592278235,0.4675542271528451
+hamiltonian_then_random_final_kick,15,15,15,0.05669461157272948,0.11940141215747246,0.848403251194841,0.4675542271528451
+hamiltonian_two_way_postselection,15,15,15,0.10137369827437392,0.1364263771232419,0.8292732706332122,0.22706504318067608

@@ -1,6 +1,6 @@
 # QuantumCylinder USB Package Summary
 
-## Final Directory Structure
+## Main Review Path
 
 ```text
 usb_package/
@@ -9,6 +9,16 @@ usb_package/
     Problem 1.ipynb
     Problem 2.ipynb
     Problem 3.ipynb
+  presentation/
+    QuantumCylinder_presentation.pdf
+  source_code/
+    README_FOR_JUDGES.md
+    REPRODUCIBILITY_COMMANDS.md
+    src/
+    scripts/
+    tests/
+    configs/
+    submission/
 ```
 
 In this repository the folder is stored as `submission/usb_package/`. When copied
@@ -27,6 +37,10 @@ The notebooks were split from
 `QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb` and keep
 the original report outputs, plots, tables, and explanatory text. They are meant
 to be readable immediately after opening, even before rerunning.
+
+The package is notebook-first for a 5-minute review. The `presentation/` and
+`source_code/` folders are included as supporting material for the official
+presentation and source-code inspection requirements.
 
 ## How to Rerun
 
@@ -78,3 +92,7 @@ with post-selection success probability and ensemble diversity retention. The
 target-aware actor-critic row uses the raw target ensemble in its reward, so it
 is reported as a target-aware policy-search candidate rather than a general
 unknown-target denoiser.
+
+Optional IBM QPU validation is included only as appendix feasibility evidence
+under `source_code/results/ibm_qpu_validation/`. It does not replace the
+state-vector benchmark and does not imply hardware advantage.

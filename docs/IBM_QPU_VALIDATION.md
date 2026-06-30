@@ -36,9 +36,12 @@ tokens in code, notebooks, Markdown, shell history, or committed files.
 ```powershell
 $env:QISKIT_IBM_TOKEN = "<your-token>"
 $env:QISKIT_IBM_INSTANCE = "<optional-instance>"
+$env:QISKIT_IBM_CHANNEL = "ibm_cloud"
 ```
 
-`IBM_QUANTUM_TOKEN` is also accepted as a token environment variable.
+`IBM_QUANTUM_TOKEN` is also accepted as a token environment variable. The
+script reads `QISKIT_IBM_CHANNEL` when set; use the channel that matches the
+saved account or token path available in the local environment.
 
 ## Dry-Run
 
@@ -86,6 +89,9 @@ job = service.job("<job-id>")
 print(job.status())
 print(job.result())
 ```
+
+If the submitted job used a different runtime channel, instantiate the service
+with the same channel value, for example `channel="ibm_cloud"`.
 
 Do not commit retrieved account metadata or credentials.
 

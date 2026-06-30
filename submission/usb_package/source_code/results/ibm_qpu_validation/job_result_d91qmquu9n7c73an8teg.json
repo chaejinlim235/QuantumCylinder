@@ -1,0 +1,40 @@
+{
+  "timestamp_utc": "2026-06-30T11:45:21.656995+00:00",
+  "job_id": "d91qmquu9n7c73an8teg",
+  "status": "DONE",
+  "result_repr_preview": "PrimitiveResult([SamplerPubResult(data=DataBin(meas=BitArray(<shape=(), num_shots=1000, num_bits=2>)), metadata={'circuit_metadata': {}}), SamplerPubResult(data=DataBin(meas=BitArray(<shape=(), num_shots=1000, num_bits=3>)), metadata={'circuit_metadata': {}}), SamplerPubResult(data=DataBin(meas=BitArray(<shape=(), num_shots=1000, num_bits=3>)), metadata={'circuit_metadata': {}})], metadata={'execution': {'execution_spans': ExecutionSpans([DoubleSliceSpan(<start='2026-06-30 11:42:26', stop='2026-06-30 11:42:27', size=3000>)])}, 'version': 2})",
+  "counts_found": [
+    {
+      "pub_index": 0,
+      "register": "meas",
+      "counts": {
+        "00": 903,
+        "10": 56,
+        "01": 23,
+        "11": 18
+      }
+    },
+    {
+      "pub_index": 1,
+      "register": "meas",
+      "counts": {
+        "100": 503,
+        "000": 486,
+        "101": 6,
+        "001": 5
+      }
+    },
+    {
+      "pub_index": 2,
+      "register": "meas",
+      "counts": {
+        "000": 966,
+        "100": 22,
+        "010": 5,
+        "110": 1,
+        "001": 5,
+        "101": 1
+      }
+    }
+  ]
+}

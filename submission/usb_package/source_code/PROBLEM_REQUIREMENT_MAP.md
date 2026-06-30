@@ -1,0 +1,14 @@
+# Problem Requirement Map
+
+| Subproblem | Requirement | Artifact path | One-sentence answer | Status |
+| --- | --- | --- | --- | --- |
+| Problem 1(a) | Build target ensemble around `|00>`. | `solution/solution_1.ipynb`, `src/quantum_cylinder/problem_1a_target_ensemble.py` | We generate a 2-qubit target ensemble clustered near `|00>` with `N=80`, `sigma=0.10`, seed `7`. | Complete |
+| Problem 1(b) | Define fidelity, MMD, and Wasserstein-type distance with cost `1-F`. | `solution/solution_1.ipynb`, `src/quantum_cylinder/problem_1b_ensemble_metrics.py` | We use fidelity-based MMD and infidelity-cost Wasserstein-type distance throughout the submission. | Complete |
+| Problem 1(c) | Show random-unitary diffusion trajectory and distance curves. | `solution/figures/fig2_random_unitary_haar_baseline.png`, `solution/tables/problem1_haar_reference.csv` | Random-unitary diffusion rapidly approaches a Haar-like strong-scrambling distance plateau. | Complete |
+| Problem 2(a) | Define fixed three-qubit Hamiltonian. | `solution/solution_1.ipynb`, `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` | We implement the fixed Hamiltonian projected-diffusion mechanism with a complement qubit. | Complete |
+| Problem 2(b) | Construct projected ensemble. | `solution/solution_1.ipynb`, `src/quantum_cylinder/problem_2_hamiltonian_projected_diffusion.py` | We evolve `M+F` and project the complement qubit to obtain data-system ensembles. | Complete |
+| Problem 2(c) | Plot Hamiltonian distances and compare qualitatively. | `solution/figures/problem_1_2_distance_curves.png`, `solution/tables/problem_2_hamiltonian_metrics.csv` | Hamiltonian projected diffusion is compared against random-unitary diffusion using the same metrics and native controls. | Complete |
+| Problem 2(d) | Discuss resource/control-cost proxies. | `solution/figures/problem_1_2_metric_aligned_comparison.png`, `solution/tables/problem_2d_resource_matches.csv` | We compare layer/random-control cost against fixed-Hamiltonian time and projection-basis control. | Complete |
+| Problem 3(a) | Show simple denoising step. | `solution/figures/problem_3a_denoising_improvement.png`, `submission/problem3_continuous_measurement_denoising.py` | We demonstrate a measurement-induced post-selected denoising proxy. | Complete |
+| Problem 3(b) | Controlled modification and trade-off analysis. | `solution/tables/problem3b_measurement_basis_tradeoff.csv`, `solution/solution_1.ipynb` | Measurement basis controls the effective non-unitary map, so denoising is evaluated by gain, success probability, and diversity retention. | Complete |
+| Problem 3(c) | Analysis-guided improvement. | `solution/tables/problem3c_analysis_guided_improvement.csv`, `solution/figures/problem_3c_hamiltonian_variant_summary.png` | Two-way Hamiltonian post-selection gives stronger distance improvement while lowering success probability. | Complete |

@@ -1,0 +1,63 @@
+{
+  "backend_num_qubits": 156,
+  "backend_selected": "ibm_fez",
+  "backend_selection_status": "requested backend ibm_fez",
+  "circuits": [
+    {
+      "name": "problem1_random_unitary_one_step",
+      "num_qubits": 2,
+      "operation_counts": {
+        "barrier": 1,
+        "cz": 1,
+        "measure": 2,
+        "rz": 8,
+        "sx": 7
+      },
+      "original_depth": 4,
+      "transpiled_depth": 11,
+      "two_qubit_gate_count": 2
+    },
+    {
+      "name": "hamiltonian_projection_tiny_proxy",
+      "num_qubits": 3,
+      "operation_counts": {
+        "barrier": 1,
+        "cz": 4,
+        "measure": 3,
+        "rz": 15,
+        "sx": 11
+      },
+      "original_depth": 8,
+      "transpiled_depth": 22,
+      "two_qubit_gate_count": 4
+    },
+    {
+      "name": "two_way_postselection_tiny_proxy",
+      "num_qubits": 3,
+      "operation_counts": {
+        "barrier": 1,
+        "cz": 8,
+        "measure": 3,
+        "rz": 21,
+        "sx": 14
+      },
+      "original_depth": 15,
+      "transpiled_depth": 39,
+      "two_qubit_gate_count": 8
+    }
+  ],
+  "claim_guardrail": "Optional IBM QPU validation only; state-vector benchmark remains the source of MMD/Wasserstein claims.",
+  "counts_or_expectation_values": "retrieved in job_result_d91qmquu9n7c73an8teg.json",
+  "dry_run": false,
+  "generated_at_utc": "2026-06-30T11:41:31.063044+00:00",
+  "job_id": "d91qmquu9n7c73an8teg",
+  "job_status": "DONE",
+  "primitive": "sampler",
+  "requested_backend": "ibm_fez",
+  "required_num_qubits": 3,
+  "runtime_status": "loaded from environment token",
+  "shots": 1000,
+  "submit_error": null,
+  "submitted": true,
+  "transpile_method": "preset_pass_manager"
+}
