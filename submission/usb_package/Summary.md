@@ -1,103 +1,109 @@
 # QuantumCylinder USB Package Summary
 
-## Main Review Path
+This folder is the USB-ready submission package. It is designed so a judge can
+find the final answer, presentation material, source code, and reproduction
+commands without reading the development repository.
+
+## Five-Minute Review Path
+
+1. Open this file.
+2. Open the split report notebooks under `solution/`:
+   - `solution/Problem 1.ipynb`
+   - `solution/Problem 2.ipynb`
+   - `solution/Problem 3.ipynb`
+3. Open `presentation/PRESENTATION_SLIDE_TEXT_EN.md` or the presentation file
+   if a rendered slide deck is requested.
+4. For source-code inspection, open `source_code/README_FOR_JUDGES.md`.
+
+The source-code package also contains the compact canonical final notebook at
+`source_code/solution/solution_1.ipynb`. The split notebooks and compact
+notebook tell the same story at different reading granularity.
+
+## Folder Map
 
 ```text
 usb_package/
   Summary.md
+  README_SUBMISSION.md
+  JUDGING_CRITERIA_ALIGNMENT.md
   solution/
     Problem 1.ipynb
     Problem 2.ipynb
     Problem 3.ipynb
   presentation/
-    QuantumCylinder_presentation.pdf
+    PRESENTATION_SLIDE_TEXT_EN.md
+    PRESENTATION_STORYBOARD_EN.md
+    SLIDE_CHECKLIST.md
   source_code/
     README_FOR_JUDGES.md
+    CODE_MANIFEST.md
+    PROBLEM_REQUIREMENT_MAP.md
     REPRODUCIBILITY_COMMANDS.md
+    IBM_QPU_README.md
     src/
     scripts/
     tests/
     configs/
     submission/
+    solution/
 ```
 
-In this repository the folder is stored as `submission/usb_package/`. When copied
-to a USB drive, the `submission/` prefix can be omitted and the folder can be
-used directly as `usb_package/`.
-
-## How to Review
-
-Open the notebooks in this order:
-
-1. `solution/Problem 1.ipynb`
-2. `solution/Problem 2.ipynb`
-3. `solution/Problem 3.ipynb`
-
-The notebooks were split from
-`QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb` and keep
-the original report outputs, plots, tables, and explanatory text. They are meant
-to be readable immediately after opening, even before rerunning.
-
-The package is notebook-first for a 5-minute review. The `presentation/` and
-`source_code/` folders are included as supporting material for the official
-presentation and source-code inspection requirements.
-
-## How to Rerun
-
-Use Jupyter or VS Code and run all cells in each notebook. Each notebook includes
-its own setup cells so it can be rerun independently. The first setup cell keeps
-the original dependency installation line:
-
-```python
-!pip install -q qiskit qiskit-aer scipy numpy matplotlib seaborn
-```
-
-If the environment already has these packages, the cell can simply be run as-is.
+In the repository, this folder is stored as `submission/usb_package/`. On a USB
+drive it can be copied and used directly as `usb_package/`.
 
 ## Problem Mapping
 
-- `Problem 1.ipynb`
-  - Builds the two-qubit target ensemble around `|00>`.
-  - Defines fidelity, fidelity-kernel MMD, and Wasserstein-type infidelity cost.
-  - Runs random-unitary forward diffusion and displays the distance trajectory.
-- `Problem 2.ipynb`
-  - Rebuilds the shared Problem 1 setup needed for comparison.
-  - Constructs the fixed three-qubit Hamiltonian with one complement qubit.
-  - Generates Hamiltonian projected diffusion outputs.
-  - Displays Bloch/metric comparison figures and resource/control proxy values.
-- `Problem 3.ipynb`
-  - Rebuilds the shared setup needed for standalone execution.
-  - Implements Problem 3(a) measurement-induced denoising.
-  - Implements Problem 3(b) controlled Hamiltonian/basis/noise trade-off analysis.
-  - Preserves the Problem 3(c) candidate portfolio:
-    no-denoising input, axis-only projection, continuous post-selection,
-    Hamiltonian plus random final kick, Hamiltonian two-way post-selection,
-    hybrid 1 data qubit plus 1 auxiliary qubit toy, and target-aware
-    actor-critic filter search.
+- Problem 1 builds a target ensemble near `|00>`, defines fidelity/MMD/
+  Wasserstein-type metrics, and studies random-unitary scrambling. The
+  interpretation is strong scrambling toward a Haar-like distance plateau, not
+  slow DDPM-like diffusion.
+- Problem 2 constructs a fixed three-qubit Hamiltonian with one complement
+  qubit, performs projected diffusion, and compares it qualitatively with the
+  random-unitary setting. The resource/control discussion compares random
+  gate-level control against fixed-Hamiltonian time and projection-basis
+  control.
+- Problem 3 uses measurement-induced post-selection as a denoising proxy.
+  Problem 3(b) analyzes measurement basis as a trade-off among distance
+  improvement, success probability, and diversity retention. Problem 3(c)
+  follows from that analysis by testing two-way Hamiltonian post-selection
+  against one-way and axis-only baselines.
 
-## Defaults
+## Scope Of Claims
 
-- Ensemble size: `N = 80` in the original report notebook
-- Target cluster width: `sigma = 0.10`
-- Random seeds: fixed inside the notebooks for reproducibility
-- Hamiltonian parameters: `hx = 0.8090`, `hy = 0.9045`, `J = 1.0`
-- Problem 3(c) actor-critic benchmark: 10 seeds x 3 input steps in the preserved output
+The main claims are state-vector benchmark claims supported by notebook
+outputs, figures, tables, and source-code reproduction commands. The package
+does not claim quantum advantage, hardware advantage, a full trainable QuDDPM,
+or that one diffusion method is always better than the other.
 
-## Scope
+The continuous-basis result is presented as a small-margin controlled
+modification, not as an overwhelming or universal win over axis-only
+projection. Actor-critic rows, if discussed, are target-aware appendix evidence
+and not a general unknown-target denoiser.
 
-This package is notebook-first because the submitted evidence depends on plots,
-tables, and explanatory report text. Problem 3(c) is a portfolio comparison, not
-a single universal denoising claim. Distance improvements must be read together
-with post-selection success probability and ensemble diversity retention. The
-target-aware actor-critic row uses the raw target ensemble in its reward, so it
-is reported as a target-aware policy-search candidate rather than a general
-unknown-target denoiser.
+## Optional IBM QPU Appendix
 
 Optional IBM QPU validation is included only as appendix feasibility evidence
 under `source_code/results/ibm_qpu_validation/`. It does not replace the
 state-vector benchmark and does not imply hardware advantage.
 
-The Problem 3-b IBM QPU mini validation includes two completed `ibm_fez` jobs:
-`d91r6pmu9n7c73an9qgg` (`2048` shots x `12` circuits) and
-`d91r71fccmks73d5nmg0` (`4096` shots x `20` circuits). The slide-ready summary
-is under `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`.
+Included Problem 3-b IBM QPU mini-validation jobs:
+
+- `ibm_fez`, job `d91r6pmu9n7c73an9qgg`, `2048` shots, `12` circuits, DONE.
+- `ibm_fez`, job `d91r71fccmks73d5nmg0`, `4096` shots, `20` circuits, DONE.
+
+Slide-ready IBM appendix summary:
+
+- `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`
+- `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.csv`
+
+## Reproduction
+
+For source-code reproduction, run commands from `source_code/`:
+
+```powershell
+python -m pytest
+python submission/run_all.py --quick
+```
+
+More detailed commands are listed in
+`source_code/REPRODUCIBILITY_COMMANDS.md`.
