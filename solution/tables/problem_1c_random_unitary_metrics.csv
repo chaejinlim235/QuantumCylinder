@@ -1,4 +1,4 @@
-index,parameter_name,parameter,mmd,wasserstein
+row_index,control_label,control_value,D_MMD,W_1_minus_F
 0,step,0.0,0.0,2.4980018054066023e-17
 1,step,1.0,0.8826063592273052,0.7333050697887116
 2,step,2.0,0.8806748028611868,0.7332683408409971

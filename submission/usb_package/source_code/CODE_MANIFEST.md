@@ -46,6 +46,7 @@ published summaries.
 | --- | --- |
 | `scripts/create_solution_haar_baseline.py` | Regenerates the Problem 1(c) Haar reference figure/table. |
 | `scripts/run_problem_1_2_baselines.py` | Generates Problem 1/2 distance curves and resource comparison. |
+| `scripts/create_readable_problem2_figures.py` | Regenerates the final-facing Problem 2 figures that emphasize the fixed-\(H\) projected baseline. |
 | `scripts/run_problem_3_continuous_denoising.py` | Runs the continuous measurement-basis denoising reference. |
 | `scripts/summarize_problem_3_seed_sweep.py` | Summarizes 20-seed Problem 3 evidence. |
 | `scripts/run_problem_3_hamiltonian_variant_candidates.py` | Runs the Problem 3(c) two-way candidate and ablations. |
@@ -60,6 +61,8 @@ published summaries.
 | `scripts/ibm_qpu_extract_p3b_counts.py` | Retrieves or reanalyzes completed Problem 3-b IBM QPU counts. |
 | `scripts/summarize_ibm_qpu_p3b_results.py` | Produces slide-ready IBM appendix summaries using standard-library CSV/JSON processing. |
 | `scripts/copy_ibm_qpu_results_to_usb.py` | Copies IBM appendix artifacts into the USB source-code package without secrets. |
+| `scripts/validate_final_csvs_no_pandas.py` | Checks final CSVs, required figures, and notebook notation without pandas. |
+| `scripts/scan_for_ibm_secrets.py` | Scans final-facing files for likely IBM token/API key/CRN patterns without printing secrets. |
 
 Included completed IBM QPU jobs:
 

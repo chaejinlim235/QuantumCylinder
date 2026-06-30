@@ -7,9 +7,9 @@
 | 1 | QuantumCylinder | We compare two diffusion mechanisms and analyze projected denoising as a recoverability-success-diversity trade-off. | none | "Our contribution is a connected final solution: Problems 1 and 2 establish comparable diffusion baselines, and Problem 3 turns post-selection into a measurable denoising trade-off." | 30s |
 | 2 | Problem Map and Criteria | The notebook answers Problem 1(a) through Problem 3(c), and the package includes source code and final artifacts. | `source_code/solution/solution_1.ipynb` | "The structure follows the problem statement and the judging criteria: completeness, fidelity, novelty, and presentation clarity." | 35s |
 | 3 | Problem 1: Strong Scrambling | Random-unitary diffusion rapidly reaches a Haar-like distance plateau, destroying the original `|00>` cluster. | `source_code/solution/figures/fig2_random_unitary_haar_baseline.png` | "The Haar line is a reference, not a training target. The important interpretation is strong scrambling, not slow Gaussian diffusion." | 45s |
-| 4 | Problem 2: Projected Diffusion | Hamiltonian projected diffusion uses fixed Hamiltonian evolution and complement-qubit projection, with schedule-dependent behavior. | `source_code/solution/figures/problem_1_2_metric_aligned_comparison.png` | "We compare by output metric strength, not equal x-axis values, because random layer count and Hamiltonian time are different controls." | 45s |
-| 5 | Problem 3(b): Trade-Off | Measurement basis controls the effective non-unitary map, so denoising must be judged by distance gain, success probability, and diversity retention. | `source_code/solution/tables/problem3b_measurement_basis_tradeoff.csv` | "The continuous basis margin over axis-only is small. The novelty is the trade-off analysis, not simply scanning bases." | 60s |
-| 6 | Problem 3(c): Two-Way Step | Two-way Hamiltonian post-selection improves distance metrics but lowers success probability. | `source_code/solution/tables/problem3c_analysis_guided_improvement.csv` | "This follows directly from 3-b: stronger contraction can help recovery, but post-selection has a cost." | 55s |
+| 4 | Problem 2: Projected Diffusion | \(S_t^{\mathrm{Ham}}\) uses fixed \(H\) evolution and complement-qubit projection, with schedule-dependent behavior. | `source_code/solution/figures/fig_metric_aligned_comparison_readable.png` | "We compare by output metric strength, not equal x-axis values, because random layer count \(k\) and Hamiltonian time \(t\) are different controls. The fixed-\(H\) baseline is also shown in `fig_p2_fixed_h_baseline_visible.png`." | 45s |
+| 5 | Problem 3(b): Trade-Off | Measurement basis controls the effective non-unitary map, so denoising must be judged by \(\Delta D\), \(p_{\mathrm{succ}}\), and \(R_{\mathrm{div}}\). | `source_code/solution/tables/problem3b_measurement_basis_tradeoff.csv` | "The continuous basis margin over axis-only is small. The novelty is the trade-off analysis, not simply scanning bases." | 60s |
+| 6 | Problem 3(c): Two-Way Step | Two-way Hamiltonian post-selection improves distance metrics but lowers \(p_{\mathrm{succ}}\). | `source_code/solution/tables/problem3c_analysis_guided_improvement.csv` | "This follows directly from 3-b: stronger contraction can help recovery, but post-selection has a cost." | 55s |
 | 7 | Conclusion | The final result is novel, complete, and appropriate to a small state-vector benchmark without overclaiming. | none | "The final thesis is a reproducible trade-off story: strong baselines, measurement-induced denoising, and clear limitations." | 30s |
 
 ## 15-Minute Expanded Talk Plan
@@ -29,7 +29,7 @@
 
 ## Q&A Appendix Plan
 
-- A1. Metric definitions: fidelity, MMD, Wasserstein-type cost `1-F`.
+- A1. Notation and metric definitions: \(S_0\), \(S_k^{\mathrm{RU}}\), \(S_t^{\mathrm{Ham}}\), \(D_{\mathrm{MMD}}\), \(W_{1-F}\), \(p_{\mathrm{succ}}\), \(R_{\mathrm{div}}\), and \(\beta\).
 - A2. Hamiltonian and projected ensemble equations.
 - A3. Problem 3(a) measurement-induced non-unitary map.
 - A4. Axis-only vs continuous basis explanation.
@@ -41,7 +41,7 @@
 
 ## Core Story
 
-The first 5 minutes tell the complete story: Problem 1 establishes strong random-unitary scrambling, Problem 2 introduces fixed Hamiltonian projected diffusion and its resource/control profile, Problem 3(b) reframes measurement basis as a control knob for an effective non-unitary map, and Problem 3(c) tests two-way post-selection as a stronger but costlier improvement.
+The first 5 minutes tell the complete story: Problem 1 establishes strong random-unitary scrambling \(S_k^{\mathrm{RU}}\), Problem 2 introduces fixed-Hamiltonian projected diffusion \(S_t^{\mathrm{Ham}}\) and its resource/control profile, Problem 3(b) reframes measurement-basis angle \(\beta\) as a control knob for an effective non-unitary map, and Problem 3(c) tests two-way post-selection as a stronger but costlier improvement.
 
 The IBM QPU path is appendix-only Q&A material. It checks a tiny Problem 3-b
 measurement-basis sweep through IBM Quantum / Qiskit Runtime. The completed

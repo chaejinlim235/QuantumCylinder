@@ -17,11 +17,27 @@ Speaker note: "The goal is not to overclaim. We give a complete small-scale benc
 
 Speaker note: "This slide anchors completeness and source-code clarity."
 
+Notation note:
+
+| Symbol / label | Meaning |
+|---|---|
+| \(S_0\) | Initial two-qubit target ensemble clustered near \(|00\rangle\) |
+| \(S_k^{\mathrm{RU}}\) | Ensemble after \(k\) random-unitary scrambling layers |
+| \(S_t^{\mathrm{Ham}}\) | Projected data-system ensemble after fixed-Hamiltonian evolution time \(t\) |
+| \(D_{\mathrm{MMD}}\) | Fidelity-kernel MMD distance |
+| \(W_{1-F}\) | Wasserstein-type distance with pairwise cost \(1-F\) |
+| \(D(S,S_0)\) | Distance between ensemble \(S\) and the initial ensemble \(S_0\) |
+| \(\Delta D\) | Denoising distance gain, before minus after |
+| \(p_{\mathrm{succ}}\) | Post-selection success probability |
+| \(R_{\mathrm{div}}\) | Diversity retention proxy, computed as retained average off-diagonal infidelity |
+| \(\beta\) | Complement-qubit measurement-basis angle |
+| fixed \(H\) | Problem 2 Hamiltonian with \(h_x=0.8090, h_y=0.9045, J=1.0\) |
+
 ### Slide 3. Problem 1: Random-Unitary Diffusion
 
 - `S0` is clustered near `|00>`.
 - Random-unitary layers rapidly move the ensemble away from `S0`.
-- Haar reference: MMD `0.869583 +/- 0.024043`, Wasserstein `0.724439 +/- 0.021491`.
+- Haar reference: \(D_{\mathrm{MMD}}\) `0.869583 +/- 0.024043`, \(W_{1-F}\) `0.724439 +/- 0.021491`.
 - Interpretation: strong scrambling / Haar-like plateau.
 
 Figure: `source_code/solution/figures/fig2_random_unitary_haar_baseline.png`
@@ -35,7 +51,9 @@ Speaker note: "The Haar reference is not a target distribution. It is a calibrat
 - Curves can fluctuate or partially saturate depending on the schedule.
 - Resource proxy: random gate controls vs fixed Hamiltonian time and projection basis.
 
-Figure: `source_code/solution/figures/problem_1_2_metric_aligned_comparison.png`
+Figure: `source_code/solution/figures/fig_metric_aligned_comparison_readable.png`
+
+Fixed-\(H\) standalone panel: `source_code/solution/figures/fig_p2_fixed_h_baseline_visible.png`
 
 Speaker note: "The comparison is qualitative and control-aware, not a universal ranking."
 
@@ -45,7 +63,7 @@ Speaker note: "The comparison is qualitative and control-aware, not a universal 
 - Measuring `F` and post-selecting induces an effective non-unitary map on `M`.
 - Axis-only `Z/X/Y` is a Pauli-basis baseline.
 - Continuous Bloch-sphere basis is a controlled generalization.
-- Main point: distance gain, success probability, and diversity retention must be reported together.
+- Main point: \(\Delta D\), \(p_{\mathrm{succ}}\), and \(R_{\mathrm{div}}\) must be reported together.
 
 Table: `source_code/solution/tables/problem3b_measurement_basis_tradeoff.csv`
 
@@ -55,9 +73,9 @@ Speaker note: "The axis-only margin is small, so the claim is the trade-off anal
 
 - Based on 3-b, stronger contraction can improve distance metrics.
 - Two-way Hamiltonian post-selection applies the projected denoising idea more strongly.
-- Median MMD gain: `0.101374`.
-- Median Wasserstein gain: `0.136426`.
-- Median success probability: `0.227065`.
+- Median \(\Delta D_{\mathrm{MMD}}\): `0.101374`.
+- Median \(\Delta W_{1-F}\): `0.136426`.
+- Median \(p_{\mathrm{succ}}\): `0.227065`.
 - Interpretation: stronger distance improvement with lower success probability.
 
 Table: `source_code/solution/tables/problem3c_analysis_guided_improvement.csv`
@@ -78,8 +96,8 @@ Speaker note: "The final result is intentionally scoped and reproducible."
 ### A1. Metric Definitions
 
 - Fidelity: `F(psi, phi) = |<psi|phi>|^2`.
-- MMD uses fidelity kernel.
-- Wasserstein-type distance uses cost `1 - F`.
+- \(D_{\mathrm{MMD}}\) uses fidelity kernel.
+- \(W_{1-F}\) uses cost `1 - F`.
 
 ### A2. Hamiltonian and Projected Ensemble
 
@@ -128,8 +146,8 @@ Use `source_code/solution/tables/problem3c_analysis_guided_improvement.csv`.
 ### A6. Seed Robustness
 
 - 20 / 20 seeds pass the main adoption gate.
-- Median MMD improvement: `0.097056`.
-- Median Wasserstein improvement: `0.147983`.
+- Median \(\Delta D_{\mathrm{MMD}}\): `0.097056`.
+- Median \(\Delta W_{1-F}\): `0.147983`.
 
 ### A7. Source Code and Reproduction
 
@@ -151,7 +169,7 @@ python scripts/summarize_problem_3_method_portfolio.py
 ### A9. IBM QPU Problem 3-b Mini Validation
 
 - We submitted tiny `M+F` circuits to IBM Quantum / Qiskit Runtime.
-- Mechanism: complement-qubit measurement basis changes post-selection success probability and selected data distribution.
+- Mechanism: complement-qubit measurement-basis angle \(\beta\) changes \(p_{\mathrm{succ}}\) and the selected data distribution.
 - Backend: `ibm_fez`.
 - Job ids: `d91r6pmu9n7c73an9qgg`, `d91r71fccmks73d5nmg0`.
 - Status: DONE.
@@ -161,5 +179,5 @@ python scripts/summarize_problem_3_method_portfolio.py
   - beta `0.2500pi`: mean p(F=0) `0.893164`, selected entropy `1.492915`.
   - beta `0.5000pi`: mean p(F=0) `0.661377`, selected entropy `1.581403`.
   - beta `0.7500pi`: mean p(F=0) `0.351270`, selected entropy `1.736465`.
-- Hardware-execution validation only; main scientific claims remain state-vector based.
+- IBM QPU Problem 3-b mini validation is appendix hardware-execution evidence only. It tests tiny representative circuits and does not replace the state-vector benchmark.
 - No hardware advantage claim.

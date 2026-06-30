@@ -36,6 +36,7 @@ Run from this `source_code/` directory:
 ```powershell
 python -m pytest
 python submission/run_all.py --quick
+python scripts/validate_final_csvs_no_pandas.py
 ```
 
 Useful follow-up commands:
@@ -43,6 +44,7 @@ Useful follow-up commands:
 ```powershell
 python scripts/summarize_problem_3_seed_sweep.py
 python scripts/summarize_problem_3_method_portfolio.py
+python scripts/create_readable_problem2_figures.py
 python scripts/ibm_qpu_smoke_test.py --dry-run
 ```
 
@@ -53,6 +55,10 @@ python scripts/ibm_qpu_smoke_test.py --dry-run
   `python -m pytest --basetemp .pytest_tmp_local`.
 - `submission/run_all.py --quick`: prints compact Problem 1, Problem 2, and
   Problem 3 reproduction summaries.
+- `validate_final_csvs_no_pandas.py`: checks final CSVs, required readability
+  figures, and the notebook notation table without pandas.
+- `create_readable_problem2_figures.py`: regenerates the fixed-\(H\)
+  readability figures from existing CSV data.
 - `summarize_problem_3_seed_sweep.py`: reports the 20-seed Problem 3 evidence,
   including the small axis-only margin and the distance/success/diversity
   trade-off.

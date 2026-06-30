@@ -22,6 +22,7 @@ Approximate runtime is a few seconds to under a minute on a typical laptop.
 
 ```powershell
 python scripts/create_solution_haar_baseline.py
+python scripts/create_readable_problem2_figures.py
 python scripts/summarize_problem_3_seed_sweep.py
 python scripts/run_problem_3_hamiltonian_variant_candidates.py
 python scripts/summarize_problem_3_method_portfolio.py
@@ -30,6 +31,8 @@ python scripts/summarize_problem_3_method_portfolio.py
 Expected outputs:
 
 - Problem 1(c) Haar reference figure/table under `solution/`.
+- Problem 2 readability figures under `solution/figures/`, including
+  `fig_p2_fixed_h_baseline_visible.png`.
 - Problem 3 seed-sweep summary showing the measurement-basis trade-off and the
   small axis-only margin.
 - Problem 3(c) method portfolio showing two-way post-selection as stronger
@@ -81,3 +84,13 @@ python scripts/copy_ibm_qpu_results_to_usb.py
 
 These IBM commands are appendix validation only. The main quantitative claims
 remain state-vector based.
+
+## Lightweight Packaging Checks
+
+```powershell
+python scripts/validate_final_csvs_no_pandas.py
+python scripts/scan_for_ibm_secrets.py
+```
+
+These checks use Python standard-library CSV/JSON/path scanning only; they do
+not require pandas.

@@ -22,6 +22,8 @@ step.
 | `figures/fig2_random_unitary_haar_baseline.png` | Problem 1(c) random-unitary curve with Haar-like reference baseline. |
 | `figures/problem_1_2_distance_curves.png` | Random-unitary and Hamiltonian projected-diffusion distance curves. |
 | `figures/problem_1_2_metric_aligned_comparison.png` | Problem 2(d) comparable-strength resource/control comparison. |
+| `figures/fig_p2_fixed_h_baseline_visible.png` | Problem 2 fixed-\(H\) projected-diffusion baseline shown in a standalone readable panel. |
+| `figures/fig_metric_aligned_comparison_readable.png` | Problem 2(c,d) metric-aligned comparison with fixed-\(H\) baseline emphasized. |
 | `figures/problem_3a_denoising_improvement.png` | Problem 3(a) measurement-induced denoising result. |
 | `figures/problem_3c_hamiltonian_variant_summary.png` | Problem 3(c) two-way and ablation comparison. |
 | `tables/problem1_haar_reference.csv` | Haar reference values used in Problem 1(c). |
@@ -42,6 +44,19 @@ step.
 The numerical values above are traceable to the CSV/Markdown artifacts under
 `tables/`, `figures/`, and the source-code package copied into
 `submission/usb_package/source_code/`.
+
+## Figure Notation
+
+- \(S_0\): initial two-qubit target ensemble near \(|00\rangle\).
+- \(S_k^{\mathrm{RU}}\): ensemble after random-unitary layer \(k\).
+- \(S_t^{\mathrm{Ham}}\): projected data-system ensemble after fixed-Hamiltonian time \(t\).
+- \(D_{\mathrm{MMD}}\): fidelity-kernel MMD.
+- \(W_{1-F}\): Wasserstein-type distance with cost \(1-F\).
+- \(\Delta D\): denoising distance gain, before minus after.
+- \(p_{\mathrm{succ}}\): post-selection success probability.
+- \(R_{\mathrm{div}}\): diversity retention proxy, computed as a ratio of average off-diagonal infidelity before/after denoising.
+- \(\beta\): complement-qubit measurement-basis angle.
+- fixed \(H\): Problem 2 Hamiltonian with \(h_x=0.8090, h_y=0.9045, J=1.0\).
 
 ## Minimal Reproduction
 
@@ -72,7 +87,7 @@ Slide-ready IBM appendix summaries:
 - `results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`
 - `results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.csv`
 
-For the higher-shot run, `p(F=0)` changes from `0.881738` at `0.0000pi` to
+For the higher-shot run, \(p_{\mathrm{succ}}=p(F=0)\) changes from `0.881738` at `0.0000pi` to
 `0.351270` at `0.7500pi`, while selected-data entropy changes from `1.375447`
 to `1.736465`. This is used only as hardware-execution validation that
 measurement basis changes post-selection statistics.

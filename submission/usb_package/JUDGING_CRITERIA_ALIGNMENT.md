@@ -30,10 +30,14 @@ Key requirement checks:
 - Problem 1(c) includes random-unitary distance curves and a Haar-like
   strong-scrambling interpretation.
 - Problem 2 compares random-unitary and Hamiltonian projected diffusion,
-  including resource/control-cost proxies.
+  including resource/control-cost proxies. The final figures distinguish
+  \(S_k^{\mathrm{RU}}\) from \(S_t^{\mathrm{Ham}}\), and the fixed-\(H\)
+  projected baseline is emphasized in
+  `source_code/solution/figures/fig_p2_fixed_h_baseline_visible.png`.
 - Problem 3(a) includes a measurement-induced denoising step.
 - Problem 3(b) analyzes a controlled measurement-basis trade-off rather than
-  only listing metric values.
+  only listing metric values. The labels explicitly report
+  \(\Delta D\), \(p_{\mathrm{succ}}\), and \(R_{\mathrm{div}}\).
 - Problem 3(c) follows directly from 3(b) by testing two-way post-selection
   against baseline/reference rows.
 

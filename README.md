@@ -78,6 +78,18 @@ post-selection proposal in Problem 3(c).
 | Source-code inspection readiness | `submission/usb_package/source_code/README_FOR_JUDGES.md` |
 | IBM QPU validation clarity | `docs/IBM_QPU_VALIDATION.md`, `submission/usb_package/source_code/IBM_QPU_README.md` |
 
+## Notation Used In Final Figures
+
+- \(S_0\): initial two-qubit target ensemble near \(|00\rangle\).
+- \(S_k^{\mathrm{RU}}\): ensemble after random-unitary layer \(k\).
+- \(S_t^{\mathrm{Ham}}\): projected data-system ensemble after fixed-Hamiltonian time \(t\).
+- \(D_{\mathrm{MMD}}\): fidelity-kernel MMD distance.
+- \(W_{1-F}\): Wasserstein-type distance with cost \(1-F\).
+- \(p_{\mathrm{succ}}\): post-selection success probability.
+- \(R_{\mathrm{div}}\): diversity retention proxy.
+- \(\beta\): complement-qubit measurement-basis angle.
+- fixed \(H\): Problem 2 Hamiltonian with \(h_x=0.8090, h_y=0.9045, J=1.0\).
+
 ## Quick Reproduce
 
 From the repository root:
