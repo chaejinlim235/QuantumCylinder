@@ -32,7 +32,11 @@ function Get-GitHubHeaders {
         }
     }
 
-    $credentialLines = & "C:\Program Files\Git\bin\bash.exe" -lc "printf 'protocol=https\nhost=github.com\n\n' | git credential fill"
+    $bashCommand = Get-Command bash.exe -ErrorAction SilentlyContinue
+    if (-not $bashCommand) {
+        throw "Could not find bash.exe. Pass -Token or set GITHUB_TOKEN."
+    }
+    $credentialLines = & $bashCommand.Source -lc "printf 'protocol=https\nhost=github.com\n\n' | git credential fill"
     $credential = @{}
     foreach ($line in $credentialLines) {
         if ($line -match "^(.*?)=(.*)$") {

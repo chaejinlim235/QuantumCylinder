@@ -1,5 +1,5 @@
 param(
-    [string]$RepoDir = "C:\Coding\Hackathon\2026Quantum",
+    [string]$RepoDir = "",
     [string]$RepoUrl = "https://github.com/chaejinlim235/QuantumCylinder.git",
     [string]$WorkerName = "seungbin",
     [switch]$SetupEnv,
@@ -8,6 +8,10 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+if (-not $RepoDir) {
+    $RepoDir = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot "..")).Path
+}
 
 function Write-Step {
     param([string]$Message)
