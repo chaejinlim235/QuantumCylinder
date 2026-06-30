@@ -269,6 +269,11 @@ def main() -> None:
         for row in best_rows
         if float(row["mmd_improvement"]) > 0.0 or float(row["wasserstein_improvement"]) > 0.0
     )
+    hybrid_decision = (
+        "front_facing_extension"
+        if positive_rows > 0 and median_div >= 0.50 and median_success >= 0.10
+        else "appendix_or_fallback"
+    )
 
     settings = {
         "n_samples": args.n_samples,
@@ -297,6 +302,19 @@ The toy mixes random-unitary corruption on one data qubit with a Hamiltonian-ins
 - median Wasserstein improvement: `{median_w:.6f}`
 - median diversity retention: `{median_div:.6f}`
 - median success probability: `{median_success:.6f}`
+- cycle decision: `{hybrid_decision}`
+
+## Problem 3 Requirement Coverage
+
+| Requirement | How this toy answers it | Evidence in this run |
+| --- | --- | --- |
+| 3(a) simple reverse/denoising step | Apply a fixed non-unitary post-selected map to the random-unitary-corrupted data qubit. | Hybrid output is compared with the no-denoising random-unitary input at each step. |
+| 3(b) controlled diffusion modification and trade-off | Vary `tau`, measurement basis `(theta, phi)`, and a shallow pre-rotation, then report quality, diversity, and success probability together. | Median diversity retention `{median_div:.6f}` and median success probability `{median_success:.6f}` are reported beside distance improvement. |
+| 3(c) proposed improvement over a baseline | Treat the random-unitary input as the identity/no-denoising baseline and test whether hybrid post-selection reduces MMD or Wasserstein distance. | Positive-improvement rows `{positive_rows} / {len(best_rows)}`; median MMD improvement `{median_mmd:.6f}`, median Wasserstein improvement `{median_w:.6f}`. |
+
+## Decision Guardrail
+
+Use the hybrid toy as a front-facing extension only if at least one row improves MMD or Wasserstein and the ensemble does not collapse by the diversity/success gates. Keep the 20-seed continuous post-selection sweep as the quantitative main result unless a later hybrid robustness sweep is equally strong.
 
 ## Best Rows
 

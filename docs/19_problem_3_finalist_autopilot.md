@@ -74,6 +74,26 @@ python scripts\run_problem_3_hybrid_diffusion_toy.py
 - `results/problem_3_hybrid_diffusion_toy/hybrid_best_metrics.csv`
 - `results/problem_3_hybrid_diffusion_toy/hybrid_toy_metrics.png`
 
+`hybrid_toy_summary.md`는 Problem 3(a)/(b)/(c) requirement coverage와 `front_facing_extension`/`appendix_or_fallback` decision guardrail을 함께 기록한다. 심사위원용 묶음은 `results/problem_3_finalist_package/`에 생성하며, seed sweep을 새로 돌리지 않은 cycle이면 기존 20-seed gate를 재요약한 것인지 명시한다.
+
+seed별 grid-best cherry-picking 질문을 방어하려면 frozen-parameter holdout 요약을 실행한다.
+
+```powershell
+cd C:\Coding\Hackathon\2026Quantum
+python scripts\summarize_problem_3_frozen_holdout.py
+```
+
+이 holdout은 train seeds `1..10`에서 하나의 continuous parameter tuple `(tau, theta, phi)`만 고른 뒤 holdout seeds `11..20`에 그대로 적용한다. 결과는 `results/problem_3_frozen_parameter_holdout/frozen_holdout_summary.md`에 남기며, oracle grid-best seed sweep을 대체하지 않고 selection-bias 방어용 보조 근거로만 쓴다.
+
+거리 개선만 보고 collapse된 후보를 고르는 실수를 방어하려면 baseline/collapse table을 생성한다.
+
+```powershell
+cd C:\Coding\Hackathon\2026Quantum
+python scripts\summarize_problem_3_baseline_collapse_table.py
+```
+
+이 표는 identity/no-denoising, best exact `Z/X/Y`, continuous post-selection, intentionally collapsed centroid diagnostic을 같은 MMD/Wasserstein/diversity/success probability 형식으로 비교한다. Collapse row는 물리적 제안이 아니라 "거리 개선만으로는 충분하지 않다"는 judge-facing 반례다.
+
 ## 실행 명령
 
 ### 6/30 새벽 01:00부터 조식 이후까지 쉬지 않고 실행
