@@ -1,0 +1,91 @@
+# Problem 3 Method Portfolio
+
+기준 시각: `2026-06-30`
+
+## 핵심 판단
+
+Problem 3는 actor-critic 하나로 결론내리면 안 된다. 최종 보고서의 구조는 다음 순서가 되어야 한다.
+
+1. 여러 reverse/denoising 아이디어를 제시한다.
+2. 같은 거리 지표와 guardrail로 비교 가능한 것은 한 표에 올린다.
+3. 직접 비교가 어려운 후보는 scope와 caveat를 분리해서 적는다.
+4. 최종 채택 후보와 부록/기각 후보를 명확히 나눈다.
+
+따라서 actor-critic은 최종 후보 중 하나이며, 전체 방법론을 대체하지 않는다.
+
+현재 최종 notebook 사본:
+
+```text
+C:\Users\sky_m\Downloads\QuantumCylinder_final_submission_report_problem3c_variants_v5.ipynb
+```
+
+## 비교할 후보
+
+| Candidate | 역할 | 보고서에서의 위치 | 주의점 |
+| --- | --- | --- | --- |
+| identity/no-denoising input | reverse step을 하지 않은 기준점 | baseline | 성능 후보가 아니라 비교 기준 |
+| best Z/X/Y axis projection | discrete measurement baseline | 3(b) 대조군 | continuous basis가 꼭 필요한지 확인하는 기준 |
+| continuous measurement-basis post-selection | 20-seed gate를 통과한 main quantitative result | 3(a), 3(b) 본문 | axis-only 대비 margin이 작다는 limitation을 함께 적음 |
+| Hamiltonian + random final kick | Hamiltonian post-selection 뒤 작은 random-unitary correction을 붙인 mixture 후보 | 3(c) 후보 | random kick은 약간의 개선 또는 악화를 만들 수 있으므로 main result가 아니라 ablation 후보 |
+| Hamiltonian two-way post-selection | Hamiltonian post-selection을 두 단계로 적용하는 후보 | 3(c) 후보 | 거리 개선이 커질 수 있지만 post-selection success probability가 낮아질 수 있음 |
+| hybrid 1M+1F toy | random-unitary와 Hamiltonian/post-selection을 섞은 hardware-motivated extension | 3(c) 후보 | 1-qubit toy라 main 2-qubit seed sweep과 직접 우열 비교하지 않음 |
+| target-aware actor-critic | raw target reward를 쓰는 policy-search 개선 후보 | 3(c) 후보 또는 appendix | unknown-target 일반 denoiser가 아니라 target-aware toy improvement |
+
+## 현재 고정된 Hamiltonian 후보 수치
+
+아래 수치는 `python scripts/run_problem_3_hamiltonian_variant_candidates.py` 실행 결과이며, `5 seeds x 3 input steps = 15 rows` 요약이다.
+
+| Method | Rows | Positive MMD rows | Positive Wasserstein rows | Median MMD improvement | Median Wasserstein improvement | Median diversity retention | Median success probability |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| continuous post-selection reference | 15 | 14 | 15 | 0.056388 | 0.120620 | 0.848836 | 0.467554 |
+| Hamiltonian + random final kick | 15 | 15 | 15 | 0.056695 | 0.119401 | 0.848403 | 0.467554 |
+| Hamiltonian two-way post-selection | 15 | 15 | 15 | 0.101374 | 0.136426 | 0.829273 | 0.227065 |
+
+해석:
+
+- `Hamiltonian + random final kick`은 MMD는 reference보다 아주 조금 좋아졌지만 Wasserstein은 약간 낮아져, main result가 아니라 mixture ablation 후보로 둔다.
+- `Hamiltonian two-way post-selection`은 거리 개선이 가장 크지만 success probability가 낮아진다. 따라서 3(c)의 좋은 trade-off 후보로 제시한다.
+- main quantitative claim은 여전히 20-seed gate를 통과한 `continuous measurement-basis post-selection`에 둔다.
+
+## 최종 선택 규칙
+
+- 3(a), 3(b)의 main result는 `continuous measurement-basis post-selection`으로 둔다.
+- 3(b)는 `axis-only`와 `continuous basis`의 통제 비교를 보여준다.
+- 3(c)는 최소 네 후보를 보여준다.
+  - `Hamiltonian + random final kick`: Hamiltonian post-selection 뒤 random-unitary correction을 붙인 mixture 후보.
+  - `Hamiltonian two-way post-selection`: 같은 Hamiltonian post-selection을 두 단계로 적용한 후보.
+  - `hybrid 1M+1F toy`: 하드웨어 동기와 보조 큐빗 측정 구조를 설명하는 후보.
+  - `target-aware actor-critic`: 성능이 강하지만 target 정보를 쓰는 후보.
+- actor-critic 수치가 좋아도 “최종 방법은 actor-critic 하나”라고 쓰지 않는다.
+- 최종 본문 포트폴리오는 실제 실행 후보와 대조군만 포함한다.
+
+## 실행 명령
+
+아래 명령은 이미 생성된 Problem 3 결과물을 읽어 후보 포트폴리오 표와 그림을 만든다.
+
+```powershell
+python scripts/summarize_problem_3_method_portfolio.py
+```
+
+생성물:
+
+- `results/problem_3_method_portfolio/method_portfolio_summary.md`
+- `results/problem_3_method_portfolio/method_portfolio_summary.csv`
+- `results/problem_3_method_portfolio/method_portfolio_summary.png`
+
+`results/` 아래 생성물은 기본적으로 Git에 커밋하지 않는다.
+
+## 보고서 문장
+
+최종 보고서의 안전한 서술:
+
+> 우리는 Problem 3에서 하나의 알고리즘만 제안하지 않고, no-denoising baseline, axis-only projection, continuous measurement-basis post-selection을 기준으로 둔 뒤, Hamiltonian + random final kick, Hamiltonian two-way post-selection, hybrid 1M+1F toy, target-aware actor-critic 후보를 같은 recoverability-aware 관점에서 비교했다. 20-seed robustness gate를 통과한 main result는 continuous post-selection이며, 3(c)의 확장 후보로는 Hamiltonian mixture/two-way, hardware-motivated hybrid toy, target-aware actor-critic policy search를 제시한다. Actor-critic은 성능상 강한 후보지만 raw target reward를 사용하므로 unknown-target 일반 denoiser로 주장하지 않는다.
+
+## 팀원별 확인 포인트
+
+| Member | 확인할 것 |
+| --- | --- |
+| 임채진 | 최종 ipynb에서 3(c)가 actor-critic 단독 구조가 아니라 후보 비교 구조인지 확인 |
+| 김승빈 | hybrid 1M+1F와 continuous post-selection의 물리적 해석, 보조 큐빗 측정의 필요성 검수 |
+| 김건우 | 후보별 코드와 metric 해석이 실제 구현과 맞는지 검수 |
+| 한지후 | `summarize_problem_3_method_portfolio.py`, README, issue, notebook 사본 동기화 |
