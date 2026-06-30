@@ -1,0 +1,29 @@
+{
+  "n_samples": 80,
+  "sigma": 0.1,
+  "seed": 1,
+  "random_steps": 12,
+  "input_steps": [
+    1,
+    2,
+    3,
+    5,
+    7,
+    12
+  ],
+  "tau_min": 0.05,
+  "tau_max": 2.0,
+  "tau_points": 20,
+  "theta_points": 13,
+  "phi_points": 16,
+  "min_metric_improvement": 0.02,
+  "min_mean_success": 0.1,
+  "min_diversity_retention": 0.5,
+  "min_axis_score_margin": 0.005,
+  "metrics": [
+    "fidelity_mmd",
+    "infidelity_wasserstein",
+    "average_off_diagonal_infidelity_diversity",
+    "post_selection_probability"
+  ]
+}

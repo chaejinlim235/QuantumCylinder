@@ -1,0 +1,14 @@
+{
+  "n_samples": 80,
+  "sigma": 0.1,
+  "seed": 2026,
+  "random_steps": 8,
+  "input_steps": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "angle_scale": 3.14159265358979,
+  "interpretation": "1 data qubit + 1 auxiliary qubit IBM-compatible state-vector toy"
+}
