@@ -1,0 +1,229 @@
+{
+  "J": 1.0,
+  "aggregate_rows": [],
+  "analysis_rows": [],
+  "backend_num_qubits": null,
+  "backend_requested": "ibm_fez",
+  "backend_selected": null,
+  "backend_selection_status": "no runtime service",
+  "betas": [
+    0.0,
+    0.7853981633974483,
+    1.5707963267948966,
+    2.356194490192345
+  ],
+  "channel": "ibm_cloud",
+  "circuit_metadata": [
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_0",
+      "index": 0,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 4,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_0",
+      "index": 1,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_0",
+      "index": 2,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_0",
+      "index": 3,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_1",
+      "index": 4,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 4,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_1",
+      "index": 5,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_1",
+      "index": 6,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_1",
+      "index": 7,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_2",
+      "index": 8,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 4,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_2",
+      "index": 9,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_2",
+      "index": 10,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_2",
+      "index": 11,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 5,
+      "transpiled_ops": {
+        "measure": 3,
+        "rxx": 2,
+        "ry": 1,
+        "u3": 3
+      },
+      "two_qubit_gate_count": 2
+    }
+  ],
+  "claim_guardrail": "This is appendix validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.",
+  "counts_extracted": false,
+  "credentials_available": false,
+  "dry_run": true,
+  "dt": 0.2,
+  "generated_at_utc": "2026-06-30T12:11:14.709374+00:00",
+  "hx": 0.809,
+  "hy": 0.9045,
+  "job_id": null,
+  "job_status": null,
+  "num_circuits": 12,
+  "repeats": 3,
+  "retrieve_error": null,
+  "retrieve_job": null,
+  "runtime_status": "qiskit-ibm-runtime unavailable: No module named 'qiskit_ibm_runtime'",
+  "sampler_status": "SamplerV2 not checked",
+  "shots": 2048,
+  "submit_error": null,
+  "submitted": false,
+  "transpile_method": "qiskit_transpile_generic",
+  "transpile_warning": null,
+  "trotter_steps": 1
+}

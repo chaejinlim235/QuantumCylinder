@@ -12,5 +12,6 @@
 - [x] No claim that continuous basis strongly or always beats axis-only.
 - [x] No claim that actor-critic is a general unknown-target denoiser.
 - [x] No claim that Hamiltonian projected diffusion is always better than random-unitary diffusion.
+- [x] IBM QPU appendix A9 is marked as hardware-execution validation only.
 - [ ] Open the final PDF on another machine before official submission.
 - [ ] Deck is final because submitted presentation material cannot be modified afterward.

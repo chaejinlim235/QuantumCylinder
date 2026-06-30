@@ -1,0 +1,738 @@
+{
+  "J": 1.0,
+  "aggregate_rows": [
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "mean_selected_data_entropy_F0": 1.375446703636751,
+      "mean_success_probability_F0": 0.88173828125,
+      "num_repeats": 5,
+      "std_selected_data_entropy_F0": 0.03643609238185637,
+      "std_success_probability_F0": 0.006647174074145875
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "mean_selected_data_entropy_F0": 1.4929151659321074,
+      "mean_success_probability_F0": 0.8931640625,
+      "num_repeats": 5,
+      "std_selected_data_entropy_F0": 0.011450111284697346,
+      "std_success_probability_F0": 0.003300867926006947
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "mean_selected_data_entropy_F0": 1.5814032025270564,
+      "mean_success_probability_F0": 0.661376953125,
+      "num_repeats": 5,
+      "std_selected_data_entropy_F0": 0.01586224770548273,
+      "std_success_probability_F0": 0.01030175082316511
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "mean_selected_data_entropy_F0": 1.7364646532799513,
+      "mean_success_probability_F0": 0.35126953125,
+      "num_repeats": 5,
+      "std_selected_data_entropy_F0": 0.015595421831113806,
+      "std_success_probability_F0": 0.0060184501850563555
+    }
+  ],
+  "analysis_rows": [
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_0",
+      "index": 0,
+      "repeat": 0,
+      "selected_data_counts_F0": {
+        "00": 2498,
+        "01": 605,
+        "10": 257,
+        "11": 216
+      },
+      "selected_data_entropy_F0": 1.312799574297189,
+      "success_F0": 3576,
+      "success_probability_F0": 0.873046875,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_0",
+      "index": 1,
+      "repeat": 0,
+      "selected_data_counts_F0": {
+        "00": 2317,
+        "01": 656,
+        "10": 410,
+        "11": 270
+      },
+      "selected_data_entropy_F0": 1.4933918409871996,
+      "success_F0": 3653,
+      "success_probability_F0": 0.891845703125,
+      "total_shots": 4096
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_0",
+      "index": 2,
+      "repeat": 0,
+      "selected_data_counts_F0": {
+        "00": 1637,
+        "01": 411,
+        "10": 433,
+        "11": 214
+      },
+      "selected_data_entropy_F0": 1.5646483480822138,
+      "success_F0": 2695,
+      "success_probability_F0": 0.657958984375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_0",
+      "index": 3,
+      "repeat": 0,
+      "selected_data_counts_F0": {
+        "00": 712,
+        "01": 228,
+        "10": 318,
+        "11": 140
+      },
+      "selected_data_entropy_F0": 1.7408385393451382,
+      "success_F0": 1398,
+      "success_probability_F0": 0.34130859375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_1",
+      "index": 4,
+      "repeat": 1,
+      "selected_data_counts_F0": {
+        "00": 2411,
+        "01": 614,
+        "10": 328,
+        "11": 243
+      },
+      "selected_data_entropy_F0": 1.3999079641112444,
+      "success_F0": 3596,
+      "success_probability_F0": 0.8779296875,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_1",
+      "index": 5,
+      "repeat": 1,
+      "selected_data_counts_F0": {
+        "00": 2350,
+        "01": 624,
+        "10": 409,
+        "11": 286
+      },
+      "selected_data_entropy_F0": 1.4861353591109336,
+      "success_F0": 3669,
+      "success_probability_F0": 0.895751953125,
+      "total_shots": 4096
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_1",
+      "index": 6,
+      "repeat": 1,
+      "selected_data_counts_F0": {
+        "00": 1649,
+        "01": 414,
+        "10": 405,
+        "11": 236
+      },
+      "selected_data_entropy_F0": 1.5669630192555006,
+      "success_F0": 2704,
+      "success_probability_F0": 0.66015625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_1",
+      "index": 7,
+      "repeat": 1,
+      "selected_data_counts_F0": {
+        "00": 766,
+        "01": 227,
+        "10": 323,
+        "11": 143
+      },
+      "selected_data_entropy_F0": 1.715686143178342,
+      "success_F0": 1459,
+      "success_probability_F0": 0.356201171875,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_2",
+      "index": 8,
+      "repeat": 2,
+      "selected_data_counts_F0": {
+        "00": 2445,
+        "01": 618,
+        "10": 299,
+        "11": 247
+      },
+      "selected_data_entropy_F0": 1.3790417262099606,
+      "success_F0": 3609,
+      "success_probability_F0": 0.881103515625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_2",
+      "index": 9,
+      "repeat": 2,
+      "selected_data_counts_F0": {
+        "00": 2322,
+        "01": 648,
+        "10": 396,
+        "11": 273
+      },
+      "selected_data_entropy_F0": 1.485438931792827,
+      "success_F0": 3639,
+      "success_probability_F0": 0.888427734375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_2",
+      "index": 10,
+      "repeat": 2,
+      "selected_data_counts_F0": {
+        "00": 1644,
+        "01": 421,
+        "10": 422,
+        "11": 252
+      },
+      "selected_data_entropy_F0": 1.5897280859225922,
+      "success_F0": 2739,
+      "success_probability_F0": 0.668701171875,
+      "total_shots": 4096
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_2",
+      "index": 11,
+      "repeat": 2,
+      "selected_data_counts_F0": {
+        "00": 746,
+        "01": 205,
+        "10": 322,
+        "11": 161
+      },
+      "selected_data_entropy_F0": 1.7297428300140498,
+      "success_F0": 1434,
+      "success_probability_F0": 0.35009765625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_3",
+      "index": 12,
+      "repeat": 3,
+      "selected_data_counts_F0": {
+        "00": 2462,
+        "01": 615,
+        "10": 313,
+        "11": 248
+      },
+      "selected_data_entropy_F0": 1.3833572527064757,
+      "success_F0": 3638,
+      "success_probability_F0": 0.88818359375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_3",
+      "index": 13,
+      "repeat": 3,
+      "selected_data_counts_F0": {
+        "00": 2350,
+        "01": 628,
+        "10": 411,
+        "11": 284
+      },
+      "selected_data_entropy_F0": 1.4870103646277935,
+      "success_F0": 3673,
+      "success_probability_F0": 0.896728515625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_3",
+      "index": 14,
+      "repeat": 3,
+      "selected_data_counts_F0": {
+        "00": 1565,
+        "01": 421,
+        "10": 436,
+        "11": 227
+      },
+      "selected_data_entropy_F0": 1.6024916186387803,
+      "success_F0": 2649,
+      "success_probability_F0": 0.646728515625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_3",
+      "index": 15,
+      "repeat": 3,
+      "selected_data_counts_F0": {
+        "00": 714,
+        "01": 218,
+        "10": 363,
+        "11": 154
+      },
+      "selected_data_entropy_F0": 1.758259987577896,
+      "success_F0": 1449,
+      "success_probability_F0": 0.353759765625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_4",
+      "index": 16,
+      "repeat": 4,
+      "selected_data_counts_F0": {
+        "00": 2430,
+        "01": 642,
+        "10": 323,
+        "11": 244
+      },
+      "selected_data_entropy_F0": 1.4021270008588858,
+      "success_F0": 3639,
+      "success_probability_F0": 0.888427734375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_4",
+      "index": 17,
+      "repeat": 4,
+      "selected_data_counts_F0": {
+        "00": 2318,
+        "01": 568,
+        "10": 465,
+        "11": 307
+      },
+      "selected_data_entropy_F0": 1.5125993331417829,
+      "success_F0": 3658,
+      "success_probability_F0": 0.89306640625,
+      "total_shots": 4096
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_4",
+      "index": 18,
+      "repeat": 4,
+      "selected_data_counts_F0": {
+        "00": 1651,
+        "01": 397,
+        "10": 481,
+        "11": 229
+      },
+      "selected_data_entropy_F0": 1.5831849407361944,
+      "success_F0": 2758,
+      "success_probability_F0": 0.67333984375,
+      "total_shots": 4096
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_4",
+      "index": 19,
+      "repeat": 4,
+      "selected_data_counts_F0": {
+        "00": 736,
+        "01": 208,
+        "10": 357,
+        "11": 153
+      },
+      "selected_data_entropy_F0": 1.7377957662843309,
+      "success_F0": 1454,
+      "success_probability_F0": 0.35498046875,
+      "total_shots": 4096
+    }
+  ],
+  "backend_num_qubits": 156,
+  "backend_requested": "ibm_fez",
+  "backend_selected": "ibm_fez",
+  "backend_selection_status": "requested backend ibm_fez",
+  "betas": [
+    0.0,
+    0.7853981633974483,
+    1.5707963267948966,
+    2.356194490192345
+  ],
+  "channel": "ibm_cloud",
+  "circuit_metadata": [
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_0",
+      "index": 0,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 21,
+        "sx": 13
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_0",
+      "index": 1,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_0",
+      "index": 2,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 14
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_0",
+      "index": 3,
+      "original_depth": 8,
+      "repeat": 0,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_1",
+      "index": 4,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 21,
+        "sx": 13
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_1",
+      "index": 5,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_1",
+      "index": 6,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 14
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_1",
+      "index": 7,
+      "original_depth": 8,
+      "repeat": 1,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_2",
+      "index": 8,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 21,
+        "sx": 13
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_2",
+      "index": 9,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_2",
+      "index": 10,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 14
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_2",
+      "index": 11,
+      "original_depth": 8,
+      "repeat": 2,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_3",
+      "index": 12,
+      "original_depth": 8,
+      "repeat": 3,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 21,
+        "sx": 13
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_3",
+      "index": 13,
+      "original_depth": 8,
+      "repeat": 3,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_3",
+      "index": 14,
+      "original_depth": 8,
+      "repeat": 3,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 14
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_3",
+      "index": 15,
+      "original_depth": 8,
+      "repeat": 3,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.0,
+      "beta_over_pi": 0.0,
+      "circuit_name": "p3b_beta_0.00pi_rep_4",
+      "index": 16,
+      "original_depth": 8,
+      "repeat": 4,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 21,
+        "sx": 13
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 0.7853981633974483,
+      "beta_over_pi": 0.25,
+      "circuit_name": "p3b_beta_0.25pi_rep_4",
+      "index": 17,
+      "original_depth": 8,
+      "repeat": 4,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 1.5707963267948966,
+      "beta_over_pi": 0.5,
+      "circuit_name": "p3b_beta_0.50pi_rep_4",
+      "index": 18,
+      "original_depth": 8,
+      "repeat": 4,
+      "transpiled_depth": 26,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 14
+      },
+      "two_qubit_gate_count": 4
+    },
+    {
+      "beta": 2.356194490192345,
+      "beta_over_pi": 0.75,
+      "circuit_name": "p3b_beta_0.75pi_rep_4",
+      "index": 19,
+      "original_depth": 8,
+      "repeat": 4,
+      "transpiled_depth": 27,
+      "transpiled_ops": {
+        "cz": 4,
+        "measure": 3,
+        "rz": 23,
+        "sx": 15
+      },
+      "two_qubit_gate_count": 4
+    }
+  ],
+  "claim_guardrail": "This is appendix validation only. The main scientific claims remain state-vector based. No hardware advantage is claimed.",
+  "counts_extracted": true,
+  "credentials_available": true,
+  "dry_run": false,
+  "dt": 0.2,
+  "generated_at_utc": "2026-06-30T12:22:55.349236+00:00",
+  "hx": 0.809,
+  "hy": 0.9045,
+  "job_id": "d91r71fccmks73d5nmg0",
+  "job_status": "DONE",
+  "num_circuits": 20,
+  "repeats": 5,
+  "retrieve_error": null,
+  "retrieve_job": "d91r71fccmks73d5nmg0",
+  "runtime_status": "loaded from environment credentials",
+  "sampler_status": "SamplerV2 available",
+  "shots": 4096,
+  "submit_error": null,
+  "submitted": false,
+  "transpile_method": "preset_pass_manager",
+  "transpile_warning": null,
+  "trotter_steps": 1
+}

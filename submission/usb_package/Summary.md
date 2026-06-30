@@ -96,3 +96,8 @@ unknown-target denoiser.
 Optional IBM QPU validation is included only as appendix feasibility evidence
 under `source_code/results/ibm_qpu_validation/`. It does not replace the
 state-vector benchmark and does not imply hardware advantage.
+
+The Problem 3-b IBM QPU mini validation includes two completed `ibm_fez` jobs:
+`d91r6pmu9n7c73an9qgg` (`2048` shots x `12` circuits) and
+`d91r71fccmks73d5nmg0` (`4096` shots x `20` circuits). The slide-ready summary
+is under `source_code/results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`.

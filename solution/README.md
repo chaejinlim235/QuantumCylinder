@@ -51,6 +51,28 @@ representative circuits can be prepared for IBM Quantum via Qiskit Runtime and
 reports transpiled depth, two-qubit gate count, shots, backend, and job status
 if a real job is explicitly submitted.
 
+### Appendix: IBM QPU Problem 3-b mini validation
+
+We submitted tiny `M+F` circuits to IBM Quantum / Qiskit Runtime and swept the
+complement-qubit measurement basis `beta`. This is an appendix validation of
+the Problem 3-b mechanism: changing the measurement basis changes
+post-selection statistics and the selected data distribution.
+
+Completed jobs:
+
+- `ibm_fez`, job `d91r6pmu9n7c73an9qgg`, `2048` shots, `12` circuits, DONE.
+- `ibm_fez`, job `d91r71fccmks73d5nmg0`, `4096` shots, `20` circuits, DONE.
+
+Slide-ready aggregate:
+
+- `results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.md`
+- `results/ibm_qpu_validation/IBM_QPU_P3B_SUMMARY_FOR_SLIDES.csv`
+
+For the higher-shot run, `p(F=0)` changes from `0.881738` at `0.0000pi`
+to `0.351270` at `0.7500pi`, while selected-data entropy changes from
+`1.375447` to `1.736465`. We use this only as hardware-execution validation
+of the measurement-basis mechanism.
+
 The main MMD/Wasserstein claims remain the reproducible state-vector benchmark.
 
 ## Limitations

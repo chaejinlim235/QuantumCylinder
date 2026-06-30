@@ -148,11 +148,18 @@ python scripts/summarize_problem_3_method_portfolio.py
 - No broad continuous-over-axis claim.
 - Actor-critic is target-aware if mentioned.
 
-### A9. IBM QPU Validation Path
+### A9. IBM QPU Problem 3-b Mini Validation
 
-- Optional small-circuit execution path through IBM Quantum / Qiskit Runtime.
-- Uses tiny representative circuits, not full ensemble MMD/Wasserstein.
-- Reports transpiled depth, two-qubit gate count, backend, and job id if submitted.
-- Main claims remain the reproducible state-vector benchmark.
+- We submitted tiny `M+F` circuits to IBM Quantum / Qiskit Runtime.
+- Mechanism: complement-qubit measurement basis changes post-selection success probability and selected data distribution.
+- Backend: `ibm_fez`.
+- Job ids: `d91r6pmu9n7c73an9qgg`, `d91r71fccmks73d5nmg0`.
+- Status: DONE.
+- Runs: `2048` shots x `12` circuits, and `4096` shots x `20` circuits.
+- Higher-shot aggregate:
+  - beta `0.0000pi`: mean p(F=0) `0.881738`, selected entropy `1.375447`.
+  - beta `0.2500pi`: mean p(F=0) `0.893164`, selected entropy `1.492915`.
+  - beta `0.5000pi`: mean p(F=0) `0.661377`, selected entropy `1.581403`.
+  - beta `0.7500pi`: mean p(F=0) `0.351270`, selected entropy `1.736465`.
+- Hardware-execution validation only; main scientific claims remain state-vector based.
 - No hardware advantage claim.
-- Dry-run/transpilation path prepared; real QPU submission requires IBM credentials and queue availability.

@@ -47,6 +47,32 @@ under `results/ibm_qpu_validation/`. Real IBM QPU submission requires
 credentials and an explicit `--submit` command; it is not required for the main
 state-vector benchmark.
 
+## Optional IBM QPU Problem 3-b Appendix
+
+Dry-run:
+
+```powershell
+python scripts/ibm_qpu_problem3b_basis_sweep.py --backend ibm_fez --shots 2048 --repeats 3 --dt 0.20 --trotter-steps 1 --save-dir results/ibm_qpu_validation/p3b_fez_2048x3_dryrun
+```
+
+Retrieve completed jobs in `.venv_ibm` or any environment with
+`qiskit-ibm-runtime` installed:
+
+```powershell
+python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r6pmu9n7c73an9qgg --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_2048x3/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_2048x3
+python scripts/ibm_qpu_extract_p3b_counts.py --job-id d91r71fccmks73d5nmg0 --backend ibm_fez --source-report results/ibm_qpu_validation/p3b_fez_4096x5/problem3b_ibm_basis_sweep_report.json --save-dir results/ibm_qpu_validation/p3b_fez_4096x5
+```
+
+Summarize and copy to USB package:
+
+```powershell
+python scripts/summarize_ibm_qpu_p3b_results.py
+python scripts/copy_ibm_qpu_results_to_usb.py
+```
+
+These IBM commands are appendix validation only. The main quantitative claims
+remain state-vector based.
+
 ## Source Inspection Path
 
 Start from:
