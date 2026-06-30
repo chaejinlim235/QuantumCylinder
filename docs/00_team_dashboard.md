@@ -4,11 +4,12 @@
 
 ## 최신 스냅샷
 
-- 기준 시각: `2026-06-30 09:40 KST`
+- 기준 시각: `2026-06-30 14:31 KST`
 - 한지후 메인 자동화는 cycle 60까지 완료 근거로 수확했고, cycle 62는 실행 중 수동 중단되어 evidence로 쓰지 않는다.
 - 김승빈 support worker는 cycle 28까지 완료했고, 별도 컴퓨터에서 14번의 20-seed sweep과 252개 이상 hybrid toy run을 남겼다.
 - Problem 3 seed sweep gate는 `20/20 use_as_main`으로 재현되었다.
-- 지금부터는 자동화 추가 실행보다 보고서/발표에 수확 근거를 정확히 반영하는 것이 우선이다.
+- Problem 3(c)에 target-aware actor-critic policy search 후보를 추가했고, 기본 10-seed run에서 `30/30` row가 기존 3(a) continuous baseline보다 MMD/Wasserstein 모두 낮았다.
+- 지금부터는 actor-critic을 최종 3(c) 본문 후보로 쓸지 appendix로 둘지 팀 검수를 거쳐 결정한다.
 
 ## 먼저 볼 것
 
@@ -16,6 +17,7 @@
 | --- | --- |
 | 현재 진행도, 역할, 실행 명령 | `docs/00_team_dashboard.md` |
 | 밤샘 Problem 3 실험의 과정/근거/결론 | `docs/22_overnight_problem_3_evidence_handoff.md` |
+| Problem 3 actor-critic 개선안 | `docs/23_problem_3_actor_critic_handoff.md` |
 | 저장소 구조와 실행 entry point | `README.md` |
 | 실제 GitHub issue 동기화 원본 | `docs/github_issue_plan.json` |
 | Problem 3 seed sweep 요약 | `results/problem_3_seed_sweep/seed_sweep_summary.md` |
@@ -29,10 +31,10 @@
 | --- | --- | --- | --- |
 | Problem 1 | locked | 임채진, 한지후 | notebook 형식 유지, 정성 설명과 diagnostic 출력만 정리 |
 | Problem 2 | locked | 김건우, 임채진 | conditional state, Hamiltonian/projection 해석 검수 |
-| Problem 3 | harvested main candidate | 한지후, 김승빈 | `docs/22_overnight_problem_3_evidence_handoff.md` 기준으로 final notebook/report 반영 |
+| Problem 3 | harvested main candidate + actor-critic candidate | 한지후, 김승빈 | `docs/22_overnight_problem_3_evidence_handoff.md`와 `docs/23_problem_3_actor_critic_handoff.md` 기준으로 final notebook/report 반영 |
 | Seed sweep | passed + independently reproduced | 김승빈 | support worker 결과에서 최종 표/그림 후보와 로그 위치 정리 |
-| Report/story | in progress | 임채진 | 1/2번 형식 유지, 3번 소문항별 답변과 limitation 정리 |
-| Code consistency | in progress | 김건우 | notebook 설명과 실제 Qiskit/backend 구현이 충돌하지 않는지 확인 |
+| Report/story | in progress | 임채진 | 1/2번 형식 유지, actor-critic 3(c) 반영 여부와 limitation 정리 |
+| Code consistency | in progress | 김건우 | notebook 설명, Qiskit/backend 구현, actor-critic filter 해석이 충돌하지 않는지 확인 |
 | Issue/repo metadata | required every change | 한지후 | README, `docs/github_issue_plan.json`, 실제 GitHub issue 동기화 |
 
 Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
@@ -42,6 +44,15 @@ Problem 3의 현재 안전한 주장은 다음 범위로 제한한다.
 - median Wasserstein improvement `0.147983`.
 - axis-only score margin은 `0.010000`으로 작으므로 limitation에 적는다.
 - hardware advantage나 general quantum advantage로 주장하지 않는다.
+
+Problem 3(c) actor-critic 후보의 현재 안전한 주장은 다음 범위로 제한한다.
+
+- 기본 10-seed, input step `[1, 2, 3]`, 총 `30` row에서 actor-critic이 3(a) continuous baseline보다 MMD/Wasserstein 모두 낮았다.
+- median actor-vs-continuous MMD margin `0.271909`.
+- median actor-vs-continuous Wasserstein margin `0.178397`.
+- median actor diversity retention `0.812548`.
+- median actor success probability `0.387360`.
+- raw target ensemble을 reward로 쓰므로 target-aware toy improvement로만 주장한다.
 
 ## 지금 실행할 명령
 
@@ -58,6 +69,7 @@ python -m pytest
 python submission/run_all.py --quick
 python scripts/run_problem_3_continuous_denoising.py
 python scripts/summarize_problem_3_seed_sweep.py
+python scripts/run_problem_3_actor_critic_denoising.py
 ```
 
 역할, issue, 파일 구조, 진행도가 바뀐 뒤 동기화:
@@ -99,6 +111,7 @@ Problem 3를 main으로 유지하는 조건:
 | Problem 1/2 코드 읽는 순서 | `docs/17_problem_1_2_code_reading_guide.md` |
 | Qiskit 검증 | `docs/09_qiskit_validation_layer.md` |
 | Problem 3 방법과 gate | `docs/11_problem_3_continuous_denoising.md` |
+| Problem 3 actor-critic 후보 | `docs/23_problem_3_actor_critic_handoff.md` |
 | Hermes 세부 설정 | `docs/12_hermes_agent_setup.md` |
 | 자동화 운영 원칙 | `docs/13_automation_feedback_loop.md` |
 | 3일 로드맵 | `docs/16_three_day_roadmap.md` |
