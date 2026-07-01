@@ -111,8 +111,7 @@ hardware-execution validation이며, hardware advantage claim이 아닙니다.
 ## Team Contributions
 
 이 섹션은 저장소 문서와 팀 메신저 기록을 바탕으로 아카이빙 목적에 맞게 정리한
-역할 기록입니다. 메신저에 명시적으로 남아 있지 않은 구현, 실험, 통합 작업은
-프로젝트 maintainer 기록에 따라 한지후가 수행한 것으로 정리합니다.
+역할 기록입니다.
 
 | 팀원 | 주요 기여 | 발표/제출 역할 |
 |---|---|---|
@@ -120,9 +119,6 @@ hardware-execution validation이며, hardware advantage claim이 아닙니다.
 | 김건우 (`koi312500`) | 코드와 Qiskit 구현 해석, notebook 설명과 실제 구현의 consistency 검수, 제출 패키지 정리, 발표자료 제작/수정 지원 | opening, Problem 1 |
 | 임채진 (`chaejinlim235`) | 코드와 결과 해석, Problem 3(a,b) storyline 정리, 최종 notebook/report와 발표자료 제작 지원 | Problem 3(a), Problem 3(b) |
 | 김승빈 (`dreamerghost77`) | 물리적 해석, Problem 3(c) trade-off 해석, measurement-induced denoising/actor-critic 보조 해석, figure/table/repro log 정리 지원 | Problem 3(c) |
-
-대회 직전 5분 발표 흐름은 `Problem 1 -> Problem 2 -> Problem 3(a,b,c) -> IBM
-QPU validation` 순서로 정리되었습니다.
 
 ## Where To Start
 
